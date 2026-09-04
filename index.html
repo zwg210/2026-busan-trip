@@ -111,8 +111,8 @@
     .weather p { margin: 3px 0 0; color: var(--muted); font-size: .88rem; }
 
     .day-card { display: grid; grid-template-columns: 36% 1fr; overflow: hidden; border-radius: 28px; background: var(--card); box-shadow: var(--shadow); margin: 0 0 30px; }
-    .day-photo { min-height: 480px; position: relative; background: #d9dfd7; }
-    .day-photo img { height: 100%; object-fit: cover; }
+    .day-photo { position: sticky; top: 82px; align-self: start; width: 100%; aspect-ratio: 4 / 5; overflow: hidden; background: #d9dfd7; }
+    .day-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
     .day-badge { position: absolute; left: 18px; top: 18px; padding: 9px 12px; border-radius: 999px; background: rgba(255,253,246,.9); backdrop-filter: blur(10px); font-weight: 900; }
     .day-content { padding: clamp(25px, 4vw, 46px); }
     .day-title { display: flex; align-items: baseline; justify-content: space-between; gap: 15px; border-bottom: 1px solid var(--line); padding-bottom: 18px; margin-bottom: 10px; }
@@ -224,7 +224,7 @@
       .hero-copy, .section-head { align-items: start; flex-direction: column; }
       .weather-grid { grid-template-columns: repeat(2, 1fr); }
       .day-card { grid-template-columns: 1fr; }
-      .day-photo { min-height: 260px; max-height: 330px; }
+      .day-photo { position: relative; top: auto; aspect-ratio: 16 / 9; min-height: 0; max-height: none; }
       .meal-options { grid-template-columns: 1fr 1fr; }
       .booking-grid { grid-template-columns: 1fr; }
       .bookmark-grid { grid-template-columns: 1fr 1fr; }
@@ -255,7 +255,7 @@
       .weather-grid { gap: 8px; }
       .weather .wx { margin: 6px 0 2px; }
       .day-card { border-radius: 20px; margin-bottom: 20px; }
-      .day-photo { min-height: 190px; height: 31vh; }
+      .day-photo { width: 100%; height: auto; min-height: 0; aspect-ratio: 4 / 3; }
       .day-badge { left: 12px; top: 12px; }
       .day-title { align-items: flex-start; }
       .day-title h3 { font-size: 1.7rem; }
@@ -325,7 +325,7 @@
   <main>
     <div class="update-banner" role="status">
       <strong>LIVE UPDATE · 9/5</strong>
-      <span>餐廳卡已加入料理照片、推薦必點與可保存的收藏篩選；手機版同步優化。</span>
+      <span>餐廳卡改用各店實景照片；新增海福鮑魚粥，並按 19:10 返台航班提前前往機場。</span>
     </div>
     <section id="weather">
       <div class="section-head">
@@ -359,7 +359,7 @@
 
       <article class="day-card">
         <div class="day-photo">
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Oryukdo%20Skywalk%20in%20Busan%2C%20South%20Korea.jpg?width=1200" alt="五六島天空步道" loading="lazy">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Oryukdo%20Skywalk%20in%20Busan%2C%20South%20Korea.jpg?width=1200" alt="五六島天空步道" loading="lazy" decoding="async" sizes="(max-width: 850px) 100vw, 36vw">
           <div class="day-badge">DAY 01 · 晴</div>
         </div>
         <div class="day-content">
@@ -380,14 +380,14 @@
             <li><time>17:40</time><div><b>入住 Westin<span class="en">Check in at Westin</span></b><small>簡單整理，18:15 前下樓到海灘。</small></div></li>
             <li class="optional"><time>17:55</time><div><b>冬柏島燈塔／Nurimaru 外觀<span class="en">Dongbaekseom Lighthouse / Nurimaru Exterior</span></b><small>從 Westin 快走一個 20 分鐘小環線；17:55 還沒整理好就跳過，18:20 必須回到海灘。</small><a class="route-link secondary" href="https://map.naver.com/p/search/%EB%88%84%EB%A6%AC%EB%A7%88%EB%A3%A8%20APEC%ED%95%98%EC%9A%B0%EC%8A%A4" target="_blank" rel="noreferrer">Naver Map ↗</a></div></li>
             <li class="must"><time>18:20</time><div><b>Westin 海灘黃金時刻<span class="en">Westin Beach Golden Hour</span></b><small>飯店旁是海雲台西端、並非封閉私人沙灘。今日日落約 18:45、方位 279°；看海灘金光與西側天色，不是太陽沉入海面。18:55 離開。</small></div></li>
-            <li class="meal-row"><time>19:30</time><div><b>晚餐：廣安里，或善良章魚分支<span class="en">Dinner: Gwangalli or Good Octopus</span></b><small>想吃善良章魚：Westin → 南區直營店約 25–35 分，吃完再到廣安里約 10–20 分；其他三間直接去廣安里。</small><div class="meal-options four">
+            <li class="meal-row"><time>19:30</time><div><b>晚餐：廣安里，或善良章魚分支<span class="en">Dinner: Gwangalli or Good Octopus</span></b><small>廣安大橋不是必去：Park Hyatt 已有很好的橋景。只有晚餐選廣安里餐廳時才順便看夜景；選善良章魚則吃完直接回飯店或去酒吧。</small><div class="meal-options four">
               <article class="meal-choice primary"><div class="tags"><span class="tag local">在地優先</span><span class="tag">海鮮</span></div><h4>진횟집 Jin Hoetjip</h4><span class="hours">每日 11:00–23:00 · 可預約</span><p>在地回訪口碑佳的生魚片套餐；兩人用餐比臨場挑回轉店穩定。</p><a href="https://map.naver.com/p/search/%EC%A7%84%ED%9A%9F%EC%A7%91%20%EA%B4%91%EC%95%88%EB%A6%AC" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag">在地名店</span><span class="tag">豬肉湯飯</span></div><h4>수영돼지국밥 水營豬肉湯飯</h4><span class="hours">每日 08:00–22:40 · 15:50–16:50 休息</span><p>口味清爽的豬肉湯飯與水煮肉白飯；較海邊內縮，Uber 約 10 分。</p><a href="https://map.naver.com/p/search/%EC%88%98%EC%98%81%EB%8F%BC%EC%A7%80%EA%B5%AD%EB%B0%A5" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag">超人氣</span><span class="tag">10:00 遠端候位</span></div><h4>톤쇼우 Tonshou 廣安店</h4><span class="hours">每日 11:00–22:00 · Catchtable</span><p>高人氣豬排；只有搶到合適叫號時段才選，不為它犧牲海岸行程。</p><a href="https://map.naver.com/p/search/%ED%86%A4%EC%87%BC%EC%9A%B0%20%EA%B4%91%EC%95%88%EC%A0%90" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag local">你指定</span><span class="tag">辣炒章魚</span></div><h4>착한낙지 부산남구직영점<br>善良章魚</h4><span class="hours">今晚營業狀態請看 Naver 即時頁面</span><p>可以去；選南區直營店最合理。屬於晚餐替代分支，不要排在五六島後、日落前，以免錯過 Westin 黃金時刻。</p><a href="https://map.naver.com/p/search/%EC%B0%A9%ED%95%9C%EB%82%99%EC%A7%80%20%EB%B6%80%EC%82%B0%EB%82%A8%EA%B5%AC%EC%A7%81%EC%98%81%EC%A0%90" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag local">你指定</span><span class="tag">廣安里順路</span></div><h4>광안목 광안점<br>Gwanganmok Gwangalli</h4><span class="hours">週六 12:00–24:00 · 15:00–16:30 休息</span><p>乾式熟成、燻烤豬頸肉與五花肉，由店員烤好；就在廣安里晚餐區，動線比善良章魚更順。熱門時用 Tabling 遠端排隊。</p><a href="https://map.naver.com/p/search/%EA%B4%91%EC%95%88%EB%AA%A9%20%EA%B4%91%EC%95%88%EC%A0%90" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
             </div></div></li>
-            <li><time>22:00</time><div><b>Hongdan 原創調酒<span class="en">Hongdan Original Cocktails</span></b><small>廣安大橋夜景後前往；建議先以 Instagram 預約吧台位。</small></div></li>
+            <li><time>22:00</time><div><b>Hongdan 原創調酒<span class="en">Hongdan Original Cocktails</span></b><small>晚餐後前往；若已累，直接回 Park Hyatt 在房內看廣安大橋。建議先以 Instagram 預約吧台位。</small></div></li>
           </ol>
           <div class="route-actions">
             <a class="route-link" href="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%9B%8C%ED%81%AC" target="_blank" rel="noreferrer">Naver Map：開啟首站 ↗</a>
@@ -398,7 +398,7 @@
 
       <article class="day-card">
         <div class="day-photo">
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Gamcheon%20Culture%20Village.jpg?width=1200" alt="甘川文化村" loading="lazy">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Gamcheon%20Culture%20Village.jpg?width=1200" alt="甘川文化村" loading="lazy" decoding="async" sizes="(max-width: 850px) 100vw, 36vw">
           <div class="day-badge">DAY 02 · 晚間雨</div>
         </div>
         <div class="day-content">
@@ -407,10 +407,9 @@
             <li><time>06:30</time><div><b>Westin 早餐<span class="en">Breakfast at Westin</span></b><small>Camellia 06:30–10:00；07:30 前吃完，才不壓縮甘川洞。若房價不含早餐，簡單吃即可。</small></div></li>
             <li><time>08:00</time><div><b>Westin → Park Hyatt<span class="en">Hotel Transfer</span></b><small>Uber 約 5–10 分；先搬行李，避免傍晚從南浦折返。</small></div></li>
             <li class="must"><time>09:20</time><div><b>甘川文化村<span class="en">Gamcheon Culture Village</span></b><small>Park Hyatt → 甘川約 45–65 分；早到避開週日人潮。</small></div></li>
-            <li class="meal-row"><time>11:40</time><div><b>松島海灘＋午餐<span class="en">Songdo Beach + Lunch</span></b><small>甘川 → 松島約 15–25 分；12:50 前結帳，三間都在松島一帶。</small><div class="meal-options">
+            <li class="meal-row"><time>11:40</time><div><b>松島海灘＋午餐<span class="en">Songdo Beach + Lunch</span></b><small>甘川 → 松島約 15–25 分；12:50 前結帳，兩間都在松島一帶。</small><div class="meal-options two">
               <article class="meal-choice primary"><div class="tags"><span class="tag local">在地優先</span><span class="tag">生魚片</span></div><h4>해변횟집 海邊生魚片店</h4><span class="hours">每日 11:00–23:00</span><p>松島老牌海鮮選擇；兩人點小份生魚片或海鮮餐，先告知趕纜車。</p><a href="https://map.naver.com/p/search/%ED%95%B4%EB%B3%80%ED%9A%9F%EC%A7%91%20%EC%86%A1%EB%8F%84" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag">在地高評價</span><span class="tag">貝類海鮮</span></div><h4>뚱보네 胖子家</h4><span class="hours">營業狀態請看 Naver 即時頁面</span><p>烤貝與海鮮下酒菜口碑佳；點餐別過量，保留纜車時間。</p><a href="https://map.naver.com/p/search/%EB%9A%B1%EB%B3%B4%EB%84%A4%20%EB%B6%80%EC%82%B0%20%EC%86%A1%EB%8F%84" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
-              <article class="meal-choice"><div class="tags"><span class="tag">在地人氣</span><span class="tag">烤魚</span></div><h4>송도포차 松島布帳馬車</h4><span class="hours">營業狀態請看 Naver 即時頁面</span><p>烤魚、海鮮煎餅等較隨性；若還沒開門就選海邊生魚片店。</p><a href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%ED%8F%AC%EC%B0%A8%20%EB%B6%80%EC%82%B0" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
             </div></div></li>
             <li class="must"><time>13:00</time><div><b>松島海上纜車＋天空公園<span class="en">Songdo Marine Cable Car + Sky Park</span></b><small>若停駛，直接把時間給札嘎其與市場。</small></div></li>
             <li class="optional"><time>14:30</time><div><b>松島龍宮雲橋<span class="en">Songdo Yonggung Cloud Bridge</span></b><small>就在纜車天空公園端，往返快走約 25–30 分；現場另購小額門票。14:30 前還沒到橋口就跳過。</small><a class="route-link secondary" href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%EC%9A%A9%EA%B6%81%EA%B5%AC%EB%A6%84%EB%8B%A4%EB%A6%AC" target="_blank" rel="noreferrer">Naver Map ↗</a></div></li>
@@ -436,7 +435,7 @@
 
       <article class="day-card">
         <div class="day-photo">
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Songdo%20Cloud%20Trails%20Skywalk%20Songdo%20Beach%20Busan%20%2845749115681%29.jpg?width=1200" alt="釜山海岸景觀" loading="lazy">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Songdo%20Cloud%20Trails%20Skywalk%20Songdo%20Beach%20Busan%20%2845749115681%29.jpg?width=1200" alt="釜山海岸景觀" loading="lazy" decoding="async" sizes="(max-width: 850px) 100vw, 36vw">
           <div class="day-badge">DAY 03 · 午後轉乾</div>
         </div>
         <div class="day-content">
@@ -473,14 +472,16 @@
 
       <article class="day-card">
         <div class="day-photo">
-          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Haedong%20Yonggungsa.jpg?width=1200" alt="海東龍宮寺" loading="lazy">
+          <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Haedong%20Yonggungsa.jpg?width=1200" alt="海東龍宮寺" loading="lazy" decoding="async" sizes="(max-width: 850px) 100vw, 36vw">
           <div class="day-badge">DAY 04 · 晴</div>
         </div>
         <div class="day-content">
-          <div class="day-title"><h3>東岸收尾<span class="en">East Coast Finale</span></h3><span>16:00 延退 · Late checkout<br>20:00 起飛 · Flight</span></div>
+          <div class="day-title"><h3>東岸收尾<span class="en">East Coast Finale</span></h3><span>16:00 延退 · Late checkout<br>19:10 起飛 · Flight</span></div>
           <ol class="timeline">
-            <li><time>06:45</time><div><b>Park Hyatt 早餐<span class="en">Breakfast at Park Hyatt</span></b><small>32 樓 Dining Room 06:30–10:30；07:35 前吃完，08:20 準時出發。</small></div></li>
-            <li class="must"><time>08:20</time><div><b>Park Hyatt → 海東龍宮寺<span class="en">Park Hyatt → Haedong Yonggungsa Temple</span></b><small>Uber 約 35–50 分；行李留房內，帶輕便隨身包。</small></div></li>
+            <li class="meal-row"><time>07:35</time><div><b>海福鮑魚粥早餐<span class="en">Breakfast at Haebok</span></b><small>Park Hyatt → LCT 約 10–15 分；07:35 叫車、08:00 開門即入座，08:25 前離開。若想睡久一點，才改回飯店早餐。</small><div class="meal-options one">
+              <article class="meal-choice primary"><div class="tags"><span class="tag local">你指定</span><span class="tag">海景早餐</span></div><h4>해복 海福鮑魚粥<br>Haebok Abalone Porridge</h4><span class="hours">每日 08:00–22:00 · 15:00–16:30 午休</span><p>LCT Podium 2F；兩人各點普通鮑魚粥即可，想增加鮑魚量再選特鮑魚粥。可提前約 20 分鐘電話預訂或外帶。</p><a href="https://map.naver.com/p/search/%ED%95%B4%EB%B3%B5%20%ED%95%B4%EC%9A%B4%EB%8C%80%20%EC%97%98%EC%8B%9C%ED%8B%B0" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
+            </div></div></li>
+            <li class="must"><time>08:25</time><div><b>海福 → 海東龍宮寺<span class="en">Haebok → Haedong Yonggungsa Temple</span></b><small>Uber 約 25–40 分；行李留在 Park Hyatt 房內，帶輕便隨身包。</small></div></li>
             <li><time>10:25</time><div><b>前往松亭海灘<span class="en">Head to Songjeong Beach</span></b><small>龍宮寺 → 松亭約 15–20 分；先走一小段海灘。</small></div></li>
             <li class="meal-row"><time>11:00</time><div><b>松亭韓式甜點<span class="en">Korean Dessert in Songjeong</span></b><small>開門即入座，11:25 前離開；把它當茶點，不要點完整下午茶份量。</small><div class="meal-options one">
               <article class="meal-choice primary"><div class="tags"><span class="tag local">必去甜點</span><span class="tag">韓式茶點</span></div><h4>수월경화 水月鏡花</h4><span class="hours">每日 11:00–21:00</span><p>海景傳統茶館；選一壺茶＋一份 달보드레 韓式點心盒兩人分。</p><a href="https://map.naver.com/p/search/%EC%88%98%EC%9B%94%EA%B2%BD%ED%99%94%20%EC%86%A1%EC%A0%95" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
@@ -491,14 +492,15 @@
             </div></div></li>
             <li class="must"><time>12:40</time><div><b>青沙浦燈塔＋踏石觀景台<span class="en">Cheongsapo Lighthouses + Daritdol Observatory</span></b><small>松亭 → 青沙浦約 10–15 分；13:20 前到膠囊車站報到。</small></div></li>
             <li class="must"><time>13:30</time><div><b>天空膠囊：青沙浦 → 尾浦<span class="en">Sky Capsule: Cheongsapo → Mipo</span></b><small>必須預約；若停駛改 Uber 回飯店。</small></div></li>
-            <li class="optional"><time>14:20</time><div><b>尾浦／海理團路短逛<span class="en">Mipo / Haeridan-gil Quick Walk</span></b><small>只在膠囊準時抵達時加碼；14:45 必須叫車，15:00 左右回房。</small></div></li>
-            <li><time>16:00</time><div><b>Uber 前往金海機場<span class="en">Uber to Gimhae Airport</span></b><small>約 45–70 分；下班時段以高值估算，目標 17:15 前抵達。</small></div></li>
-            <li class="meal-row"><time>17:30</time><div><b>金海機場晚餐<span class="en">Dinner at Gimhae Airport</span></b><small>先完成報到；餐廳位置與安檢前後以當日航廈指示為準。</small><div class="meal-options">
+            <li class="optional"><time>14:20</time><div><b>尾浦／海理團路短逛<span class="en">Mipo / Haeridan-gil Quick Walk</span></b><small>只在膠囊準時抵達時加碼；14:40 必須叫車，約 15:00 回房取行李。</small></div></li>
+            <li class="must"><time>15:30</time><div><b>Uber 前往金海機場<span class="en">Uber to Gimhae Airport</span></b><small>雖可延退至 16:00，這天不要用滿：車程約 45–70 分，目標 16:30 左右抵達，為 19:10 國際線保留約 2 小時 40 分。</small></div></li>
+            <li class="meal-row"><time>16:50</time><div><b>報到後機場早晚餐<span class="en">Early Dinner after Check-in</span></b><small>先完成報到與托運；餐廳位置與安檢前後以當日航廈指示為準。17:35 前結束。</small><div class="meal-options">
               <article class="meal-choice primary"><div class="tags"><span class="tag local">首選</span><span class="tag">韓式定食</span></div><h4>명가의 뜰 名家之庭</h4><span class="hours">國際線 3F · 06:00–21:30</span><p>可點章魚麵定食或豬肉菜色；作為離韓前最後一餐最完整。</p><a href="https://map.naver.com/p/search/%EB%AA%85%EA%B0%80%EC%9D%98%20%EB%9C%B0%20%EA%B9%80%ED%95%B4%EA%B3%B5%ED%95%AD" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag">快速</span><span class="tag">壽司／分食</span></div><h4>플레이보6 에어레일</h4><span class="hours">國際線 2F · 06:00–21:00</span><p>壽司與韓式小吃，適合安檢排隊偏長、只剩 30 分鐘時。</p><a href="https://map.naver.com/p/search/%ED%94%8C%EB%A0%88%EC%9D%B4%EB%B3%B46%20%EC%97%90%EC%96%B4%EB%A0%88%EC%9D%BC%20%EA%B9%80%ED%95%B4%EA%B3%B5%ED%95%AD" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag">最快</span><span class="tag">拉麵</span></div><h4>K라면바</h4><span class="hours">國際線 2F · 06:00–21:00</span><p>時間不足的熱食備案；避開牛肉配料即可，牛高湯可接受。</p><a href="https://map.naver.com/p/search/K%EB%9D%BC%EB%A9%B4%EB%B0%94%20%EA%B9%80%ED%95%B4%EA%B3%B5%ED%95%AD" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
             </div></div></li>
-            <li class="must"><time>18:35</time><div><b>領取線上免稅預購<span class="en">Collect Online Duty-Free Preorder</span></b><small>只有已下單才執行。通過出境審查後，到國際線 2F、12–13 號登機門前取貨櫃檯；備妥護照、登機證與交換券，逐件核對。建議至少留 20–30 分鐘。</small></div></li>
+            <li class="must"><time>17:45</time><div><b>領取線上免稅預購<span class="en">Collect Online Duty-Free Preorder</span></b><small>只有已下單才執行。通過出境審查後，到國際線 2F、12–13 號登機門前取貨櫃檯；備妥護照、登機證與交換券，逐件核對。</small></div></li>
+            <li class="must"><time>18:25</time><div><b>抵達登機門<span class="en">Be at the Gate</span></b><small>19:10 起飛；停止購物，確認登機證上的實際登機時間與登機門。</small></div></li>
           </ol>
           <div class="route-actions">
             <a class="route-link" href="https://map.naver.com/p/search/%ED%95%B4%EB%8F%99%EC%9A%A9%EA%B6%81%EC%82%AC" target="_blank" rel="noreferrer">Naver Map：開啟首站 ↗</a>
@@ -601,7 +603,7 @@
       天氣與設施營運可能隨颱風快速改變；本頁資料請配合當日官方公告使用。
       <div class="credits">
         <span>地圖：Google Maps／Naver Map</span>
-        <span>料理照片為示意圖：<a href="https://commons.wikimedia.org/wiki/Category:Korean_cuisine" target="_blank" rel="noreferrer">Wikimedia Commons（各圖來源／授權可由卡片開啟）</a></span>
+        <span>餐飲實景：各店 DiningCode 店家頁、店家實訪文章及 <a href="https://menu.busan.go.kr/" target="_blank" rel="noreferrer">Busan City 官方餐飲頁</a>；每張卡可開啟原始來源</span>
         <span>照片：<a href="https://commons.wikimedia.org/wiki/File:Busan_City_Haeundae_Beach_KOGL_(01).jpg" target="_blank">Busan City</a></span>
         <span><a href="https://commons.wikimedia.org/wiki/File:Oryukdo_Skywalk_in_Busan,_South_Korea.jpg" target="_blank">Choi2451 / CC0</a></span>
         <span><a href="https://commons.wikimedia.org/wiki/File:Gamcheon_Culture_Village.jpg" target="_blank">Bernard Gagnon / CC0</a></span>
@@ -612,25 +614,6 @@
   </footer>
 
   <script>
-    const foodImages = {
-      "miyeok-guk": ["assets/food/miyeok-guk.jpg", "海帶湯料理示意", "https://commons.wikimedia.org/wiki/File:Miyeok-guk.jpg"],
-      "milmyeon": ["assets/food/milmyeon.jpg", "釜山密麵料理示意", "https://commons.wikimedia.org/wiki/File:Milmyeon_1.jpg"],
-      "hoe": ["assets/food/hoe.jpg", "韓式生魚片料理示意", "https://commons.wikimedia.org/wiki/File:Korean.food-Hoe-02.jpg"],
-      "gukbap": ["assets/food/dwaeji-gukbap.jpg", "豬肉湯飯料理示意", "https://commons.wikimedia.org/wiki/File:Korean.cuisine-Dwaeji.gukbap-01.jpg"],
-      "tonkatsu": ["assets/food/tonkatsu.jpg", "日式炸豬排料理示意", "https://commons.wikimedia.org/wiki/File:Japanese_tonkatsu.jpg"],
-      "nakji": ["assets/food/nakji-bokkeum.jpg", "辣炒章魚料理示意", "https://commons.wikimedia.org/wiki/File:Korean_cuisine-Nakji_bokkeum-01.jpg"],
-      "samgyeopsal": ["assets/food/samgyeopsal.jpg", "韓式烤豬肉料理示意", "https://commons.wikimedia.org/wiki/File:Samgyeopsal-gui.jpg"],
-      "hotteok": ["assets/food/hotteok.jpg", "韓式糖餅料理示意", "https://commons.wikimedia.org/wiki/File:Hotteok.jpg"],
-      "jokbal": ["assets/food/jokbal.jpg", "韓式豬腳料理示意", "https://commons.wikimedia.org/wiki/File:Korean_food,_Jokbal.jpg"],
-      "kalguksu": ["assets/food/kalguksu.jpg", "刀切麵料理示意", "https://commons.wikimedia.org/wiki/File:Korean.noodle-Kalguksu-01.jpg"],
-      "hangwa": ["assets/food/hangwa.jpg", "韓式茶點料理示意", "https://commons.wikimedia.org/wiki/File:朝鮮傳統韓菓.jpg"],
-      "bao": ["assets/food/bao.jpg", "刈包料理示意", "https://commons.wikimedia.org/wiki/File:Bao_Buns.jpg"],
-      "fish": ["assets/food/grilled-fish.jpg", "烤魚料理示意", "https://commons.wikimedia.org/wiki/File:Korean_grilled_mackerel-Godeungeo_gui-02.jpg"],
-      "pajeon": ["assets/food/haemul-pajeon.jpg", "海鮮煎餅料理示意", "https://commons.wikimedia.org/wiki/File:Korean_pancake-Haemul_pajeon-01.jpg"],
-      "latte": ["assets/food/latte.jpg", "咖啡料理示意", "https://commons.wikimedia.org/wiki/File:Latte_art.jpg"],
-      "mochi": ["assets/food/mochi-ice-cream.jpg", "麻糬冰淇淋料理示意", "https://commons.wikimedia.org/wiki/File:Mochi_Ice_Cream.jpg"]
-    };
-
     const mealEnhancements = [
       ["풍원장", "miyeok-guk", "鮑魚海帶湯定食 · 전복미역국정찬"],
       ["가야밀면", "milmyeon", "水密麵＋手工餃子 · 물밀면＋만두"],
@@ -644,7 +627,6 @@
       ["광안목", "samgyeopsal", "A Set：熟成豬頸肉＋五花肉"],
       ["해변횟집", "hoe", "兩人小份綜合生魚片 · 모둠회 소"],
       ["뚱보네", "pajeon", "烤貝小份＋海鮮煎餅 · 조개구이＋해물파전"],
-      ["송도포차", "fish", "烤鯖魚＋海鮮煎餅 · 고등어구이＋해물파전"],
       ["씨앗호떡", "hotteok", "現煎種子糖餅 1 個，兩人先分食"],
       ["비빔당면", "milmyeon", "拌冬粉＋魚板 · 비빔당면＋어묵"],
       ["개미집", "nakji", "章魚蝦鍋 · 낙새（不含牛腸）"],
@@ -662,8 +644,17 @@
       ["낙불집", "nakji", "章魚料理 · 낙지볶음（點餐時確認不加牛肉）"],
       ["명가의 뜰", "nakji", "章魚拌麵定食 · 낙지소면반상"],
       ["플레이보6", "hoe", "壽司組合＋魚板，依當日櫃檯品項"],
-      ["K라면바", "kalguksu", "非牛肉口味拉麵＋蛋（現場確認湯底）"]
+      ["K라면바", "kalguksu", "非牛肉口味拉麵＋蛋（現場確認湯底）"],
+      ["해복", "miyeok-guk", "普通鮑魚粥 · 전복죽 ₩16,000；想加量再選特鮑魚粥"]
     ];
+
+    async function initMeals() {
+    let photoList = [];
+    try {
+      const response = await fetch("assets/food/locations/sources.json");
+      if (response.ok) photoList = await response.json();
+    } catch (_) {}
+    const restaurantPhotos = new Map(photoList.map(photo => [photo.key, photo]));
 
     let savedMeals;
     try { savedMeals = new Set(JSON.parse(localStorage.getItem("busanSavedMeals") || "[]")); }
@@ -674,23 +665,25 @@
       const title = card.querySelector("h4")?.textContent.replace(/\s+/g, " ").trim() || "";
       const match = mealEnhancements.find(([key]) => title.includes(key));
       if (!match) return;
-      const [key, imageKey, order] = match;
-      const [src, alt, source] = foodImages[imageKey];
+      const [key, , order] = match;
+      const photo = restaurantPhotos.get(key);
       card.dataset.mealKey = key;
 
-      const figure = document.createElement("figure");
-      figure.className = "meal-photo";
-      figure.innerHTML = `<img src="${src}" alt="${alt}" loading="lazy" decoding="async"><figcaption>料理示意 · <a href="${source}" target="_blank" rel="noreferrer">photo source ↗</a></figcaption>`;
-      const save = document.createElement("button");
-      save.className = "meal-save";
-      save.type = "button";
-      save.addEventListener("click", () => {
-        savedMeals.has(key) ? savedMeals.delete(key) : savedMeals.add(key);
-        try { localStorage.setItem("busanSavedMeals", JSON.stringify([...savedMeals])); } catch (_) {}
-        renderSavedMeals();
-      });
-      figure.append(save);
-      card.prepend(figure);
+      if (photo) {
+        const figure = document.createElement("figure");
+        figure.className = "meal-photo";
+        figure.innerHTML = `<img src="${photo.image}" alt="${title} 店家實景／實際餐點" loading="lazy" decoding="async"><figcaption>店家實景 · <a href="${photo.source}" target="_blank" rel="noreferrer">source ↗</a></figcaption>`;
+        const save = document.createElement("button");
+        save.className = "meal-save";
+        save.type = "button";
+        save.addEventListener("click", () => {
+          savedMeals.has(key) ? savedMeals.delete(key) : savedMeals.add(key);
+          try { localStorage.setItem("busanSavedMeals", JSON.stringify([...savedMeals])); } catch (_) {}
+          renderSavedMeals();
+        });
+        figure.append(save);
+        card.prepend(figure);
+      }
 
       const recommendation = document.createElement("div");
       recommendation.className = "recommended-order";
@@ -704,10 +697,12 @@
       document.querySelectorAll(".meal-choice[data-meal-key]").forEach(card => {
         const isSaved = savedMeals.has(card.dataset.mealKey);
         const button = card.querySelector(".meal-save");
-        button.classList.toggle("is-saved", isSaved);
-        button.textContent = isSaved ? "♥ 已收藏" : "♡ 收藏";
-        button.setAttribute("aria-pressed", String(isSaved));
-        button.setAttribute("aria-label", `${isSaved ? "取消收藏" : "收藏"}${card.querySelector("h4").textContent.trim()}`);
+        if (button) {
+          button.classList.toggle("is-saved", isSaved);
+          button.textContent = isSaved ? "♥ 已收藏" : "♡ 收藏";
+          button.setAttribute("aria-pressed", String(isSaved));
+          button.setAttribute("aria-label", `${isSaved ? "取消收藏" : "收藏"}${card.querySelector("h4").textContent.trim()}`);
+        }
         card.hidden = showSavedOnly && !isSaved;
       });
       document.getElementById("saved-count").textContent = `${savedMeals.size} 間已收藏`;
@@ -720,6 +715,8 @@
       renderSavedMeals();
     });
     renderSavedMeals();
+    }
+    initMeals();
 
     document.querySelectorAll('.map-filter button').forEach(button => {
       button.addEventListener('click', () => {
