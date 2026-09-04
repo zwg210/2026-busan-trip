@@ -121,7 +121,7 @@
     .timeline { list-style: none; padding: 0; margin: 0; }
     .timeline li { display: grid; grid-template-columns: 92px 1fr; gap: 15px; padding: 15px 0; border-bottom: 1px solid var(--line); }
     .timeline time { color: var(--sea); font-weight: 850; font-variant-numeric: tabular-nums; }
-    .timeline b { display: block; }
+    .timeline b { display: block; padding-right: 215px; }
     .en { display: block; margin-top: 1px; color: var(--muted); font-size: .78em; font-weight: 720; line-height: 1.35; letter-spacing: .01em; }
     .day-title h3 .en { margin-top: 5px; color: var(--sea); font: 700 .42em/1.2 system-ui, sans-serif; letter-spacing: .03em; }
     .timeline small { color: var(--muted); }
@@ -134,8 +134,11 @@
     .origin-tag.saved { border-color: rgba(239,118,95,.25); background: #ffe5df; color: #9d2e26; }
     .origin-tag.logistics { border-color: rgba(91,101,99,.16); background: #f1f2ef; color: var(--muted); }
     .origin-tag.top { border-color: rgba(242,193,78,.42); background: #fff2c7; color: #765506; }
-    .temp-chip { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 5px; width: fit-content; margin: 1px 0 7px; padding: 5px 9px; border: 1px solid rgba(38,117,150,.2); border-radius: 999px; background: #eaf5f8; color: #17566f; font-size: .68rem; font-weight: 900; line-height: 1.35; }
+    .temp-chip { position: absolute; z-index: 2; top: 12px; right: 0; display: inline-flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 5px; width: fit-content; max-width: 210px; margin: 0; padding: 5px 9px; border: 1px solid rgba(38,117,150,.2); border-radius: 999px; background: #eaf5f8; color: #17566f; font-size: .68rem; font-weight: 900; line-height: 1.35; text-align: right; box-shadow: 0 3px 10px rgba(23,86,111,.08); cursor: pointer; }
     .temp-chip em { color: var(--muted); font-style: normal; font-weight: 750; }
+    .temp-chip:focus-visible { outline: 2px solid var(--sea); outline-offset: 2px; }
+    .operating-hours { display: flex; align-items: flex-start; gap: 6px; width: fit-content; margin: 6px 0 7px; padding: 5px 8px; border-radius: 8px; background: rgba(242,193,78,.18); color: #735509; font-size: .7rem; font-weight: 850; line-height: 1.4; }
+    .operating-hours em { color: var(--muted); font-style: normal; font-weight: 700; }
     .travel-connector { grid-column: 2; display: flex; align-items: center; gap: 8px; min-height: 30px; margin-top: 2px; padding: 6px 10px; border-left: 2px dotted rgba(11,102,104,.42); border-radius: 0 10px 10px 0; background: linear-gradient(90deg, rgba(11,102,104,.08), transparent); color: var(--sea); font-size: .7rem; font-weight: 900; line-height: 1.35; }
     .travel-connector .travel-arrow { font-size: .9rem; line-height: 1; }
     .travel-connector em { color: var(--muted); font-style: normal; font-weight: 750; }
@@ -294,7 +297,13 @@
       .day-title { align-items: flex-start; }
       .day-title h3 { font-size: 1.7rem; }
       .timeline li { grid-template-columns: 68px minmax(0, 1fr); gap: 8px; padding: 14px 0; }
+      .timeline b { min-height: 28px; padding-right: 65px; }
       .timeline small { display: block; margin-top: 2px; line-height: 1.45; }
+      .temp-chip { top: 10px; max-width: 64px; padding: 4px 7px; font-size: .66rem; white-space: nowrap; }
+      .temp-chip em { display: none; }
+      .temp-chip.expanded { max-width: min(230px, calc(100% - 76px)); white-space: normal; }
+      .temp-chip.expanded em { display: inline; }
+      .operating-hours { margin-top: 5px; }
       .travel-connector { grid-column: 1 / -1; margin-left: 68px; }
       .route-actions { display: grid; grid-template-columns: 1fr; }
       .route-link { width: 100%; min-height: 48px; justify-content: center; text-align: center; }
@@ -362,7 +371,7 @@
   <main>
     <div class="update-banner" role="status">
       <strong>LIVE UPDATE · 9/5</strong>
-      <span>每站之間新增 Uber／步行等預估移動時間；另有逐站溫度、體感／降雨／強風與餐廳實景菜色照片。</span>
+      <span>逐站溫度移至每列右上角，並新增所有行程列的營業／開放時間；站間移動時間亦保留在中間。</span>
     </div>
     <section id="weather">
       <div class="section-head">
@@ -702,6 +711,7 @@
       天氣與設施營運可能隨颱風快速改變；本頁資料請配合當日官方公告使用。
       <div class="credits">
         <span>地圖：Google Maps／Naver Map</span>
+        <span>營業時間：<a href="https://www.visitbusan.net/" target="_blank" rel="noreferrer">Visit Busan</a>、<a href="https://english.visitkorea.or.kr/" target="_blank" rel="noreferrer">VISITKOREA</a>、<a href="https://www.bluelinepark.com/eng/" target="_blank" rel="noreferrer">Blue Line Park</a>、<a href="https://en.busanaircruise.co.kr/" target="_blank" rel="noreferrer">Busan Air Cruise</a> 及各店即時頁面</span>
         <span>餐飲實景：各店 DiningCode 店家頁、店家實訪文章及 <a href="https://menu.busan.go.kr/" target="_blank" rel="noreferrer">Busan City 官方餐飲頁</a>；每張卡可開啟原始來源</span>
         <span>照片：<a href="https://commons.wikimedia.org/wiki/File:Busan_City_Haeundae_Beach_KOGL_(01).jpg" target="_blank">Busan City</a></span>
         <span><a href="https://commons.wikimedia.org/wiki/File:Oryukdo_Skywalk_in_Busan,_South_Korea.jpg" target="_blank">Choi2451 / CC0</a></span>
@@ -771,6 +781,76 @@
       });
     }
     initOriginTags();
+
+    const operatingHours = [
+      [
+        ["國際線航廈約 05:00–23:00", "航班作業優先"],
+        ["午餐候選：各店時間見下方", "候位可能變動"],
+        ["甜點候選：各店時間見下方", "售完可能提早結束"],
+        ["Uber 24 小時", "依附近供車"],
+        ["天空步道 09:00–19:00", "6–9月；強風可暫停開放"],
+        ["通常 10:00–23:00", "Olive Young 請以 Naver 當日頁面為準"],
+        ["飯店前台 24 小時", "客房入住依訂房"],
+        ["海雲台海灘全天開放", "海灘設施另有時段"],
+        ["冬柏島步道全天開放", "Nurimaru 館舍通常 09:00–18:00"],
+        ["晚餐候選：各店時間見下方", "分店與候位狀況不同"],
+        ["依 Instagram 當日公告", "Hongdan 建議先預約"]
+      ],
+      [
+        ["Camellia 早餐 06:30–10:00", "住客用餐"],
+        ["飯店前台／寄放行李 24 小時", "客房依入住時間"],
+        ["09:00–18:00", "3–10月；村內有居民"],
+        ["松島海灘全天開放", "午餐候選時間見下方"],
+        ["09:00–21:00", "售票通常提早 30 分結束；看風況"],
+        ["09:00–18:00", "17:30 最後入場；1、3週週一休"],
+        ["札嘎其 02:00–22:00；國際市場多為 09:00–20:00", "個別攤店不同"],
+        ["甜點候選：各店時間見下方", "BIFF 廣場本身全天可走"],
+        ["書店多約 10:00–19:00", "各店公休與時間不同"],
+        ["公園全天；釜山塔 10:00–22:00", "全年開放"],
+        ["夜市 19:30–24:00", "晚餐候選時間見下方"]
+      ],
+      [
+        ["Park Hyatt 早餐約 06:30–10:30", "依住客方案"],
+        ["10:30–19:30", "樂天免稅店釜山店"],
+        ["午餐候選：各店時間見下方", "候位可能變動"],
+        ["街區全天可走", "咖啡店與商店各自營業"],
+        ["以 Naver 當日頁面為準", "Mammoth 分店時間可能調整"],
+        ["08:00–18:00", "Momos 最後點餐 17:30"],
+        ["村落全天可走", "店家多為日間營業；注意居民"],
+        ["海岸步道全天開放", "只建議白天且風浪安全時走"],
+        ["晚餐候選：各店時間見下方", "候位可能變動"],
+        ["依 Instagram／Naver 當日公告", "Make Zero 建議預約"]
+      ],
+      [
+        ["08:00–22:00", "海福 15:00–16:30 午休"],
+        ["龍宮寺 04:30–19:20", "18:50 最後入場"],
+        ["松亭海灘全天開放", "海灘設施另有時段"],
+        ["甜點候選：各店時間見下方", "售完可能提早結束"],
+        ["午餐候選：各店時間見下方", "12:25 前離開"],
+        ["燈塔全天；踏石觀景台 09:00–21:00", "9月時段；天候可關閉"],
+        ["08:30–19:30", "天空膠囊 9月時段；依預約班次"],
+        ["街區全天可走", "沿線店家各自營業"],
+        ["Uber 24 小時", "依交通與附近供車"],
+        ["航廈餐飲多約 06:00–21:00", "各櫃位不同"],
+        ["出境免稅店 06:30–21:30", "取貨櫃檯依當日航班"],
+        ["國際線航廈約 05:00–23:00", "依航空公司登機截止時間"]
+      ]
+    ];
+
+    function initOperatingHours() {
+      document.querySelectorAll(".day-card").forEach((day, dayIndex) => {
+        day.querySelectorAll(".timeline > li").forEach((row, rowIndex) => {
+          const hours = operatingHours[dayIndex]?.[rowIndex];
+          if (!hours) return;
+          const block = document.createElement("div");
+          block.className = "operating-hours";
+          block.innerHTML = `<span aria-hidden="true">🕒</span><span>${hours[0]}${hours[1] ? ` <em>· ${hours[1]}</em>` : ""}</span>`;
+          const tags = row.querySelector(":scope > div > .origin-tags");
+          (tags || row.querySelector(":scope > div > b"))?.insertAdjacentElement("afterend", block);
+        });
+      });
+    }
+    initOperatingHours();
 
     const travelLegs = [
       [
@@ -884,7 +964,18 @@
           const temp = forecastFallbacks[dayIndex]?.[rowIndex];
           const chip = document.createElement("span");
           chip.className = "temp-chip";
+          chip.tabIndex = 0;
+          chip.setAttribute("role", "button");
+          chip.setAttribute("aria-label", `${temp ?? "–"}°C 戶外預估；點按顯示或收起細節`);
           chip.innerHTML = `🌡 ${temp ?? "–"}°C <em>戶外預估</em>`;
+          const toggleDetails = () => chip.classList.toggle("expanded");
+          chip.addEventListener("click", toggleDetails);
+          chip.addEventListener("keydown", event => {
+            if (event.key === "Enter" || event.key === " ") {
+              event.preventDefault();
+              toggleDetails();
+            }
+          });
           const origin = row.querySelector(":scope > div > .origin-tags");
           (origin || row.querySelector(":scope > div > b"))?.insertAdjacentElement("afterend", chip);
           chips.push({ chip, zone: forecastZone(dayIndex, title), date: forecastDates[dayIndex], time, title });
@@ -910,6 +1001,7 @@
           if (/早餐|午餐|晚餐|甜點|免稅店|Olive Young|入住|酒吧|Make Zero|登機門/.test(title)) notes.push("室內有冷氣");
           chip.innerHTML = `🌡 ${temperature}°C <em>${notes.join(" · ")}</em>`;
           chip.title = `${date} ${time} ${zone} 逐時預報估算`;
+          chip.setAttribute("aria-label", `${temperature}°C；${notes.join("；")}；點按顯示或收起細節`);
         });
         document.getElementById("forecast-status").firstChild.textContent = "逐站溫度已依 Haeundae、Oryukdo、西釜山、影島、西面與機張的最新逐時預報更新；數字為戶外估算。資料：";
       } catch (_) {
