@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b3b3c">
-  <title>BUSAN / 4 DAYS — 釜山旅行手冊</title>
+  <title>Lucas’s BUSAN / 4 DAYS — 個人釜山旅行手冊</title>
   <meta name="description" content="2026 年 9 月 5–8 日釜山雙人旅行：天氣調整行程、午餐選項、調酒吧、互動地圖與訂票提醒。">
   <style>
     :root {
@@ -116,6 +116,9 @@
     .timeline time { color: var(--sea); font-weight: 850; font-variant-numeric: tabular-nums; }
     .timeline b { display: block; }
     .timeline small { color: var(--muted); }
+    .timeline li { position: relative; }
+    .timeline li.done { opacity: .52; }
+    .timeline li.done b { text-decoration: line-through; }
     .route-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; padding: 11px 15px; border-radius: 999px; background: var(--sea); color: white; text-decoration: none; font-weight: 800; }
     .route-link:hover { background: var(--deep); }
 
@@ -128,6 +131,7 @@
     .tag { padding: 4px 8px; border-radius: 99px; background: #e4efeb; color: var(--deep); font-size: .72rem; font-weight: 850; }
     .tag.michelin { background: #ffe3de; color: #9d2e26; }
     .food-card h4 { margin: 0 0 5px; font-size: 1.1rem; }
+    .hours { display: block; margin: 2px 0 9px; color: var(--sea); font-size: .78rem; font-weight: 850; }
     .food-card p { margin: 0 0 15px; color: var(--muted); font-size: .9rem; }
     .food-card .food-actions { display: flex; gap: 12px; margin-top: auto; }
     .food-card a { color: var(--sea); font-size: .84rem; font-weight: 850; text-underline-offset: 3px; }
@@ -226,7 +230,7 @@
 <body>
   <header class="hero">
     <div class="hero-inner">
-      <p class="eyebrow">Two travellers · No beef · Sea, food &amp; cocktails</p>
+      <p class="eyebrow">Lucas’s personal field guide · Two travellers · No beef</p>
       <h1>BUSAN<br><em>four days</em></h1>
       <div class="hero-copy">
         <p>以天氣為核心的四日旅行手冊：晴天留給海岸，雨天留給市區。午餐不綁死，抵達每區後再從精選名單決定。</p>
@@ -280,11 +284,11 @@
         <div class="day-content">
           <div class="day-title"><h3>東南海岸</h3><span>Westin Josun<br>入住日</span></div>
           <ol class="timeline">
-            <li><time>10:20</time><div><b>抵達金海機場</b><small>領行李後 Uber Taxi 前往飯店，約 50–70 分鐘。</small></div></li>
+            <li><time>10:20</time><div><b>抵達金海機場</b><small>領行李後 Uber Taxi 前往飯店，約 50–70 分鐘；週六中午預留高值。</small></div></li>
             <li><time>12:20</time><div><b>Westin 寄放行李</b><small>午餐從下方「9/5 海雲台」三個選項現場挑選。</small></div></li>
-            <li><time>14:10</time><div><b>五六島天空步道＋日出公園</b><small>若開放，只走二妓台入口短程；強風時改樂天免稅店。</small></div></li>
+            <li><time>14:10</time><div><b>五六島天空步道＋日出公園</b><small>Westin → 五六島約 25–35 分；若強風關閉，改樂天免稅店。</small></div></li>
             <li><time>17:00</time><div><b>入住／海雲台海灘</b><small>可加走平坦的冬柏島入口。</small></div></li>
-            <li><time>18:30</time><div><b>晚餐 → 廣安里夜景</b><small>20:45 後到 Hongdan 喝第一晚創意調酒。</small></div></li>
+            <li><time>18:30</time><div><b>晚餐 → 廣安里夜景</b><small>Westin → 廣安里約 15–25 分；Hongdan 距海灘約 5–10 分鐘步行。</small></div></li>
           </ol>
           <a class="route-link" href="https://www.google.com/maps/dir/?api=1&origin=The+Westin+Josun+Busan&destination=Hongdan+Busan&waypoints=Oryukdo+Skywalk%7CGwangalli+Beach&travelmode=driving" target="_blank" rel="noreferrer">在 Google Maps 開啟本日路線 ↗</a>
         </div>
@@ -298,12 +302,12 @@
         <div class="day-content">
           <div class="day-title"><h3>西釜山</h3><span>Park Hyatt<br>換飯店</span></div>
           <ol class="timeline">
-            <li><time>08:00</time><div><b>Westin → Park Hyatt</b><small>兩間飯店僅約 10 分鐘；先搬行李，避免傍晚從南浦折返。</small></div></li>
-            <li><time>09:20</time><div><b>甘川文化村</b><small>早到避開週日人潮，保留約 2 小時。</small></div></li>
-            <li><time>11:40</time><div><b>松島午餐</b><small>先看纜車即時營運，再從下方午餐選項決定。</small></div></li>
+            <li><time>08:00</time><div><b>Westin → Park Hyatt</b><small>Uber 約 5–10 分；先搬行李，避免傍晚從南浦折返。</small></div></li>
+            <li><time>09:20</time><div><b>甘川文化村</b><small>Park Hyatt → 甘川約 45–65 分；早到避開週日人潮。</small></div></li>
+            <li><time>11:40</time><div><b>松島午餐</b><small>甘川 → 松島約 15–25 分；先看纜車即時營運。</small></div></li>
             <li><time>12:40</time><div><b>松島海上纜車＋天空公園</b><small>若停駛，直接把時間給札嘎其與市場。</small></div></li>
-            <li><time>15:20</time><div><b>札嘎其 → BIFF → 國際市場</b><small>步行順路；17:30 富平罐頭市場吃晚餐。</small></div></li>
-            <li><time>19:00</time><div><b>龍頭山公園／釜山塔</b><small>雨夜備案良好；21:00 左右回 Park Hyatt。</small></div></li>
+            <li><time>15:20</time><div><b>札嘎其 → BIFF → 國際市場</b><small>松島 → 札嘎其約 15–20 分；市場之間步行各約 5–12 分。</small></div></li>
+            <li><time>19:00</time><div><b>龍頭山公園／釜山塔</b><small>富平步行約 15–20 分；回 Park Hyatt 約 35–55 分。</small></div></li>
           </ol>
           <a class="route-link" href="https://www.google.com/maps/dir/?api=1&origin=Park+Hyatt+Busan&destination=Busan+Tower&waypoints=Gamcheon+Culture+Village%7CSongdo+Bay+Station%7CJagalchi+Market%7CBupyeong+Kkangtong+Market&travelmode=driving" target="_blank" rel="noreferrer">在 Google Maps 開啟本日路線 ↗</a>
         </div>
@@ -317,12 +321,12 @@
         <div class="day-content">
           <div class="day-title"><h3>西面＋影島</h3><span>雨天先室內<br>午後看海</span></div>
           <ol class="timeline">
-            <li><time>10:30</time><div><b>樂天免稅店釜山店</b><small>雨勢尚未結束前先逛室內。</small></div></li>
-            <li><time>12:00</time><div><b>田浦午餐選擇</b><small>Bao Haus、Cor Pasta Bar 或豬肉湯飯，見下方比較。</small></div></li>
+            <li><time>10:30</time><div><b>樂天免稅店釜山店</b><small>Park Hyatt → 西面約 25–40 分；雨勢尚未結束前先逛室內。</small></div></li>
+            <li><time>12:00</time><div><b>田浦午餐選擇</b><small>Bao Haus、Anmok 西面分店或 Jeongjitgan，見下方比較。</small></div></li>
             <li><time>13:15</time><div><b>田浦咖啡街</b><small>保留約 90 分鐘，依雨勢彈性延長。</small></div></li>
-            <li><time>15:40</time><div><b>白淺文化村</b><small>若階梯濕滑，只走上層村落；不要勉強走絕影海岸下層。</small></div></li>
-            <li><time>18:30</time><div><b>晚餐</b><small>可預約影島米其林必比登全素餐廳 ARP。</small></div></li>
-            <li><time>20:40</time><div><b>Make Zero</b><small>在田浦以發酵、自製素材與零浪費概念做調酒。</small></div></li>
+            <li><time>15:40</time><div><b>白淺文化村</b><small>田浦 → 白淺約 30–45 分；濕滑時只走上層村落。</small></div></li>
+            <li><time>18:30</time><div><b>晚餐選擇</b><small>ARP 週一 16:00 關門，不適合晚餐；可選 Anmok 南川本店或回西面。</small></div></li>
+            <li><time>20:40</time><div><b>Make Zero</b><small>白淺 → 南川約 35–50 分；南川 → Make Zero 約 20–30 分。</small></div></li>
           </ol>
           <a class="route-link" href="https://www.google.com/maps/dir/?api=1&origin=Park+Hyatt+Busan&destination=Make+Zero+Busan&waypoints=Lotte+Duty+Free+Busan%7CJeonpo+Cafe+Street%7CHuinnyeoul+Culture+Village%7CARP+Busan&travelmode=driving" target="_blank" rel="noreferrer">在 Google Maps 開啟本日路線 ↗</a>
         </div>
@@ -336,12 +340,12 @@
         <div class="day-content">
           <div class="day-title"><h3>東岸收尾</h3><span>16:00 延退<br>20:00 起飛</span></div>
           <ol class="timeline">
-            <li><time>08:20</time><div><b>Park Hyatt → 海東龍宮寺</b><small>行李留房內，帶輕便隨身包。</small></div></li>
-            <li><time>10:25</time><div><b>松亭海灘</b><small>散步後，在 11:15–12:15 間從東岸午餐選項挑一家。</small></div></li>
-            <li><time>12:30</time><div><b>青沙浦燈塔＋踏石觀景台</b><small>預留步行和拍照時間。</small></div></li>
+            <li><time>08:20</time><div><b>Park Hyatt → 海東龍宮寺</b><small>Uber 約 35–50 分；行李留房內，帶輕便隨身包。</small></div></li>
+            <li><time>10:25</time><div><b>松亭海灘</b><small>龍宮寺 → 松亭約 15–20 分；11:15–12:15 間午餐。</small></div></li>
+            <li><time>12:30</time><div><b>青沙浦燈塔＋踏石觀景台</b><small>松亭 → 青沙浦約 10–15 分；預留步行和拍照時間。</small></div></li>
             <li><time>13:30</time><div><b>天空膠囊：青沙浦 → 尾浦</b><small>必須預約；若停駛改 Uber 回飯店。</small></div></li>
-            <li><time>14:20</time><div><b>尾浦／海理團路短逛</b><small>15:00 前回 Park Hyatt，整理後 16:00 退房。</small></div></li>
-            <li><time>16:00</time><div><b>Uber 前往金海機場</b><small>預留尖峰塞車；目標 17:15 前抵達。</small></div></li>
+            <li><time>14:20</time><div><b>尾浦／海理團路短逛</b><small>尾浦 → Park Hyatt 約 15–25 分；15:00 左右回房。</small></div></li>
+            <li><time>16:00</time><div><b>Uber 前往金海機場</b><small>約 45–70 分；下班時段以高值估算，目標 17:15 前抵達。</small></div></li>
           </ol>
           <a class="route-link" href="https://www.google.com/maps/dir/?api=1&origin=Park+Hyatt+Busan&destination=Park+Hyatt+Busan&waypoints=Haedong+Yonggungsa%7CSongjeong+Beach%7CCheongsapo+Daritdol+Observatory%7CMipo+Station&travelmode=driving" target="_blank" rel="noreferrer">在 Google Maps 開啟本日路線 ↗</a>
         </div>
@@ -358,9 +362,9 @@
         <div class="lunch-day">
           <h3>9/5 · 海雲台／Westin 周邊</h3>
           <div class="food-grid">
-            <article class="food-card"><div class="tags"><span class="tag michelin">MICHELIN Selected</span><span class="tag">海鮮</span></div><h4>Kumsu Bokguk 금수복국</h4><p>釜山經典河豚湯，抵達後最省力；請確認湯與小菜無牛肉調味。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=Kumsu+Bokguk+Haeundae" target="_blank">地圖 ↗</a><a href="https://guide.michelin.com/dk/en/busan-region/restaurants" target="_blank">米其林 ↗</a></div></article>
-            <article class="food-card"><div class="tags"><span class="tag michelin">MICHELIN Selected</span><span class="tag">熟成魚</span></div><h4>Iwa 이와</h4><p>熟成生魚片與壽司套餐；品質較高、用餐較久，最好先電話預約。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=Iwa+Busan+Haeundae" target="_blank">地圖 ↗</a><a href="https://guide.michelin.com/kr/en/busan-region/busan_1025838/restaurant/iwa" target="_blank">米其林 ↗</a></div></article>
-            <article class="food-card"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">鰻魚</span></div><h4>Haemok 해목</h4><p>日式鰻魚飯與海鮮丼，通常排隊；時間吃緊時不必硬等。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=Haemok+Haeundae+Busan" target="_blank">地圖 ↗</a><a href="https://guide.michelin.com/kr/en/busan-region/busan_1025838/restaurants/bib-gourmand" target="_blank">米其林 ↗</a></div></article>
+            <article class="food-card"><div class="tags"><span class="tag michelin">MICHELIN Selected</span><span class="tag">海鮮</span></div><h4>Kumsu Bokguk 금수복국</h4><span class="hours">每日 24 小時 · 無休</span><p>釜山經典河豚湯，抵達後最省力；請確認湯與小菜無牛肉調味。</p><div class="food-actions"><a href="https://map.naver.com/p/search/%EA%B8%88%EC%88%98%EB%B3%B5%EA%B5%AD%20%ED%95%B4%EC%9A%B4%EB%8C%80%EB%B3%B8%EC%A0%90" target="_blank">Naver Map ↗</a><a href="https://guide.michelin.com/dk/en/busan-region/restaurants" target="_blank">米其林 ↗</a></div></article>
+            <article class="food-card"><div class="tags"><span class="tag michelin">MICHELIN Selected</span><span class="tag">熟成魚</span></div><h4>Iwa 이와</h4><span class="hours">每日 11:30–22:00 · 預約優先</span><p>熟成生魚片與壽司套餐；品質較高、用餐較久，最好先電話預約。</p><div class="food-actions"><a href="https://map.naver.com/p/search/%EC%9D%B4%EC%99%80%20%ED%95%B4%EC%9A%B4%EB%8C%80" target="_blank">Naver Map ↗</a><a href="https://guide.michelin.com/kr/en/busan-region/busan_1025838/restaurant/iwa" target="_blank">米其林 ↗</a></div></article>
+            <article class="food-card"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">鰻魚</span></div><h4>Haemok 해목</h4><span class="hours">週末 11:00–22:00 · LO 20:50 · 無午休</span><p>日式鰻魚飯與海鮮丼，通常排隊；時間吃緊時不必硬等。</p><div class="food-actions"><a href="https://map.naver.com/p/search/%ED%95%B4%EB%AA%A9%20%ED%95%B4%EC%9A%B4%EB%8C%80%EC%A0%90" target="_blank">Naver Map ↗</a><a href="https://guide.michelin.com/kr/en/busan-region/busan_1025838/restaurants/bib-gourmand" target="_blank">米其林 ↗</a></div></article>
           </div>
         </div>
 
@@ -369,16 +373,16 @@
           <div class="food-grid">
             <article class="food-card"><div class="tags"><span class="tag">松島</span><span class="tag">海鮮</span></div><h4>松島海鮮／烤貝店</h4><p>最順路且不必跨區。選烤貝、海鮮鍋或生魚片，避開標示牛肉的綜合鍋。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=seafood+restaurant+Songdo+Beach+Busan" target="_blank">附近餐廳 ↗</a></div></article>
             <article class="food-card"><div class="tags"><span class="tag">札嘎其</span><span class="tag">現選海鮮</span></div><h4>Jagalchi Market 札嘎其市場</h4><p>若纜車停駛，提前來市場挑海鮮再到樓上料理；先談清楚價格與料理費。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=Jagalchi+Market+Busan" target="_blank">地圖 ↗</a></div></article>
-            <article class="food-card"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">全素</span></div><h4>ARP 아르프</h4><p>位於影島的全素料理，完全沒有牛肉風險；需多約 15–20 分鐘車程，建議預約。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=ARP+Vegan+Busan" target="_blank">地圖 ↗</a><a href="https://guide.michelin.com/sg/en/busan-region/busan_1025838/restaurant/arp" target="_blank">米其林 ↗</a></div></article>
+            <article class="food-card"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">全素</span></div><h4>ARP 아르프</h4><span class="hours">週日 11:30–20:00 · 建議預約</span><p>位於影島的全素料理，完全沒有牛肉風險；從南浦／札嘎其前往較順。</p><div class="food-actions"><a href="https://map.naver.com/p/search/%EC%95%84%EB%A5%B4%ED%94%84%20%EC%98%81%EB%8F%84" target="_blank">Naver Map ↗</a><a href="https://guide.michelin.com/sg/en/busan-region/busan_1025838/restaurant/arp" target="_blank">米其林 ↗</a></div></article>
           </div>
         </div>
 
         <div class="lunch-day">
           <h3>9/7 · 西面／田浦</h3>
           <div class="food-grid">
-            <article class="food-card"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">台式</span></div><h4>Bao Haus 바오하우스</h4><p>豬肉刈包與台式小食，最配田浦路線；逐項確認醬汁及其他菜色沒有牛肉。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=Bao+Haus+Busan" target="_blank">地圖 ↗</a><a href="https://guide.michelin.com/kr/en/busan-region/busan_1025838/restaurants/bib-gourmand" target="_blank">米其林 ↗</a></div></article>
-            <article class="food-card"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">義大利麵</span></div><h4>Cor Pasta Bar 코르 파스타바</h4><p>小型義大利麵吧；先問當日醬汁與高湯，再選海鮮或蔬菜麵。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=Cor+Pasta+Bar+Busan" target="_blank">地圖 ↗</a><a href="https://guide.michelin.com/kr/en/busan-region/busan_1025838/restaurants/bib-gourmand" target="_blank">米其林 ↗</a></div></article>
-            <article class="food-card"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">豬肉湯飯</span></div><h4>Jeongjitgan 정짓간</h4><p>現代化豬肉湯飯。下單時仍確認使用純豬骨湯，沒有牛骨或牛肉調味。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=Jeongjitgan+Busan" target="_blank">地圖 ↗</a><a href="https://guide.michelin.com/kr/en/busan-region/busan_1025838/restaurants/bib-gourmand" target="_blank">米其林 ↗</a></div></article>
+            <article class="food-card"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">台式</span></div><h4>Bao Haus 바오하우스</h4><span class="hours">週一 11:00–21:00 · 15:00–17:00 午休</span><p>豬肉刈包與台式小食，最配田浦路線；不要點牛肉麵。</p><div class="food-actions"><a href="https://map.naver.com/p/search/%EB%B0%94%EC%98%A4%ED%95%98%EC%9A%B0%EC%8A%A4%20%EC%A0%84%ED%8F%AC" target="_blank">Naver Map ↗</a><a href="https://guide.michelin.com/kr/en/busan-region/busan_1025838/restaurants/bib-gourmand" target="_blank">米其林 ↗</a></div></article>
+            <article class="food-card"><div class="tags"><span class="tag">MICHELIN 品牌分店</span><span class="tag">豬肉湯飯</span></div><h4>Anmok Seomyeon 안목 서면점</h4><span class="hours">週一 10:00–22:00 · 無午休</span><p>就在西面，時間最穩；米其林列名的是南川本店，此處為同品牌分店。</p><div class="food-actions"><a href="https://map.naver.com/p/search/%EC%95%88%EB%AA%A9%20%EC%84%9C%EB%A9%B4%EC%A0%90" target="_blank">Naver Map ↗</a><a href="https://guide.michelin.com/ee/en/busan-region/busan_1025838/restaurant/anmok" target="_blank">本店介紹 ↗</a></div></article>
+            <article class="food-card"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">豬肉湯飯</span></div><h4>Jeongjitgan 부산역점</h4><span class="hours">每日 10:00–22:00 · LO 21:30</span><p>位於釜山站，從西面需約 15–25 分鐘車程；特別想吃湯飯再選。</p><div class="food-actions"><a href="https://map.naver.com/p/search/%EC%A0%95%EC%A7%93%EA%B0%84%20%EB%B6%80%EC%82%B0%EC%97%AD%EC%A0%90" target="_blank">Naver Map ↗</a><a href="https://guide.michelin.com/kr/en/busan-region/busan_1025838/restaurants/bib-gourmand" target="_blank">米其林 ↗</a></div></article>
           </div>
         </div>
 
@@ -387,7 +391,7 @@
           <div class="food-grid">
             <article class="food-card"><div class="tags"><span class="tag">松亭</span><span class="tag">海鮮</span></div><h4>松亭海鮮餐廳</h4><p>時間最可靠：烤魚、海鮮湯或生魚片。11:15 開始吃，12:20 前離開。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=seafood+restaurant+Songjeong+Beach+Busan" target="_blank">附近餐廳 ↗</a></div></article>
             <article class="food-card"><div class="tags"><span class="tag">青沙浦</span><span class="tag">烤貝</span></div><h4>Cheongsapo Shellfish Village</h4><p>海景烤貝氣氛最好；需抓緊時間，最晚 12:45 離開去觀景台。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=Cheongsapo+shellfish+restaurant+Busan" target="_blank">附近餐廳 ↗</a></div></article>
-            <article class="food-card"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">蕎麥麵</span></div><h4>Moemiljip 뫼밀집</h4><p>Park Hyatt 旁的自製蕎麥麵與水煮豬肉；更適合作為臨時取消東岸時的午餐備案。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=Moemiljip+Busan" target="_blank">地圖 ↗</a><a href="https://guide.michelin.com/us/en/busan-region/busan_1025838/restaurant/moemiljip" target="_blank">米其林 ↗</a></div></article>
+            <article class="food-card"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">蕎麥麵</span></div><h4>Moemiljip 뫼밀집</h4><span class="hours">週二 11:30–20:30 · 15:30–17:00 午休</span><p>Park Hyatt 旁的自製蕎麥麵；適合作為東岸臨時取消時的備案。</p><div class="food-actions"><a href="https://map.naver.com/p/search/%EB%AB%BC%EB%B0%80%EC%A7%91%20%EB%A7%88%EB%A6%B0%EC%8B%9C%ED%8B%B0" target="_blank">Naver Map ↗</a><a href="https://guide.michelin.com/us/en/busan-region/busan_1025838/restaurant/moemiljip" target="_blank">米其林 ↗</a></div></article>
           </div>
         </div>
       </div>
@@ -411,10 +415,10 @@
         </div>
       </div>
       <div class="route-summary">
-        <article class="mini-route"><strong>9/5 · 東南岸</strong><p>Westin → 五六島 → 廣安里 → Hongdan</p><a href="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%9B%8C%ED%81%AC" target="_blank" rel="noreferrer">Naver Map 景點 ↗</a></article>
-        <article class="mini-route"><strong>9/6 · 西釜山</strong><p>甘川洞 → 松島 → 札嘎其 → 富平 → 釜山塔</p><a href="https://map.naver.com/p/search/%EA%B0%90%EC%B2%9C%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">Naver Map 景點 ↗</a></article>
-        <article class="mini-route"><strong>9/7 · 西面影島</strong><p>樂天 → 田浦 → 白淺村 → ARP → Make Zero</p><a href="https://map.naver.com/p/search/%ED%9D%B0%EC%97%AC%EC%9A%B8%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">Naver Map 景點 ↗</a></article>
-        <article class="mini-route"><strong>9/8 · 東岸</strong><p>龍宮寺 → 松亭 → 青沙浦 → 尾浦 → 飯店</p><a href="https://map.naver.com/p/search/%ED%95%B4%EB%8F%99%EC%9A%A9%EA%B6%81%EC%82%AC" target="_blank" rel="noreferrer">Naver Map 景點 ↗</a></article>
+        <article class="mini-route"><strong>9/5 · 東南岸</strong><p>機場→飯店 50–70m<br>飯店→五六島 25–35m<br>廣安里→飯店 15–25m</p><a href="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%9B%8C%ED%81%AC" target="_blank" rel="noreferrer">Naver Map 景點 ↗</a></article>
+        <article class="mini-route"><strong>9/6 · 西釜山</strong><p>Park Hyatt→甘川 45–65m<br>甘川→松島 15–25m<br>南浦→飯店 35–55m</p><a href="https://map.naver.com/p/search/%EA%B0%90%EC%B2%9C%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">Naver Map 景點 ↗</a></article>
+        <article class="mini-route"><strong>9/7 · 西面影島</strong><p>飯店→西面 25–40m<br>田浦→白淺 30–45m<br>南川→田浦 20–30m</p><a href="https://map.naver.com/p/search/%ED%9D%B0%EC%97%AC%EC%9A%B8%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">Naver Map 景點 ↗</a></article>
+        <article class="mini-route"><strong>9/8 · 東岸</strong><p>飯店→龍宮寺 35–50m<br>龍宮寺→松亭 15–20m<br>飯店→機場 45–70m</p><a href="https://map.naver.com/p/search/%ED%95%B4%EB%8F%99%EC%9A%A9%EA%B6%81%EC%82%AC" target="_blank" rel="noreferrer">Naver Map 景點 ↗</a></article>
       </div>
     </section>
 
