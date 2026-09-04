@@ -32,8 +32,9 @@
       font: 16px/1.65 system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans TC", sans-serif;
     }
     a { color: inherit; }
-    button, a { -webkit-tap-highlight-color: transparent; }
+    button, a { -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     img { display: block; width: 100%; }
+    p, small, a, h1, h2, h3, h4 { overflow-wrap: anywhere; }
 
     .hero {
       min-height: 82vh;
@@ -186,23 +187,30 @@
       .hero-inner, main, .footer-inner { width: min(100% - 24px, 1180px); }
       .hero { min-height: 58svh; }
       .hero-inner { padding: 28px 0 34px; }
-      h1 { font-size: clamp(3.2rem, 20vw, 5.6rem); }
+      h1 { font-size: clamp(3rem, 19vw, 5.4rem); }
+      .hero-inner, .hero-copy, .hero-copy p, .eyebrow { min-width: 0; max-width: 100%; }
+      .eyebrow { font-size: .7rem; line-height: 1.65; letter-spacing: .13em; }
       .hero-copy { margin-top: 20px; }
+      .hero-copy p { line-height: 1.55; }
       .date-chip { display: none; }
       .nav-wrap { top: auto; bottom: 0; border-top: 1px solid var(--line); border-bottom: 0; padding-bottom: env(safe-area-inset-bottom); }
-      nav { width: 100%; justify-content: flex-start; padding: 7px 8px; }
+      nav { width: 100%; justify-content: flex-start; padding: 7px max(8px, env(safe-area-inset-left)); scroll-snap-type: x proximity; overscroll-behavior-x: contain; }
       nav a { min-height: 42px; display: grid; place-items: center; padding: 7px 12px; font-size: .8rem; }
+      nav a { scroll-snap-align: start; }
       main { padding: 36px 0 calc(78px + env(safe-area-inset-bottom)); }
       section { scroll-margin-top: 16px; margin-bottom: 58px; }
       .section-head { gap: 10px; margin-bottom: 18px; }
+      .section-head h2 { font-size: clamp(2rem, 12vw, 3rem); }
       .alert { grid-template-columns: auto 1fr; }
-      .alert > a { grid-column: 2; }
+      .alert > a { grid-column: 1 / -1; min-height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,.28); border-radius: 999px; }
       .weather-grid { gap: 8px; }
       .weather .wx { margin: 6px 0 2px; }
       .day-card { border-radius: 20px; margin-bottom: 20px; }
       .day-photo { min-height: 190px; height: 31vh; }
       .day-badge { left: 12px; top: 12px; }
-      .timeline li { grid-template-columns: 76px 1fr; gap: 8px; }
+      .day-title { align-items: flex-start; }
+      .day-title h3 { font-size: 1.7rem; }
+      .timeline li { grid-template-columns: 68px minmax(0, 1fr); gap: 8px; padding: 14px 0; }
       .timeline small { display: block; margin-top: 2px; line-height: 1.45; }
       .route-link { width: 100%; min-height: 48px; justify-content: center; text-align: center; }
       .food-grid, .bar-grid { grid-template-columns: 1fr; }
@@ -214,10 +222,19 @@
       .map-shell { padding: 7px; border-radius: 20px; }
       .map-filter { flex-wrap: nowrap; overflow-x: auto; padding: 6px 2px 10px; }
       .map-filter button { flex: 0 0 auto; min-height: 42px; }
-      .map-frame { height: 52vh; min-height: 360px; border-radius: 15px; }
+      .map-frame { height: 56svh; min-height: 340px; max-height: 500px; border-radius: 15px; }
       .map-open { left: 12px; right: 12px; bottom: 12px; text-align: center; }
       .route-summary { grid-template-columns: 1fr; }
       .mini-route p { min-height: 0; }
+      .feature-card, .booking, .phrase { padding: 20px; }
+      .feature-card { min-height: 220px; }
+      .phrase .ko { font-size: 1.2rem; }
+    }
+    @media (max-width: 370px) {
+      .weather-grid { grid-template-columns: 1fr; }
+      .day-title { display: block; }
+      .day-title span { display: block; margin-top: 7px; text-align: left; }
+      .timeline li { grid-template-columns: 62px minmax(0, 1fr); }
     }
     @media print {
       .nav-wrap, .map-shell, .route-link { display: none; }
@@ -286,7 +303,7 @@
           <ol class="timeline">
             <li><time>10:20</time><div><b>抵達金海機場</b><small>領行李後 Uber Taxi 前往飯店，約 50–70 分鐘；週六中午預留高值。</small></div></li>
             <li><time>12:20</time><div><b>Westin 寄放行李</b><small>午餐從下方「9/5 海雲台」三個選項現場挑選。</small></div></li>
-            <li><time>14:10</time><div><b>五六島天空步道＋日出公園</b><small>Westin → 五六島約 25–35 分；若強風關閉，改樂天免稅店。</small></div></li>
+            <li><time>14:10</time><div><b>五六島天空步道＋日出公園＋二妓台入口</b><small>Westin → 五六島約 25–35 分；只走二妓台入口短程，強風時取消海岸段。</small></div></li>
             <li><time>17:00</time><div><b>入住／海雲台海灘</b><small>可加走平坦的冬柏島入口。</small></div></li>
             <li><time>18:30</time><div><b>晚餐 → 廣安里夜景</b><small>Westin → 廣安里約 15–25 分；Hongdan 距海灘約 5–10 分鐘步行。</small></div></li>
           </ol>
@@ -304,9 +321,10 @@
           <ol class="timeline">
             <li><time>08:00</time><div><b>Westin → Park Hyatt</b><small>Uber 約 5–10 分；先搬行李，避免傍晚從南浦折返。</small></div></li>
             <li><time>09:20</time><div><b>甘川文化村</b><small>Park Hyatt → 甘川約 45–65 分；早到避開週日人潮。</small></div></li>
-            <li><time>11:40</time><div><b>松島午餐</b><small>甘川 → 松島約 15–25 分；先看纜車即時營運。</small></div></li>
+            <li><time>11:40</time><div><b>松島海灘＋午餐</b><small>甘川 → 松島約 15–25 分；先看纜車即時營運。</small></div></li>
             <li><time>12:40</time><div><b>松島海上纜車＋天空公園</b><small>若停駛，直接把時間給札嘎其與市場。</small></div></li>
             <li><time>15:20</time><div><b>札嘎其 → BIFF → 國際市場</b><small>松島 → 札嘎其約 15–20 分；市場之間步行各約 5–12 分。</small></div></li>
+            <li><time>17:40</time><div><b>富平罐頭市場＋晚餐</b><small>從國際市場步行約 5–10 分；下雨時可縮短街區停留。</small></div></li>
             <li><time>19:00</time><div><b>龍頭山公園／釜山塔</b><small>富平步行約 15–20 分；回 Park Hyatt 約 35–55 分。</small></div></li>
           </ol>
           <a class="route-link" href="https://www.google.com/maps/dir/?api=1&origin=Park+Hyatt+Busan&destination=Busan+Tower&waypoints=Gamcheon+Culture+Village%7CSongdo+Bay+Station%7CJagalchi+Market%7CBupyeong+Kkangtong+Market&travelmode=driving" target="_blank" rel="noreferrer">在 Google Maps 開啟本日路線 ↗</a>
@@ -323,8 +341,8 @@
           <ol class="timeline">
             <li><time>10:30</time><div><b>樂天免稅店釜山店</b><small>Park Hyatt → 西面約 25–40 分；雨勢尚未結束前先逛室內。</small></div></li>
             <li><time>12:00</time><div><b>田浦午餐選擇</b><small>Bao Haus、Anmok 西面分店或 Jeongjitgan，見下方比較。</small></div></li>
-            <li><time>13:15</time><div><b>田浦咖啡街</b><small>保留約 90 分鐘，依雨勢彈性延長。</small></div></li>
-            <li><time>15:40</time><div><b>白淺文化村</b><small>田浦 → 白淺約 30–45 分；濕滑時只走上層村落。</small></div></li>
+            <li><time>13:15</time><div><b>田浦咖啡街＋西面商圈</b><small>補回原定的西面逛街；雨大時以地下街與百貨為主，約 90 分鐘。</small></div></li>
+            <li><time>15:40</time><div><b>白淺文化村＋絕影海岸</b><small>田浦 → 白淺約 30–45 分；乾燥才走絕影海岸步道，濕滑時留在上層村落。</small></div></li>
             <li><time>18:30</time><div><b>晚餐選擇</b><small>ARP 週一 16:00 關門，不適合晚餐；可選 Anmok 南川本店或回西面。</small></div></li>
             <li><time>20:40</time><div><b>Make Zero</b><small>白淺 → 南川約 35–50 分；南川 → Make Zero 約 20–30 分。</small></div></li>
           </ol>
