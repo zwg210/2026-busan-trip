@@ -134,6 +134,10 @@
     .origin-tag.saved { border-color: rgba(239,118,95,.25); background: #ffe5df; color: #9d2e26; }
     .origin-tag.logistics { border-color: rgba(91,101,99,.16); background: #f1f2ef; color: var(--muted); }
     .origin-tag.top { border-color: rgba(242,193,78,.42); background: #fff2c7; color: #765506; }
+    .temp-chip { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 5px; width: fit-content; margin: 1px 0 7px; padding: 5px 9px; border: 1px solid rgba(38,117,150,.2); border-radius: 999px; background: #eaf5f8; color: #17566f; font-size: .68rem; font-weight: 900; line-height: 1.35; }
+    .temp-chip em { color: var(--muted); font-style: normal; font-weight: 750; }
+    .forecast-note { margin: 12px 0 0; color: var(--muted); font-size: .76rem; line-height: 1.5; }
+    .forecast-note a { color: var(--sea); font-weight: 850; text-underline-offset: 3px; }
     .timeline li { position: relative; }
     .timeline li.done { opacity: .52; }
     .timeline li.done b { text-decoration: line-through; }
@@ -353,7 +357,7 @@
   <main>
     <div class="update-banner" role="status">
       <strong>LIVE UPDATE · 9/5</strong>
-      <span>餐廳卡改用各店實景照片；新增海福鮑魚粥，並按 19:10 返台航班提前前往機場。</span>
+      <span>新增每個行程時段的逐站溫度、體感／降雨／強風提示；餐廳卡亦已換成各店實景與菜色照片。</span>
     </div>
     <section id="weather">
       <div class="section-head">
@@ -366,11 +370,12 @@
         <a class="text-link" href="https://www.weather.go.kr/w/forecast/overall/short-term.do?stnId=159" target="_blank" rel="noreferrer">KMA 即時預報 ↗</a>
       </div>
       <div class="weather-grid">
-        <article class="weather"><div class="day">SAT · 9/5</div><div class="wx">☀️</div><strong>27–30°C</strong><p>白天最佳戶外窗；沿岸風強</p></article>
-        <article class="weather"><div class="day">SUN · 9/6</div><div class="wx">🌥️</div><strong>18–29°C</strong><p>白天轉陰，18:00 後有雨</p></article>
-        <article class="weather"><div class="day">MON · 9/7</div><div class="wx">🌦️</div><strong>17–30°C</strong><p>上午有雨，午後逐漸好轉</p></article>
-        <article class="weather"><div class="day">TUE · 9/8</div><div class="wx">☀️</div><strong>16–30°C</strong><p>轉晴；東岸安排在這天</p></article>
+        <article class="weather"><div class="day">SAT · 9/5</div><div class="wx">☀️</div><strong>25–28°C</strong><p>晴到少雲；沿岸陣風強</p></article>
+        <article class="weather"><div class="day">SUN · 9/6</div><div class="wx">🌦️</div><strong>24–28°C</strong><p>雲量增加、偶有短雨；海風強</p></article>
+        <article class="weather"><div class="day">MON · 9/7</div><div class="wx">🌦️</div><strong>24–27°C</strong><p>上午零星雨，午後逐漸轉乾</p></article>
+        <article class="weather"><div class="day">TUE · 9/8</div><div class="wx">☀️</div><strong>20–30°C</strong><p>晴到少雲；午後偏熱</p></article>
       </div>
+      <p class="forecast-note" id="forecast-status">逐站溫度採 Haeundae、Oryukdo、西釜山、影島、西面與機張的逐時預報；頁面開啟時會更新。資料：<a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo ↗</a></p>
     </section>
 
     <section id="plan">
@@ -761,6 +766,77 @@
       });
     }
     initOriginTags();
+
+    const forecastDates = ["2026-09-05", "2026-09-06", "2026-09-07", "2026-09-08"];
+    const forecastZones = ["haeundae", "oryukdo", "west", "yeongdo", "gijang", "seomyeon"];
+    const forecastFallbacks = [
+      [27, 28, 28, 28, 28, 27, 27, 27, 27, 27, 25],
+      [25, 26, 27, 28, 28, 28, 27, 27, 27, 27, 25],
+      [25, 26, 27, 27, 27, 27, 27, 26, 25, 25],
+      [23, 24, 27, 28, 28, 28, 29, 29, 28, 29, 28, 27]
+    ];
+
+    function forecastZone(dayIndex, title) {
+      if (/金海機場|機場早晚餐|登機門|免稅預購/.test(title)) return "west";
+      if (/五六島/.test(title)) return "oryukdo";
+      if (dayIndex === 0) return "haeundae";
+      if (dayIndex === 1) return /Westin|Park Hyatt/.test(title) ? "haeundae" : "west";
+      if (dayIndex === 2) {
+        if (/Park Hyatt/.test(title)) return "haeundae";
+        if (/Momos|白淺|絕影/.test(title)) return "yeongdo";
+        return "seomyeon";
+      }
+      if (/海福|尾浦|海理團路/.test(title)) return "haeundae";
+      return "gijang";
+    }
+
+    function roundedForecastHour(date, time) {
+      const [hour, minute] = time.split(":").map(Number);
+      return `${date}T${String(hour + (minute >= 30 ? 1 : 0)).padStart(2, "0")}:00`;
+    }
+
+    async function initTemperatureEstimates() {
+      const chips = [];
+      document.querySelectorAll(".day-card").forEach((day, dayIndex) => {
+        day.querySelectorAll(".timeline > li").forEach((row, rowIndex) => {
+          const title = row.querySelector(":scope > div > b")?.textContent.replace(/\s+/g, " ").trim() || "";
+          const time = row.querySelector(":scope > time")?.textContent.trim() || "12:00";
+          const temp = forecastFallbacks[dayIndex]?.[rowIndex];
+          const chip = document.createElement("span");
+          chip.className = "temp-chip";
+          chip.innerHTML = `🌡 ${temp ?? "–"}°C <em>戶外預估</em>`;
+          const origin = row.querySelector(":scope > div > .origin-tags");
+          (origin || row.querySelector(":scope > div > b"))?.insertAdjacentElement("afterend", chip);
+          chips.push({ chip, zone: forecastZone(dayIndex, title), date: forecastDates[dayIndex], time, title });
+        });
+      });
+
+      try {
+        const endpoint = "https://api.open-meteo.com/v1/forecast?latitude=35.16,35.10,35.10,35.08,35.19,35.157&longitude=129.16,129.12,129.03,129.04,129.22,129.059&hourly=temperature_2m,apparent_temperature,precipitation_probability,wind_speed_10m&timezone=Asia%2FSeoul&start_date=2026-09-05&end_date=2026-09-08";
+        const response = await fetch(endpoint);
+        if (!response.ok) throw new Error("forecast unavailable");
+        const forecasts = await response.json();
+        chips.forEach(({ chip, zone, date, time, title }) => {
+          const forecast = forecasts[forecastZones.indexOf(zone)];
+          const index = forecast?.hourly?.time?.indexOf(roundedForecastHour(date, time));
+          if (!Number.isInteger(index) || index < 0) return;
+          const temperature = Math.round(forecast.hourly.temperature_2m[index]);
+          const feelsLike = Math.round(forecast.hourly.apparent_temperature[index]);
+          const rain = forecast.hourly.precipitation_probability[index];
+          const wind = Math.round(forecast.hourly.wind_speed_10m[index]);
+          const notes = [`體感 ${feelsLike}°`];
+          if (rain >= 30) notes.push(`降雨 ${rain}%`);
+          if (wind >= 30) notes.push("強風");
+          if (/早餐|午餐|晚餐|甜點|免稅店|Olive Young|入住|酒吧|Make Zero|登機門/.test(title)) notes.push("室內有冷氣");
+          chip.innerHTML = `🌡 ${temperature}°C <em>${notes.join(" · ")}</em>`;
+          chip.title = `${date} ${time} ${zone} 逐時預報估算`;
+        });
+        document.getElementById("forecast-status").firstChild.textContent = "逐站溫度已依 Haeundae、Oryukdo、西釜山、影島、西面與機張的最新逐時預報更新；數字為戶外估算。資料：";
+      } catch (_) {
+        document.getElementById("forecast-status").firstChild.textContent = "逐站溫度目前使用 9/5 下載的逐時預報備援值；網路恢復後重新整理會自動更新。資料：";
+      }
+    }
+    initTemperatureEstimates();
 
     const placeInsights = [
       {
