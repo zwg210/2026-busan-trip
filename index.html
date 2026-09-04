@@ -136,6 +136,9 @@
     .origin-tag.top { border-color: rgba(242,193,78,.42); background: #fff2c7; color: #765506; }
     .temp-chip { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 5px; width: fit-content; margin: 1px 0 7px; padding: 5px 9px; border: 1px solid rgba(38,117,150,.2); border-radius: 999px; background: #eaf5f8; color: #17566f; font-size: .68rem; font-weight: 900; line-height: 1.35; }
     .temp-chip em { color: var(--muted); font-style: normal; font-weight: 750; }
+    .travel-connector { grid-column: 2; display: flex; align-items: center; gap: 8px; min-height: 30px; margin-top: 2px; padding: 6px 10px; border-left: 2px dotted rgba(11,102,104,.42); border-radius: 0 10px 10px 0; background: linear-gradient(90deg, rgba(11,102,104,.08), transparent); color: var(--sea); font-size: .7rem; font-weight: 900; line-height: 1.35; }
+    .travel-connector .travel-arrow { font-size: .9rem; line-height: 1; }
+    .travel-connector em { color: var(--muted); font-style: normal; font-weight: 750; }
     .forecast-note { margin: 12px 0 0; color: var(--muted); font-size: .76rem; line-height: 1.5; }
     .forecast-note a { color: var(--sea); font-weight: 850; text-underline-offset: 3px; }
     .timeline li { position: relative; }
@@ -292,6 +295,7 @@
       .day-title h3 { font-size: 1.7rem; }
       .timeline li { grid-template-columns: 68px minmax(0, 1fr); gap: 8px; padding: 14px 0; }
       .timeline small { display: block; margin-top: 2px; line-height: 1.45; }
+      .travel-connector { grid-column: 1 / -1; margin-left: 68px; }
       .route-actions { display: grid; grid-template-columns: 1fr; }
       .route-link { width: 100%; min-height: 48px; justify-content: center; text-align: center; }
       .meal-options, .meal-options.two, .meal-options.four, .bar-grid { grid-template-columns: 1fr; }
@@ -321,6 +325,7 @@
       .day-title { display: block; }
       .day-title span { display: block; margin-top: 7px; text-align: left; }
       .timeline li { grid-template-columns: 62px minmax(0, 1fr); }
+      .travel-connector { margin-left: 62px; }
     }
     @media print {
       .nav-wrap, .map-shell, .route-link { display: none; }
@@ -357,7 +362,7 @@
   <main>
     <div class="update-banner" role="status">
       <strong>LIVE UPDATE · 9/5</strong>
-      <span>新增每個行程時段的逐站溫度、體感／降雨／強風提示；餐廳卡亦已換成各店實景與菜色照片。</span>
+      <span>每站之間新增 Uber／步行等預估移動時間；另有逐站溫度、體感／降雨／強風與餐廳實景菜色照片。</span>
     </div>
     <section id="weather">
       <div class="section-head">
@@ -381,7 +386,7 @@
     <section id="plan">
       <div class="section-head">
         <h2>The route.</h2>
-        <p>住宿：9/5 Westin Josun Busan；9/6–7 Park Hyatt Busan。時間已包含主要 Uber 移動緩衝。</p>
+        <p>住宿：9/5 Westin Josun Busan；9/6–7 Park Hyatt Busan。站與站之間均標示預估移動時間；步行依你的快走速度，Uber 採交通浮動區間，出發前仍以叫車 App 為準。</p>
       </div>
       <div class="food-preference"><strong>用餐原則：</strong>每個實際用餐時段直接列出順路選項，標示「在地優先」者以本地口碑與路線為首選；Bib Gourmand 只作加分，不看星級。餐廳可供應牛肉，只需避開牛肉主菜，牛高湯可以。</div>
       <div class="place-check"><strong>店名核對：</strong>「善良章魚／착한낙지」已加入今晚晚餐分支。搜尋不到能唯一對應的「CHILO BUSAN」店家；請傳 Naver Map 或 Instagram 連結，我再放入正確日程，暫不讓錯誤地點影響路線。</div>
@@ -766,6 +771,81 @@
       });
     }
     initOriginTags();
+
+    const travelLegs = [
+      [
+        ["🚕", "Uber", "50–70 分"],
+        ["🚶", "步行／短程 Uber", "5–15 分"],
+        ["🚶", "步行至上車點", "2–5 分"],
+        ["🚕", "Uber", "30–40 分"],
+        ["🚕", "Uber", "30–40 分"],
+        ["🚕", "Uber", "10–15 分"],
+        ["🚶", "飯店內步行", "2–5 分"],
+        ["🚶", "海岸步行", "12–20 分"],
+        ["🚕", "Uber（依晚餐分支）", "15–30 分"],
+        ["🚕", "Uber（依餐廳位置）", "10–25 分"]
+      ],
+      [
+        ["🚕", "Uber 換飯店", "5–10 分"],
+        ["🚕", "Uber", "45–65 分"],
+        ["🚕", "Uber", "15–25 分"],
+        ["🚶", "步行至纜車站", "3–8 分"],
+        ["🚶", "天空公園步行", "5–10 分"],
+        ["🚠", "纜車回程＋Uber", "25–35 分"],
+        ["🚶", "市場步行", "5–8 分"],
+        ["🚶", "步行", "8–12 分"],
+        ["🚶", "步行", "12–18 分"],
+        ["🚶", "步行", "15–20 分"]
+      ],
+      [
+        ["🚕", "Uber", "25–40 分"],
+        ["🚶", "西面步行", "5–15 分"],
+        ["🚶", "步行", "5–12 分"],
+        ["🚶", "步行", "8–15 分"],
+        ["🚕", "Uber", "30–45 分"],
+        ["🚕", "Uber", "15–25 分"],
+        ["🚶", "海岸步道", "20–30 分"],
+        ["🚕", "走回車道＋Uber", "35–50 分"],
+        ["🚶", "步行／短程 Uber", "5–15 分"]
+      ],
+      [
+        ["🚕", "Uber", "25–40 分"],
+        ["🚶", "寺院出口至上車點", "5–10 分"],
+        ["🚕", "Uber 至松亭", "15–20 分"],
+        ["🚶", "松亭步行", "3–8 分"],
+        ["🚕", "Uber", "10–15 分"],
+        ["🚶", "步行至青沙浦站", "10–15 分"],
+        ["🚡", "天空膠囊", "約 30 分"],
+        ["🚕", "Uber 回飯店取行李", "15–25 分"],
+        ["🚕", "Uber 至金海機場", "45–70 分"],
+        ["🚶", "航廈內步行", "3–8 分"],
+        ["🛂", "安檢／出境＋步行", "20–35 分"]
+      ]
+    ];
+
+    function initTravelEstimates() {
+      document.querySelectorAll(".day-card").forEach((day, dayIndex) => {
+        const rows = [...day.querySelectorAll(".timeline > li")];
+        rows.slice(0, -1).forEach((row, rowIndex) => {
+          const leg = travelLegs[dayIndex]?.[rowIndex];
+          if (!leg) return;
+          const connector = document.createElement("div");
+          connector.className = "travel-connector";
+          connector.setAttribute("aria-label", `前往下一站預估移動時間：${leg[1]} ${leg[2]}`);
+          const arrow = document.createElement("span");
+          arrow.className = "travel-arrow";
+          arrow.textContent = `${leg[0]} ↓`;
+          const label = document.createElement("span");
+          label.textContent = `${leg[1]} · ${leg[2]} `;
+          const estimate = document.createElement("em");
+          estimate.textContent = "預估移動 · Est. travel";
+          label.append(estimate);
+          connector.append(arrow, label);
+          row.append(connector);
+        });
+      });
+    }
+    initTravelEstimates();
 
     const forecastDates = ["2026-09-05", "2026-09-06", "2026-09-07", "2026-09-08"];
     const forecastZones = ["haeundae", "oryukdo", "west", "yeongdo", "gijang", "seomyeon"];
