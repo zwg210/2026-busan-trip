@@ -125,6 +125,15 @@
     .en { display: block; margin-top: 1px; color: var(--muted); font-size: .78em; font-weight: 720; line-height: 1.35; letter-spacing: .01em; }
     .day-title h3 .en { margin-top: 5px; color: var(--sea); font: 700 .42em/1.2 system-ui, sans-serif; letter-spacing: .03em; }
     .timeline small { color: var(--muted); }
+    .origin-legend { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; margin: -13px 0 26px; color: var(--muted); font-size: .76rem; }
+    .origin-legend > strong { margin-right: 2px; color: var(--ink); }
+    .origin-tags { display: flex; flex-wrap: wrap; gap: 5px; margin: 7px 0 6px; }
+    .origin-tag { display: inline-flex; align-items: center; width: fit-content; padding: 3px 8px; border: 1px solid transparent; border-radius: 999px; font-size: .65rem; font-weight: 900; line-height: 1.35; letter-spacing: .025em; }
+    .origin-tag.initial { border-color: rgba(29,55,55,.18); background: #e7ece8; color: var(--deep); }
+    .origin-tag.recommended { border-color: rgba(11,102,104,.18); background: #ddf0ed; color: var(--sea); }
+    .origin-tag.saved { border-color: rgba(239,118,95,.25); background: #ffe5df; color: #9d2e26; }
+    .origin-tag.logistics { border-color: rgba(91,101,99,.16); background: #f1f2ef; color: var(--muted); }
+    .origin-tag.top { border-color: rgba(242,193,78,.42); background: #fff2c7; color: #765506; }
     .timeline li { position: relative; }
     .timeline li.done { opacity: .52; }
     .timeline li.done b { text-decoration: line-through; }
@@ -173,6 +182,7 @@
     .meal-tools span { color: var(--muted); font-size: .78rem; }
     .meal-choice[hidden] { display: none; }
     .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
+    .tags .origin-tag { margin-right: 1px; }
     .tag { padding: 4px 8px; border-radius: 99px; background: #e4efeb; color: var(--deep); font-size: .72rem; font-weight: 850; }
     .tag.michelin { background: #ffe3de; color: #9d2e26; }
     .tag.local { background: var(--sea); color: white; }
@@ -363,6 +373,14 @@
       </div>
       <div class="food-preference"><strong>用餐原則：</strong>每個實際用餐時段直接列出順路選項，標示「在地優先」者以本地口碑與路線為首選；Bib Gourmand 只作加分，不看星級。餐廳可供應牛肉，只需避開牛肉主菜，牛高湯可以。</div>
       <div class="place-check"><strong>店名核對：</strong>「善良章魚／착한낙지」已加入今晚晚餐分支。搜尋不到能唯一對應的「CHILO BUSAN」店家；請傳 Naver Map 或 Instagram 連結，我再放入正確日程，暫不讓錯誤地點影響路線。</div>
+      <div class="origin-legend" aria-label="地點來源標籤說明">
+        <strong>標籤：</strong>
+        <span class="origin-tag initial">原始行程 · Initial</span>
+        <span class="origin-tag recommended">行程建議 · Recommended</span>
+        <span class="origin-tag saved">你指定收藏 · Saved</span>
+        <span class="origin-tag logistics">交通住宿 · Logistics</span>
+        <span class="origin-tag top">本時段首選 · Top pick</span>
+      </div>
       <div class="meal-tools" aria-label="餐廳收藏篩選">
         <button id="saved-only" type="button" aria-pressed="false">♡ 只看已收藏 · Saved</button>
         <span id="saved-count" aria-live="polite">0 間已收藏</span>
@@ -679,6 +697,65 @@
   </footer>
 
   <script>
+    const initialDestinationKeys = [
+      "五六島天空步道", "甘川文化村", "松島海灘＋午餐", "松島海上纜車",
+      "札嘎其 → BIFF", "BIFF 廣場甜點", "龍頭山公園", "富平罐頭市場",
+      "樂天免稅店", "田浦咖啡街", "白淺文化村", "海福 → 海東龍宮寺",
+      "前往松亭海灘", "松亭午餐", "青沙浦燈塔", "天空膠囊：青沙浦",
+      "尾浦／海理團路", "晚餐：廣安里"
+    ];
+    const savedDestinationKeys = [
+      "Olive Young 海雲台站店", "Westin 海灘黃金時刻",
+      "Mammoth Coffee 西面", "海福鮑魚粥早餐"
+    ];
+    const logisticsKeys = [
+      "抵達金海機場", "Uber 前往五六島", "入住 Westin", "Westin → Park Hyatt",
+      "Westin 早餐", "Park Hyatt 早餐", "Uber 前往金海機場",
+      "報到後機場早晚餐", "領取線上免稅預購", "抵達登機門"
+    ];
+    const savedRestaurantKeys = ["착한낙지", "善良章魚", "광안목", "해복"];
+
+    function originTag(type, label) {
+      const tag = document.createElement("span");
+      tag.className = `origin-tag ${type}`;
+      tag.textContent = label;
+      return tag;
+    }
+
+    function initOriginTags() {
+      document.querySelectorAll(".timeline li > div > b").forEach(title => {
+        const titleText = title.textContent.replace(/\s+/g, " ").trim();
+        const tags = document.createElement("div");
+        tags.className = "origin-tags";
+        if (savedDestinationKeys.some(key => titleText.includes(key))) {
+          tags.append(originTag("saved", "你指定收藏 · Saved"));
+        } else if (initialDestinationKeys.some(key => titleText.includes(key))) {
+          tags.append(originTag("initial", "原始行程 · Initial"));
+        } else if (logisticsKeys.some(key => titleText.includes(key))) {
+          tags.append(originTag("logistics", "交通住宿 · Logistics"));
+        } else {
+          tags.append(originTag("recommended", "行程建議 · Recommended"));
+        }
+        title.insertAdjacentElement("afterend", tags);
+      });
+
+      document.querySelectorAll(".meal-choice").forEach(card => {
+        const title = card.querySelector("h4")?.textContent.replace(/\s+/g, " ").trim() || "";
+        let tags = card.querySelector(":scope > .tags");
+        if (!tags) {
+          tags = document.createElement("div");
+          tags.className = "tags";
+          card.prepend(tags);
+        }
+        const isSaved = savedRestaurantKeys.some(key => title.includes(key));
+        tags.prepend(originTag(isSaved ? "saved" : "recommended", isSaved ? "你指定收藏 · Saved" : "餐廳建議 · Recommended"));
+        if (card.classList.contains("primary")) {
+          tags.append(originTag("top", "本時段首選 · Top pick"));
+        }
+      });
+    }
+    initOriginTags();
+
     const placeInsights = [
       {
         key: "Olive Young 海雲台站店",
