@@ -25,7 +25,6 @@ const places = [
   ["모모스커피", "momos-yeongdo", "모모스커피 영도 로스터리"],
   ["白淺村海景咖啡", "huinnyeoul-cafe", "흰여울문화마을 카페"],
   ["소수인", "sosuin", "소수인 서면"],
-  ["라스트춘선", "last-chunsun", "라스트춘선 서면"],
   ["수월경화", "suwol-gyeonghwa", "수월경화 송정"],
   ["송정집", "songjeongjip", "송정집 부산"],
   ["낙불집", "nakbuljip", "낙불집 송정"],
@@ -68,11 +67,6 @@ const exactPhotoData = {
     image: "https://www.bsjunggu.go.kr/upload_data/board_data/LIFE/151203078857863.jpg",
     title: "부평깡통야시장 · Busan Jung-gu official photo"
   },
-  "라스트춘선": {
-    page: "https://joohana.tistory.com/74",
-    image: "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FbMJi4y%2FbtsKBUhbDJc%2FAAAAAAAAAAAAAAAAAAAAAK3n1FqoS8KevBlk_JJP3giua1VS4Izj0exhyNRdU7uG%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1790780399%26allow_ip%3D%26allow_referer%3D%26signature%3Di9cEI8gQ90uPNDiWhdAE0IsOhRg%253D",
-    title: "라스트춘선 서면점 · actual visit photo"
-  },
   "해복": {
     page: "https://dailyguidehub.tistory.com/93",
     image: "https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdna%2FdLEztA%2FdJMcageSO2w%2FAAAAAAAAAAAAAAAAAAAAAMCvpIEEs03dcaZZP3i6EYKtgVgHETruHPojlSbcdROr%2Fimg.jpg%3Fcredential%3DyqXZFxpELC7KVnFOS48ylbz2pIh7yKj8%26expires%3D1790780399%26allow_ip%3D%26allow_referer%3D%26signature%3DfWZRUN2tBlyUyWfg55e2hPJ8l%252B8%253D",
@@ -83,6 +77,54 @@ const exactPhotoData = {
 const outputDir = path.resolve("assets/food/locations");
 await mkdir(outputDir, { recursive: true });
 
+const browserHeaders = { "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Safari/605.1.15" };
+
+async function fetchHtml(url) {
+  const response = await fetch(url, { headers: browserHeaders });
+  if (!response.ok) throw new Error(`${url}: page ${response.status}`);
+  return response.text();
+}
+
+function extractPhotoUrls(html, source, primaryImage) {
+  const decoded = html.replaceAll("&amp;", "&").replaceAll("\\/", "/");
+  let urls = [...decoded.matchAll(/https?:\/\/[^"'<>\s]+?\.(?:jpe?g|webp|png)(?:\?[^"'<>\s]*)?/gi)].map(match => match[0]);
+  if (source.includes("diningcode.com")) {
+    urls = urls.filter(url => url.includes("d12zq4w4guyljn.cloudfront.net"));
+  } else if (source.includes("tistory.com")) {
+    // Keep article photography only; Tistory pages also expose many UI icons and profile assets.
+    urls = urls.filter(url => url.includes("blog.kakaocdn.net"));
+  } else if (source.includes("bsjunggu.go.kr")) {
+    urls = urls.filter(url => url.includes("upload_data"));
+  }
+  urls = urls.map(url => url.replace("/300_300_", "/750_750_").replace("/original_", "/750_750_"));
+  const candidates = source.includes("diningcode.com") ? [...urls, primaryImage] : [primaryImage, ...urls];
+  return [...new Set(candidates.filter(Boolean))].slice(0, 4);
+}
+
+async function fetchDiningCodePhotos(profileUrl, primaryImage) {
+  const profileId = new URL(profileUrl).searchParams.get("rid");
+  if (!profileId) return [primaryImage].filter(Boolean);
+  const response = await fetch("https://www.diningcode.com/2018/ajax/headerImageList.php", {
+    method: "POST",
+    headers: { ...browserHeaders, "content-type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ v_rid: profileId, offset: "0", size: "10" })
+  });
+  if (!response.ok) return [primaryImage].filter(Boolean);
+  const data = await response.json();
+  const urls = data.result_data?.images?.list?.map(photo => photo.middle || photo.origin).filter(Boolean) || [];
+  return [...new Set(urls.length ? urls : [primaryImage])].slice(0, 4);
+}
+
+async function downloadPhoto(url, slug, index, source) {
+  const imageResponse = await fetch(url, { headers: browserHeaders });
+  if (!imageResponse.ok) throw new Error(`${slug}: image ${imageResponse.status}`);
+  const contentType = imageResponse.headers.get("content-type") || "";
+  const extension = contentType.includes("webp") ? "webp" : contentType.includes("png") ? "png" : "jpg";
+  const file = `${slug}-${index + 1}.${extension}`;
+  await writeFile(path.join(outputDir, file), Buffer.from(await imageResponse.arrayBuffer()));
+  return { image: `assets/food/locations/${file}`, source };
+}
+
 async function fetchPlace([key, slug, query]) {
   const photoData = exactPhotoData[key];
   const exactPage = exactPages[key];
@@ -90,9 +132,7 @@ async function fetchPlace([key, slug, query]) {
   const pageUrl = photoData?.page || exactPage || (profileId
     ? `https://www.diningcode.com/profile.php?rid=${profileId}`
     : `https://www.diningcode.com/list.dc?query=${encodeURIComponent(query)}`);
-  const response = await fetch(pageUrl, { headers: { "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 Safari/605.1.15" } });
-  if (!response.ok) throw new Error(`${query}: page ${response.status}`);
-  const html = await response.text();
+  const html = await fetchHtml(pageUrl);
   let title;
   let imageUrl;
   let source = pageUrl;
@@ -115,13 +155,15 @@ async function fetchPlace([key, slug, query]) {
     source = `https://www.diningcode.com/profile.php?rid=${listing.v_rid}`;
   }
   if (!title || !imageUrl) throw new Error(`${query}: metadata not found`);
-  const imageResponse = await fetch(imageUrl, { headers: { "user-agent": "Mozilla/5.0" } });
-  if (!imageResponse.ok) throw new Error(`${query}: image ${imageResponse.status}`);
-  const contentType = imageResponse.headers.get("content-type") || "";
-  const extension = contentType.includes("webp") ? "webp" : "jpg";
-  const file = `${slug}.${extension}`;
-  await writeFile(path.join(outputDir, file), Buffer.from(await imageResponse.arrayBuffer()));
-  return { key, slug, query, title, image: `assets/food/locations/${file}`, source };
+  const gallerySource = source;
+  const galleryHtml = gallerySource === pageUrl ? html : await fetchHtml(gallerySource);
+  const photoUrls = gallerySource.includes("diningcode.com")
+    ? await fetchDiningCodePhotos(gallerySource, imageUrl)
+    : extractPhotoUrls(galleryHtml, gallerySource, imageUrl);
+  const downloads = await Promise.allSettled(photoUrls.map((url, index) => downloadPhoto(url, slug, index, gallerySource)));
+  const images = downloads.filter(item => item.status === "fulfilled").map(item => item.value);
+  if (!images.length) throw new Error(`${query}: no gallery images downloaded`);
+  return { key, slug, query, title, image: images[0].image, images, source: gallerySource };
 }
 
 const results = [];

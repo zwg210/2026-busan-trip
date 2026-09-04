@@ -166,11 +166,17 @@
     .meal-options.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .meal-choice { display: flex; flex-direction: column; min-width: 0; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
     .meal-choice.primary { border-color: var(--sea); background: #f1f8f5; box-shadow: inset 0 3px 0 var(--sea); }
-    .meal-photo { position: relative; overflow: hidden; height: 138px; margin: -12px -12px 12px; border-radius: 13px 13px 0 0; background: #dbe3df; }
-    .meal-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
-    .meal-choice:hover .meal-photo img { transform: scale(1.035); }
+    .meal-photo { position: relative; overflow: hidden; height: 160px; margin: -12px -12px 12px; border-radius: 13px 13px 0 0; background: #dbe3df; }
+    .meal-photo-track { display: flex; width: 100%; height: 100%; overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth; scrollbar-width: none; }
+    .meal-photo-track::-webkit-scrollbar { display: none; }
+    .meal-choice .meal-photo-track a { flex: 0 0 100%; width: 100%; min-height: 0; margin: 0; padding: 0; scroll-snap-align: start; }
+    .meal-photo img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
+    .meal-photo-track a:hover img { transform: scale(1.035); }
     .meal-photo figcaption { position: absolute; left: 8px; bottom: 7px; padding: 4px 7px; border-radius: 99px; background: rgba(18,35,35,.78); color: white; font-size: .61rem; backdrop-filter: blur(5px); }
     .meal-photo figcaption a { min-height: 0; margin: 0; color: white; font-size: inherit; font-weight: 750; text-decoration: none; }
+    .gallery-nav { position: absolute; z-index: 2; top: 50%; width: 32px; height: 32px; border: 1px solid rgba(255,255,255,.5); border-radius: 50%; background: rgba(18,35,35,.7); color: white; font: 900 1rem/1 system-ui, sans-serif; cursor: pointer; transform: translateY(-50%); backdrop-filter: blur(6px); }
+    .gallery-nav.prev { left: 7px; }
+    .gallery-nav.next { right: 7px; }
     .meal-save { position: absolute; z-index: 2; top: 8px; right: 8px; min-height: 35px; padding: 7px 10px; border: 1px solid rgba(255,255,255,.55); border-radius: 99px; background: rgba(18,35,35,.78); color: white; font: inherit; font-size: .7rem; font-weight: 900; cursor: pointer; backdrop-filter: blur(7px); }
     .meal-save.is-saved { border-color: var(--coral); background: var(--coral); }
     .recommended-order { margin: 2px 0 10px; padding: 9px 10px; border-left: 3px solid var(--gold); border-radius: 0 9px 9px 0; background: rgba(242,193,78,.16); }
@@ -290,8 +296,9 @@
       .weather { padding: 14px; }
       .day-content { padding: 24px 18px; }
       .meal-choice { padding: 13px; }
-      .meal-photo { height: 170px; margin: -13px -13px 12px; }
-      .meal-choice:hover .meal-photo img { transform: none; }
+      .meal-photo { height: 210px; margin: -13px -13px 12px; }
+      .meal-photo-track a:hover img { transform: none; }
+      .gallery-nav { display: none; }
       .meal-tools { position: sticky; z-index: 5; top: 8px; justify-content: space-between; padding: 8px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.92); box-shadow: 0 8px 22px rgba(18,35,35,.1); backdrop-filter: blur(10px); }
       .meal-choice a { min-height: 38px; }
       .map-shell { padding: 7px; border-radius: 20px; }
@@ -486,9 +493,8 @@
             </div></div></li>
             <li class="must"><time>16:20</time><div><b>白淺文化村＋絕影海岸<span class="en">Huinnyeoul Culture Village + Jeoryeong Coast</span></b><small>Momos → 白淺約 15–25 分；乾燥才走絕影海岸步道，濕滑時留在上層村落。</small></div></li>
             <li class="optional"><time>17:25</time><div><b>絕影海岸隧道<span class="en">Jeoryeong Coastal Tunnel</span></b><small>步道乾燥、體力足才往返；多抓 25–35 分鐘。濕滑或浪大時完全不要下去。</small><a class="route-link secondary" href="https://map.naver.com/p/search/%EC%A0%88%EC%98%81%ED%95%B4%EC%95%88%EC%82%B0%EC%B1%85%EB%A1%9C%20%ED%84%B0%EB%84%90" target="_blank" rel="noreferrer">Naver Map ↗</a></div></li>
-            <li class="meal-row"><time>19:15</time><div><b>回西面／田浦晚餐<span class="en">Dinner in Seomyeon / Jeonpo</span></b><small>白淺 → 西面約 30–45 分；三間都方便銜接 Make Zero。</small><div class="meal-options">
+            <li class="meal-row"><time>19:15</time><div><b>回西面／田浦晚餐<span class="en">Dinner in Seomyeon / Jeonpo</span></b><small>白淺 → 西面約 30–45 分；兩間都方便銜接 Make Zero。原候選 Last Chunsun 西面店已確認停業並移除。</small><div class="meal-options two">
               <article class="meal-choice primary"><div class="tags"><span class="tag local">在地優先</span><span class="tag">日式酒菜</span></div><h4>소수인 Sosuin</h4><span class="hours">週一 17:00–24:00</span><p>西面在地人氣日式小料理；適合兩人分食海鮮、炸物與飯麵。</p><a href="https://map.naver.com/p/search/%EC%86%8C%EC%88%98%EC%9D%B8%20%EC%84%9C%EB%A9%B4" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
-              <article class="meal-choice"><div class="tags"><span class="tag">現代韓食</span><span class="tag">營業至深夜</span></div><h4>라스트춘선 Last Chunsun</h4><span class="hours">週一 17:00–03:00 · LO 02:00</span><p>創意韓式下酒菜，時間彈性最大；吃完再步行或短程 Uber 去酒吧。</p><a href="https://map.naver.com/p/search/%EB%9D%BC%EC%8A%A4%ED%8A%B8%EC%B6%98%EC%84%A0%20%EC%84%9C%EB%A9%B4" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">若午餐沒吃</span></div><h4>바오하우스 Bao Haus</h4><span class="hours">17:00–21:00 晚餐時段</span><p>午餐若選刀切麵或湯飯，晚餐仍可改吃刈包與台式小食。</p><a href="https://map.naver.com/p/search/%EB%B0%94%EC%98%A4%ED%95%98%EC%9A%B0%EC%8A%A4%20%EC%A0%84%ED%8F%AC" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
             </div></div></li>
             <li><time>20:40</time><div><b>Make Zero</b><small>晚餐後前往；建議預約吧台位，讓 bartender 依偏好設計。</small></div></li>
@@ -921,6 +927,36 @@
       }
     ];
 
+    const placeExperienceDetails = new Map([
+      ["Olive Young 海雲台站店", "海雲台站一帶是觀光客與居民共用的生活商圈，藥妝、餐飲和地鐵出口密集。進店後先找限定組合與熱門補貨區，再處理退稅；把它放在五六島回程而不是出發前，能讓購物袋只跟你走最後一小段。"],
+      ["五六島天空步道", "島群其實是火山岩與長期海蝕共同塑成的海岸地標，天氣清楚時能看見船隻由外海進入釜山港。先在日出公園看完整地形，再走玻璃步道，會比只排隊踩透明地板更有脈絡；二妓台入口則讓你近距離看岩層和浪線。"],
+      ["冬柏島燈塔", "Nurimaru 建築把韓式亭閣屋頂曲線轉成現代會議館，室內曾接待亞太經濟體領袖。你的時間在日落後很短，沿木棧道看外觀、燈塔與跨海大橋即可；若天色已全黑或海風太強，從 Westin 前方海岸看輪廓也不會損失太多。"],
+      ["Westin 海灘黃金時刻", "這一端不像海雲台中央段那麼被高樓包圍，冬柏島會替畫面形成自然邊框。九月太陽偏西落向城市一側，因此真正值得觀察的是天空色溫、沙面反光和逐漸亮起的樓群，而不是等待一顆太陽沉進正前方海面。"],
+      ["晚餐：廣安里", "廣安大橋把海灘由單純的白天浴場變成釜山代表性夜景舞台，橋下水域仍保留漁港與水上活動的生活感。若選廣安木或海鮮晚餐，餐前後走到沙灘中央看一次全橋即可；不必另外耗時追逐觀景台，Park Hyatt 房間的高角度會補上另一種視野。"],
+      ["Hongdan 原創調酒", "釜山的新一代酒吧多半規模不大，與首爾的大型概念店相比，更強調 bartender 與客人的直接對話。入座後可以用三個條件描述需求：基酒、酸甜程度、想嘗試的韓國元素；若對芝麻、紫蘇、發酵或煙燻有偏好，也直接說，成品通常比照酒單點更貼近你。"],
+      ["甘川文化村", "村落的鮮豔外觀背後是戰時遷徙與山坡土地不足的現實，房屋沿等高線排列，也刻意避免遮住下一戶採光。觀光時不要只把它當彩色布景：從主展望台看屋頂密度、再走一段仍有人居住的小巷，會更能理解居民生活與藝術改造並存的張力。"],
+      ["松島海灘＋午餐", "松島早期以海水浴、跳水台和纜車吸引城市居民，是釜山把自然海岸轉成公共休閒空間的重要案例。今日海灣尺度不大，站在沙灘東側便能同時看到海上步道、纜車和遠方貨輪；午餐後沿岸走 10 分鐘已足夠建立整體印象。"],
+      ["松島海上纜車", "纜車跨出陸地後，腳下景觀會從沙灘迅速轉成岩岸，外側則是釜山港繁忙的航路。去程站靠海側看城市弧線，回程再看松島住宅沿山坡堆疊；若搭水晶車廂，透明地板有趣，但真正精彩的是水平視線的海岸全貌。"],
+      ["松島龍宮雲橋", "雲橋落在較粗獷的岩岸端，氣質與松島沙灘的人工休閒設施不同。走到橋中段回頭看，能把天空公園、纜車塔與海蝕地形疊在一起；橋面曝曬且風大，行程落後或天候轉差時應把它視為第一個可刪除項。"],
+      ["札嘎其 → BIFF", "三個市場代表不同階段的釜山：札嘎其是港口漁業與女性攤商文化，國際市場承接戰後物資與避難者生計，BIFF 則把舊戲院區連到亞洲電影城市的形象。沿途注意市場招牌、攤位商品與街道尺度如何改變，比只在地標拍照更能讀出城市歷史。"],
+      ["BIFF 廣場甜點", "廣場的電影手印與街頭小吃共享同一條步行街，正好呈現南浦洞從戲院街轉為大眾文化空間的過程。種子糖餅的特色是炸得酥脆後剪開、塞入葵花籽與堅果；趁熱分一個，留胃給富平市場，體驗會比一次買多攤更好。"],
+      ["寶水洞書店街", "二手書交易最初不只是懷舊產業，而是避難家庭、學生與臨時學校交換稀缺教材的方法。今天店數雖不如全盛期，書堆延伸到狹巷、店主手寫分類與老式階梯仍保存那種自發市場感；放慢腳步翻一本舊攝影集，比快速穿過更有味道。"],
+      ["龍頭山公園", "龍頭山雖不高，位置卻正對舊港區，因此在城市尚未大量興建高樓前就是重要瞭望點。搭手扶梯上山後先繞塔基一圈，比較港口、影島與南浦巷弄三個方向；若不上塔，公園平台也足以看出釜山『山貼著港』的地形。"],
+      ["富平罐頭市場晚餐", "『罐頭』二字留下戰後舶來品、軍需品與走私貨在市場流通的記憶，今日則由夜市小吃延續它吸收外來飲食的性格。19:30 左右推車陸續進場最有氣氛；兩人先繞一圈再決定，每攤只點一份共享，才能同時吃到魚板、水年糕與炸物。"],
+      ["樂天免稅店釜山店", "西面位於釜山都市交通的中心位置，和海岸景點相比，更接近當地人購物、通勤與夜生活的日常。免稅店適合把香水、精品或需機場取貨的品項一次處理；下單時務必再次確認取貨機場是 Gimhae International，而不是首爾機場。"],
+      ["田浦咖啡街", "田浦的有趣之處不只是咖啡館數量，而是修理機具、五金倉庫和新店仍在相鄰門面運作。留意咖啡館如何保留捲門、裸露管線與工業招牌，再轉進小巷看選物與工作室；這種新舊共存，比追單一網紅店更接近街區魅力。"],
+      ["Mammoth Coffee 西面", "Mammoth 代表韓國都市裡強調大杯、快速與高性價比的連鎖咖啡型態，與後面的精品烘焙店 Momos 正好形成對照。這站只留給你指定的 Royal Milk Tea；若現場沒有供應，不必改點普通咖啡或排隊，直接把胃口留給影島。"],
+      ["Momos Coffee 影島", "Momos 從溫泉場的小店發展成國際知名的釜山精品咖啡品牌，團隊也曾在世界咖啡師賽事取得重要成績。影島空間讓烘豆設備、港區倉儲尺度與吧台服務一起被看見；詢問當日豆單並點一杯手沖，會比只買招牌拿鐵更能體驗其專業。"],
+      ["白淺文化村", "聚落建在極窄的海岸台地上，上層是居民巷弄，下層則是貼著岩壁的絕影步道，兩者由陡階梯連接。先走上層看房屋和海平線，再依地面乾燥程度下切；途中可觀察遠洋船在釜山外港排隊，這是白淺村不同於一般彩色村落的港都背景。"],
+      ["絕影海岸隧道", "通往隧道的路段比照片看起來更貼近海面，浪況與濕滑程度會直接影響安全。隧道內的彩色照明不是唯一亮點，真正漂亮的是出口把水平海面框成明亮矩形的瞬間；抵達後拍完即可原路返回，不需要為了走完全段壓縮晚餐。"],
+      ["Make Zero", "低廢棄概念不是單純少用吸管，而是把果皮、香草莖或剩餘食材經澄清、浸泡與發酵轉成酒液的一部分。點酒時可請 bartender 解釋某個材料如何被二次利用，再選一杯清爽、一杯酒體較厚的作品共享，會比兩杯相近的酸甜調酒更有比較性。"],
+      ["海福 → 海東龍宮寺", "多數韓國古寺藏在山林，龍宮寺直接面向海蝕岩岸，因此海浪與開闊水平線成為宗教空間的一部分。穿過十二生肖像與階梯後，不要只停主殿；走到較低的岩岸平台回看殿閣層疊，最能理解寺院為何成為釜山獨特地標。清晨也較能保留安靜感。"],
+      ["前往松亭海灘", "松亭的沙灘弧線較短，背後建築尺度也比海雲台低，因此仍帶有海邊小鎮感。衝浪店與初學者讓水面比傳統浴場更有動態；你只需沿中央段走到竹島方向看一眼，不必把它安排成長時間玩水站。"],
+      ["青沙浦燈塔", "紅白燈塔分立防波堤兩側，是漁船進港的實用設施，也因顏色對比成為青沙浦最常見的畫面。踏石觀景台則把沿岸礁石意象轉成伸向海面的曲線平台；先從遠處拍完整形狀，再穿鞋套走透明段，會比只拍腳下更完整。"],
+      ["天空膠囊：青沙浦", "膠囊速度刻意放慢，重點是把舊鐵路沿線原本稍縱即逝的海景變成約半小時的觀看體驗。由青沙浦往尾浦時，海通常在座位外側持續展開，接近終點才逐漸出現 LCT 與海雲台天際線；上車後先拍海，後段再拍城市，畫面不會重複。"],
+      ["尾浦／海理團路", "尾浦仍保有小港與漁業痕跡，海理團路則在舊鐵路和住宅巷弄周邊長出新一代烘焙、甜點與選物店。兩區反映海雲台不只有高樓與大沙灘；不過你的機場時間很緊，抵達後直接選 Bada Sand 或 Duplit，一買到就回飯店。"]
+    ]);
+
     function initPlaceInsights() {
       document.querySelectorAll(".timeline li > div > b").forEach(title => {
         const titleText = title.textContent.replace(/\s+/g, " ").trim();
@@ -928,7 +964,8 @@
         if (!insight || title.parentElement.querySelector(":scope > .place-insight")) return;
         const details = document.createElement("details");
         details.className = "place-insight";
-        details.innerHTML = `<summary>歷史與亮點 · Story & highlights</summary><div class="insight-body"><p><strong>歷史／背景</strong>${insight.history}</p><p><strong>最值得看</strong>${insight.highlight}</p><a class="insight-source" href="${insight.source}" target="_blank" rel="noreferrer">官方／地點資料 ↗</a></div>`;
+        const experience = placeExperienceDetails.get(insight.key);
+        details.innerHTML = `<summary>歷史與亮點 · Story & highlights</summary><div class="insight-body"><p><strong>歷史／背景</strong>${insight.history}</p><p><strong>故事與現場</strong>${experience || "抵達後先觀察周圍環境與城市脈絡，再把時間留給這一站最具代表性的細節。"}</p><p><strong>最值得看</strong>${insight.highlight}</p><a class="insight-source" href="${insight.source}" target="_blank" rel="noreferrer">官方／地點資料 ↗</a></div>`;
         const description = title.parentElement.querySelector(":scope > small");
         (description || title).insertAdjacentElement("afterend", details);
       });
@@ -959,7 +996,6 @@
       ["모모스커피", "latte", "手沖咖啡＋Cheese Terrine"],
       ["白淺村海景咖啡", "latte", "手沖咖啡／海鹽奶油麵包（依現場店家）"],
       ["소수인", "hoe", "當日刺身＋炸物＋一份飯麵，兩人共享"],
-      ["라스트춘선", "pajeon", "店家當日招牌現代韓食＋一款傳統酒"],
       ["수월경화", "hangwa", "달보드레 韓式點心盒＋一壺茶"],
       ["송정집", "kalguksu", "手工刀切麵＋餃子 · 손칼국수＋만두"],
       ["낙불집", "nakji", "章魚料理 · 낙지볶음（點餐時確認不加牛肉）"],
@@ -991,9 +1027,26 @@
       card.dataset.mealKey = key;
 
       if (photo) {
+        const gallery = (photo.images?.length ? photo.images : [{ image: photo.image, source: photo.source }]).filter(item => item.image);
         const figure = document.createElement("figure");
         figure.className = "meal-photo";
-        figure.innerHTML = `<img src="${photo.image}" alt="${title} 店家實景／實際餐點" loading="lazy" decoding="async"><figcaption>店家實景 · <a href="${photo.source}" target="_blank" rel="noreferrer">source ↗</a></figcaption>`;
+        figure.innerHTML = `<div class="meal-photo-track">${gallery.map((item, index) => `<a href="${item.source || photo.source}" target="_blank" rel="noreferrer" aria-label="開啟 ${title} 第 ${index + 1} 張照片來源"><img src="${item.image}" alt="${title} 實際店家／餐點照片 ${index + 1}" loading="lazy" decoding="async"></a>`).join("")}</div><figcaption>實景 ${gallery.length} 張 · 左右滑 · <a href="${photo.source}" target="_blank" rel="noreferrer">source ↗</a></figcaption>`;
+        if (gallery.length > 1) {
+          const previous = document.createElement("button");
+          previous.className = "gallery-nav prev";
+          previous.type = "button";
+          previous.textContent = "‹";
+          previous.setAttribute("aria-label", `${title} 上一張照片`);
+          const next = document.createElement("button");
+          next.className = "gallery-nav next";
+          next.type = "button";
+          next.textContent = "›";
+          next.setAttribute("aria-label", `${title} 下一張照片`);
+          const track = figure.querySelector(".meal-photo-track");
+          previous.addEventListener("click", () => track.scrollBy({ left: -track.clientWidth, behavior: "smooth" }));
+          next.addEventListener("click", () => track.scrollBy({ left: track.clientWidth, behavior: "smooth" }));
+          figure.append(previous, next);
+        }
         const save = document.createElement("button");
         save.className = "meal-save";
         save.type = "button";
