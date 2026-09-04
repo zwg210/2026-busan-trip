@@ -148,6 +148,21 @@
     .meal-options.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .meal-choice { display: flex; flex-direction: column; min-width: 0; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
     .meal-choice.primary { border-color: var(--sea); background: #f1f8f5; box-shadow: inset 0 3px 0 var(--sea); }
+    .meal-photo { position: relative; overflow: hidden; height: 138px; margin: -12px -12px 12px; border-radius: 13px 13px 0 0; background: #dbe3df; }
+    .meal-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
+    .meal-choice:hover .meal-photo img { transform: scale(1.035); }
+    .meal-photo figcaption { position: absolute; left: 8px; bottom: 7px; padding: 4px 7px; border-radius: 99px; background: rgba(18,35,35,.78); color: white; font-size: .61rem; backdrop-filter: blur(5px); }
+    .meal-photo figcaption a { min-height: 0; margin: 0; color: white; font-size: inherit; font-weight: 750; text-decoration: none; }
+    .meal-save { position: absolute; z-index: 2; top: 8px; right: 8px; min-height: 35px; padding: 7px 10px; border: 1px solid rgba(255,255,255,.55); border-radius: 99px; background: rgba(18,35,35,.78); color: white; font: inherit; font-size: .7rem; font-weight: 900; cursor: pointer; backdrop-filter: blur(7px); }
+    .meal-save.is-saved { border-color: var(--coral); background: var(--coral); }
+    .recommended-order { margin: 2px 0 10px; padding: 9px 10px; border-left: 3px solid var(--gold); border-radius: 0 9px 9px 0; background: rgba(242,193,78,.16); }
+    .recommended-order span { display: block; margin-bottom: 2px; color: #7d5c09; font-size: .61rem; font-weight: 900; letter-spacing: .08em; }
+    .recommended-order strong { font-size: .8rem; line-height: 1.4; }
+    .meal-tools { display: flex; align-items: center; gap: 10px; margin: -12px 0 28px; }
+    .meal-tools button { min-height: 42px; padding: 9px 15px; border: 1px solid var(--sea); border-radius: 99px; background: white; color: var(--sea); font: inherit; font-size: .8rem; font-weight: 900; cursor: pointer; }
+    .meal-tools button.active { background: var(--sea); color: white; }
+    .meal-tools span { color: var(--muted); font-size: .78rem; }
+    .meal-choice[hidden] { display: none; }
     .tags { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 8px; }
     .tag { padding: 4px 8px; border-radius: 99px; background: #e4efeb; color: var(--deep); font-size: .72rem; font-weight: 850; }
     .tag.michelin { background: #ffe3de; color: #9d2e26; }
@@ -254,6 +269,9 @@
       .weather { padding: 14px; }
       .day-content { padding: 24px 18px; }
       .meal-choice { padding: 13px; }
+      .meal-photo { height: 170px; margin: -13px -13px 12px; }
+      .meal-choice:hover .meal-photo img { transform: none; }
+      .meal-tools { position: sticky; z-index: 5; top: 8px; justify-content: space-between; padding: 8px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.92); box-shadow: 0 8px 22px rgba(18,35,35,.1); backdrop-filter: blur(10px); }
       .meal-choice a { min-height: 38px; }
       .map-shell { padding: 7px; border-radius: 20px; }
       .map-filter { flex-wrap: nowrap; overflow-x: auto; padding: 6px 2px 10px; }
@@ -307,7 +325,7 @@
   <main>
     <div class="update-banner" role="status">
       <strong>LIVE UPDATE · 9/5</strong>
-      <span>今天已加入 Olive Young、廣安木；新增甜點／購物書籤與金海機場預購取貨指南。</span>
+      <span>餐廳卡已加入料理照片、推薦必點與可保存的收藏篩選；手機版同步優化。</span>
     </div>
     <section id="weather">
       <div class="section-head">
@@ -334,6 +352,10 @@
       </div>
       <div class="food-preference"><strong>用餐原則：</strong>每個實際用餐時段直接列出順路選項，標示「在地優先」者以本地口碑與路線為首選；Bib Gourmand 只作加分，不看星級。餐廳可供應牛肉，只需避開牛肉主菜，牛高湯可以。</div>
       <div class="place-check"><strong>店名核對：</strong>「善良章魚／착한낙지」已加入今晚晚餐分支。搜尋不到能唯一對應的「CHILO BUSAN」店家；請傳 Naver Map 或 Instagram 連結，我再放入正確日程，暫不讓錯誤地點影響路線。</div>
+      <div class="meal-tools" aria-label="餐廳收藏篩選">
+        <button id="saved-only" type="button" aria-pressed="false">♡ 只看已收藏 · Saved</button>
+        <span id="saved-count" aria-live="polite">0 間已收藏</span>
+      </div>
 
       <article class="day-card">
         <div class="day-photo">
@@ -579,6 +601,7 @@
       天氣與設施營運可能隨颱風快速改變；本頁資料請配合當日官方公告使用。
       <div class="credits">
         <span>地圖：Google Maps／Naver Map</span>
+        <span>料理照片為示意圖：<a href="https://commons.wikimedia.org/wiki/Category:Korean_cuisine" target="_blank" rel="noreferrer">Wikimedia Commons（各圖來源／授權可由卡片開啟）</a></span>
         <span>照片：<a href="https://commons.wikimedia.org/wiki/File:Busan_City_Haeundae_Beach_KOGL_(01).jpg" target="_blank">Busan City</a></span>
         <span><a href="https://commons.wikimedia.org/wiki/File:Oryukdo_Skywalk_in_Busan,_South_Korea.jpg" target="_blank">Choi2451 / CC0</a></span>
         <span><a href="https://commons.wikimedia.org/wiki/File:Gamcheon_Culture_Village.jpg" target="_blank">Bernard Gagnon / CC0</a></span>
@@ -589,6 +612,115 @@
   </footer>
 
   <script>
+    const foodImages = {
+      "miyeok-guk": ["assets/food/miyeok-guk.jpg", "海帶湯料理示意", "https://commons.wikimedia.org/wiki/File:Miyeok-guk.jpg"],
+      "milmyeon": ["assets/food/milmyeon.jpg", "釜山密麵料理示意", "https://commons.wikimedia.org/wiki/File:Milmyeon_1.jpg"],
+      "hoe": ["assets/food/hoe.jpg", "韓式生魚片料理示意", "https://commons.wikimedia.org/wiki/File:Korean.food-Hoe-02.jpg"],
+      "gukbap": ["assets/food/dwaeji-gukbap.jpg", "豬肉湯飯料理示意", "https://commons.wikimedia.org/wiki/File:Korean.cuisine-Dwaeji.gukbap-01.jpg"],
+      "tonkatsu": ["assets/food/tonkatsu.jpg", "日式炸豬排料理示意", "https://commons.wikimedia.org/wiki/File:Japanese_tonkatsu.jpg"],
+      "nakji": ["assets/food/nakji-bokkeum.jpg", "辣炒章魚料理示意", "https://commons.wikimedia.org/wiki/File:Korean_cuisine-Nakji_bokkeum-01.jpg"],
+      "samgyeopsal": ["assets/food/samgyeopsal.jpg", "韓式烤豬肉料理示意", "https://commons.wikimedia.org/wiki/File:Samgyeopsal-gui.jpg"],
+      "hotteok": ["assets/food/hotteok.jpg", "韓式糖餅料理示意", "https://commons.wikimedia.org/wiki/File:Hotteok.jpg"],
+      "jokbal": ["assets/food/jokbal.jpg", "韓式豬腳料理示意", "https://commons.wikimedia.org/wiki/File:Korean_food,_Jokbal.jpg"],
+      "kalguksu": ["assets/food/kalguksu.jpg", "刀切麵料理示意", "https://commons.wikimedia.org/wiki/File:Korean.noodle-Kalguksu-01.jpg"],
+      "hangwa": ["assets/food/hangwa.jpg", "韓式茶點料理示意", "https://commons.wikimedia.org/wiki/File:朝鮮傳統韓菓.jpg"],
+      "bao": ["assets/food/bao.jpg", "刈包料理示意", "https://commons.wikimedia.org/wiki/File:Bao_Buns.jpg"],
+      "fish": ["assets/food/grilled-fish.jpg", "烤魚料理示意", "https://commons.wikimedia.org/wiki/File:Korean_grilled_mackerel-Godeungeo_gui-02.jpg"],
+      "pajeon": ["assets/food/haemul-pajeon.jpg", "海鮮煎餅料理示意", "https://commons.wikimedia.org/wiki/File:Korean_pancake-Haemul_pajeon-01.jpg"],
+      "latte": ["assets/food/latte.jpg", "咖啡料理示意", "https://commons.wikimedia.org/wiki/File:Latte_art.jpg"],
+      "mochi": ["assets/food/mochi-ice-cream.jpg", "麻糬冰淇淋料理示意", "https://commons.wikimedia.org/wiki/File:Mochi_Ice_Cream.jpg"]
+    };
+
+    const mealEnhancements = [
+      ["풍원장", "miyeok-guk", "鮑魚海帶湯定食 · 전복미역국정찬"],
+      ["가야밀면", "milmyeon", "水密麵＋手工餃子 · 물밀면＋만두"],
+      ["해목", "fish", "鰻魚飯三吃 · 히츠마부시"],
+      ["호랑이젤라떡", "mochi", "海鹽牛奶／開心果 Gelattok（依當日口味）"],
+      ["OPS", "hangwa", "學院前蛋糕＋泡芙 · 학원전＋슈크림"],
+      ["진횟집", "hoe", "兩人小份綜合生魚片 · 모둠회 소"],
+      ["수영돼지국밥", "gukbap", "豬肉湯飯＋白切肉飯 · 돼지국밥＋수육백반"],
+      ["톤쇼우", "tonkatsu", "特選里肌豬排 · 특로스카츠"],
+      ["착한낙지", "nakji", "辣炒章魚 2 人份＋烏龍麵 · 낙지볶음"],
+      ["광안목", "samgyeopsal", "A Set：熟成豬頸肉＋五花肉"],
+      ["해변횟집", "hoe", "兩人小份綜合生魚片 · 모둠회 소"],
+      ["뚱보네", "pajeon", "烤貝小份＋海鮮煎餅 · 조개구이＋해물파전"],
+      ["송도포차", "fish", "烤鯖魚＋海鮮煎餅 · 고등어구이＋해물파전"],
+      ["씨앗호떡", "hotteok", "現煎種子糖餅 1 個，兩人先分食"],
+      ["비빔당면", "milmyeon", "拌冬粉＋魚板 · 비빔당면＋어묵"],
+      ["개미집", "nakji", "章魚蝦鍋 · 낙새（不含牛腸）"],
+      ["부산족발", "jokbal", "冷盤豬腳小份 · 냉채족발 소"],
+      ["부평깡통시장", "hotteok", "魚板＋水年糕＋炸物，各點小份共享"],
+      ["기장손칼국수", "kalguksu", "手工刀切麵＋紫菜飯捲 · 손칼국수＋김밥"],
+      ["송정3대국밥", "gukbap", "豬肉湯飯＋白切肉 · 돼지국밥＋수육"],
+      ["바오하우스", "bao", "經典豬肉刈包＋炸雞 · Classic Bao＋Fried Chicken"],
+      ["모모스커피", "latte", "手沖咖啡＋Cheese Terrine"],
+      ["白淺村海景咖啡", "latte", "手沖咖啡／海鹽奶油麵包（依現場店家）"],
+      ["소수인", "hoe", "當日刺身＋炸物＋一份飯麵，兩人共享"],
+      ["라스트춘선", "pajeon", "店家當日招牌現代韓食＋一款傳統酒"],
+      ["수월경화", "hangwa", "달보드레 韓式點心盒＋一壺茶"],
+      ["송정집", "kalguksu", "手工刀切麵＋餃子 · 손칼국수＋만두"],
+      ["낙불집", "nakji", "章魚料理 · 낙지볶음（點餐時確認不加牛肉）"],
+      ["명가의 뜰", "nakji", "章魚拌麵定食 · 낙지소면반상"],
+      ["플레이보6", "hoe", "壽司組合＋魚板，依當日櫃檯品項"],
+      ["K라면바", "kalguksu", "非牛肉口味拉麵＋蛋（現場確認湯底）"]
+    ];
+
+    let savedMeals;
+    try { savedMeals = new Set(JSON.parse(localStorage.getItem("busanSavedMeals") || "[]")); }
+    catch (_) { savedMeals = new Set(); }
+    let showSavedOnly = false;
+
+    document.querySelectorAll(".meal-choice").forEach(card => {
+      const title = card.querySelector("h4")?.textContent.replace(/\s+/g, " ").trim() || "";
+      const match = mealEnhancements.find(([key]) => title.includes(key));
+      if (!match) return;
+      const [key, imageKey, order] = match;
+      const [src, alt, source] = foodImages[imageKey];
+      card.dataset.mealKey = key;
+
+      const figure = document.createElement("figure");
+      figure.className = "meal-photo";
+      figure.innerHTML = `<img src="${src}" alt="${alt}" loading="lazy" decoding="async"><figcaption>料理示意 · <a href="${source}" target="_blank" rel="noreferrer">photo source ↗</a></figcaption>`;
+      const save = document.createElement("button");
+      save.className = "meal-save";
+      save.type = "button";
+      save.addEventListener("click", () => {
+        savedMeals.has(key) ? savedMeals.delete(key) : savedMeals.add(key);
+        try { localStorage.setItem("busanSavedMeals", JSON.stringify([...savedMeals])); } catch (_) {}
+        renderSavedMeals();
+      });
+      figure.append(save);
+      card.prepend(figure);
+
+      const recommendation = document.createElement("div");
+      recommendation.className = "recommended-order";
+      recommendation.innerHTML = `<span>推薦必點 · ORDER THIS</span><strong>${order}</strong>`;
+      const hours = card.querySelector(".hours");
+      hours?.insertAdjacentElement("afterend", recommendation);
+    });
+
+    const savedOnlyButton = document.getElementById("saved-only");
+    function renderSavedMeals() {
+      document.querySelectorAll(".meal-choice[data-meal-key]").forEach(card => {
+        const isSaved = savedMeals.has(card.dataset.mealKey);
+        const button = card.querySelector(".meal-save");
+        button.classList.toggle("is-saved", isSaved);
+        button.textContent = isSaved ? "♥ 已收藏" : "♡ 收藏";
+        button.setAttribute("aria-pressed", String(isSaved));
+        button.setAttribute("aria-label", `${isSaved ? "取消收藏" : "收藏"}${card.querySelector("h4").textContent.trim()}`);
+        card.hidden = showSavedOnly && !isSaved;
+      });
+      document.getElementById("saved-count").textContent = `${savedMeals.size} 間已收藏`;
+      savedOnlyButton.classList.toggle("active", showSavedOnly);
+      savedOnlyButton.setAttribute("aria-pressed", String(showSavedOnly));
+      savedOnlyButton.textContent = showSavedOnly ? "全部餐廳 · Show all" : "♡ 只看已收藏 · Saved";
+    }
+    savedOnlyButton.addEventListener("click", () => {
+      showSavedOnly = !showSavedOnly;
+      renderSavedMeals();
+    });
+    renderSavedMeals();
+
     document.querySelectorAll('.map-filter button').forEach(button => {
       button.addEventListener('click', () => {
         document.querySelectorAll('.map-filter button').forEach(b => b.classList.remove('active'));
