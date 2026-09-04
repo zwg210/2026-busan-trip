@@ -122,6 +122,9 @@
     .timeline li.done b { text-decoration: line-through; }
     .route-link { display: inline-flex; align-items: center; gap: 8px; margin-top: 20px; padding: 11px 15px; border-radius: 999px; background: var(--sea); color: white; text-decoration: none; font-weight: 800; }
     .route-link:hover { background: var(--deep); }
+    .route-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
+    .route-actions .route-link { margin-top: 0; }
+    .route-link.secondary { color: var(--sea); background: transparent; border: 1px solid var(--sea); }
 
     .lunch-note { margin-bottom: 20px; padding: 16px 18px; border-radius: 16px; background: rgba(242,193,78,.25); }
     .lunch-days { display: grid; gap: 24px; }
@@ -149,6 +152,8 @@
     .mini-route strong { display: block; margin-bottom: 8px; }
     .mini-route p { min-height: 68px; margin: 0 0 12px; color: var(--muted); font-size: .82rem; line-height: 1.5; }
     .mini-route a { color: var(--sea); font-size: .83rem; font-weight: 850; text-underline-offset: 3px; }
+    .stop-links { display: flex; flex-wrap: wrap; gap: 7px; }
+    .stop-links a { padding: 6px 9px; border-radius: 999px; background: #e4efeb; text-decoration: none; }
 
     .bar-grid, .booking-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
     .feature-card { position: relative; overflow: hidden; padding: 26px; border-radius: 22px; color: white; background: var(--deep); min-height: 245px; }
@@ -212,6 +217,7 @@
       .day-title h3 { font-size: 1.7rem; }
       .timeline li { grid-template-columns: 68px minmax(0, 1fr); gap: 8px; padding: 14px 0; }
       .timeline small { display: block; margin-top: 2px; line-height: 1.45; }
+      .route-actions { display: grid; grid-template-columns: 1fr; }
       .route-link { width: 100%; min-height: 48px; justify-content: center; text-align: center; }
       .food-grid, .bar-grid { grid-template-columns: 1fr; }
       .weather { padding: 14px; }
@@ -307,7 +313,10 @@
             <li><time>17:00</time><div><b>入住／海雲台海灘</b><small>可加走平坦的冬柏島入口。</small></div></li>
             <li><time>18:30</time><div><b>晚餐 → 廣安里夜景</b><small>Westin → 廣安里約 15–25 分；Hongdan 距海灘約 5–10 分鐘步行。</small></div></li>
           </ol>
-          <a class="route-link" href="https://www.google.com/maps/dir/?api=1&origin=The+Westin+Josun+Busan&destination=Hongdan+Busan&waypoints=Oryukdo+Skywalk%7CGwangalli+Beach&travelmode=driving" target="_blank" rel="noreferrer">在 Google Maps 開啟本日路線 ↗</a>
+          <div class="route-actions">
+            <a class="route-link" href="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%9B%8C%ED%81%AC" target="_blank" rel="noreferrer">Naver Map：開啟首站 ↗</a>
+            <a class="route-link secondary" href="https://www.google.com/maps/dir/?api=1&amp;origin=The+Westin+Josun+Busan&amp;destination=Hongdan+Busan&amp;waypoints=Oryukdo+Skywalk%7CGwangalli+Beach&amp;travelmode=driving" target="_blank" rel="noreferrer">Google 路線備用 ↗</a>
+          </div>
         </div>
       </article>
 
@@ -327,7 +336,10 @@
             <li><time>17:40</time><div><b>富平罐頭市場＋晚餐</b><small>從國際市場步行約 5–10 分；下雨時可縮短街區停留。</small></div></li>
             <li><time>19:00</time><div><b>龍頭山公園／釜山塔</b><small>富平步行約 15–20 分；回 Park Hyatt 約 35–55 分。</small></div></li>
           </ol>
-          <a class="route-link" href="https://www.google.com/maps/dir/?api=1&origin=Park+Hyatt+Busan&destination=Busan+Tower&waypoints=Gamcheon+Culture+Village%7CSongdo+Bay+Station%7CJagalchi+Market%7CBupyeong+Kkangtong+Market&travelmode=driving" target="_blank" rel="noreferrer">在 Google Maps 開啟本日路線 ↗</a>
+          <div class="route-actions">
+            <a class="route-link" href="https://map.naver.com/p/search/%EA%B0%90%EC%B2%9C%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">Naver Map：開啟首站 ↗</a>
+            <a class="route-link secondary" href="https://www.google.com/maps/dir/?api=1&amp;origin=Park+Hyatt+Busan&amp;destination=Busan+Tower&amp;waypoints=Gamcheon+Culture+Village%7CSongdo+Bay+Station%7CJagalchi+Market%7CBupyeong+Kkangtong+Market&amp;travelmode=driving" target="_blank" rel="noreferrer">Google 路線備用 ↗</a>
+          </div>
         </div>
       </article>
 
@@ -346,7 +358,10 @@
             <li><time>18:30</time><div><b>晚餐選擇</b><small>ARP 週一 16:00 關門，不適合晚餐；可選 Anmok 南川本店或回西面。</small></div></li>
             <li><time>20:40</time><div><b>Make Zero</b><small>白淺 → 南川約 35–50 分；南川 → Make Zero 約 20–30 分。</small></div></li>
           </ol>
-          <a class="route-link" href="https://www.google.com/maps/dir/?api=1&origin=Park+Hyatt+Busan&destination=Make+Zero+Busan&waypoints=Lotte+Duty+Free+Busan%7CJeonpo+Cafe+Street%7CHuinnyeoul+Culture+Village%7CARP+Busan&travelmode=driving" target="_blank" rel="noreferrer">在 Google Maps 開啟本日路線 ↗</a>
+          <div class="route-actions">
+            <a class="route-link" href="https://map.naver.com/p/search/%EB%A1%AF%EB%8D%B0%EB%A9%B4%EC%84%B8%EC%A0%90%20%EB%B6%80%EC%82%B0%EC%A0%90" target="_blank" rel="noreferrer">Naver Map：開啟首站 ↗</a>
+            <a class="route-link secondary" href="https://www.google.com/maps/dir/?api=1&amp;origin=Park+Hyatt+Busan&amp;destination=Make+Zero+Busan&amp;waypoints=Lotte+Duty+Free+Busan%7CJeonpo+Cafe+Street%7CHuinnyeoul+Culture+Village&amp;travelmode=driving" target="_blank" rel="noreferrer">Google 路線備用 ↗</a>
+          </div>
         </div>
       </article>
 
@@ -365,7 +380,10 @@
             <li><time>14:20</time><div><b>尾浦／海理團路短逛</b><small>尾浦 → Park Hyatt 約 15–25 分；15:00 左右回房。</small></div></li>
             <li><time>16:00</time><div><b>Uber 前往金海機場</b><small>約 45–70 分；下班時段以高值估算，目標 17:15 前抵達。</small></div></li>
           </ol>
-          <a class="route-link" href="https://www.google.com/maps/dir/?api=1&origin=Park+Hyatt+Busan&destination=Park+Hyatt+Busan&waypoints=Haedong+Yonggungsa%7CSongjeong+Beach%7CCheongsapo+Daritdol+Observatory%7CMipo+Station&travelmode=driving" target="_blank" rel="noreferrer">在 Google Maps 開啟本日路線 ↗</a>
+          <div class="route-actions">
+            <a class="route-link" href="https://map.naver.com/p/search/%ED%95%B4%EB%8F%99%EC%9A%A9%EA%B6%81%EC%82%AC" target="_blank" rel="noreferrer">Naver Map：開啟首站 ↗</a>
+            <a class="route-link secondary" href="https://www.google.com/maps/dir/?api=1&amp;origin=Park+Hyatt+Busan&amp;destination=Park+Hyatt+Busan&amp;waypoints=Haedong+Yonggungsa%7CSongjeong+Beach%7CCheongsapo+Daritdol+Observatory%7CMipo+Station&amp;travelmode=driving" target="_blank" rel="noreferrer">Google 路線備用 ↗</a>
+          </div>
         </div>
       </article>
     </section>
@@ -389,8 +407,8 @@
         <div class="lunch-day">
           <h3>9/6 · 松島／南浦</h3>
           <div class="food-grid">
-            <article class="food-card"><div class="tags"><span class="tag">松島</span><span class="tag">海鮮</span></div><h4>松島海鮮／烤貝店</h4><p>最順路且不必跨區。選烤貝、海鮮鍋或生魚片，避開標示牛肉的綜合鍋。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=seafood+restaurant+Songdo+Beach+Busan" target="_blank">附近餐廳 ↗</a></div></article>
-            <article class="food-card"><div class="tags"><span class="tag">札嘎其</span><span class="tag">現選海鮮</span></div><h4>Jagalchi Market 札嘎其市場</h4><p>若纜車停駛，提前來市場挑海鮮再到樓上料理；先談清楚價格與料理費。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=Jagalchi+Market+Busan" target="_blank">地圖 ↗</a></div></article>
+            <article class="food-card"><div class="tags"><span class="tag">松島</span><span class="tag">海鮮</span></div><h4>松島海鮮／烤貝店</h4><p>最順路且不必跨區。選烤貝、海鮮鍋或生魚片，避開標示牛肉的綜合鍋。</p><div class="food-actions"><a href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5%20%EC%A1%B0%EA%B0%9C%EA%B5%AC%EC%9D%B4" target="_blank" rel="noreferrer">Naver 附近餐廳 ↗</a></div></article>
+            <article class="food-card"><div class="tags"><span class="tag">札嘎其</span><span class="tag">現選海鮮</span></div><h4>Jagalchi Market 札嘎其市場</h4><p>若纜車停駛，提前來市場挑海鮮再到樓上料理；先談清楚價格與料理費。</p><div class="food-actions"><a href="https://map.naver.com/p/search/%EC%9E%90%EA%B0%88%EC%B9%98%EC%8B%9C%EC%9E%A5" target="_blank" rel="noreferrer">Naver Map ↗</a></div></article>
             <article class="food-card"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">全素</span></div><h4>ARP 아르프</h4><span class="hours">週日 11:30–20:00 · 建議預約</span><p>位於影島的全素料理，完全沒有牛肉風險；從南浦／札嘎其前往較順。</p><div class="food-actions"><a href="https://map.naver.com/p/search/%EC%95%84%EB%A5%B4%ED%94%84%20%EC%98%81%EB%8F%84" target="_blank">Naver Map ↗</a><a href="https://guide.michelin.com/sg/en/busan-region/busan_1025838/restaurant/arp" target="_blank">米其林 ↗</a></div></article>
           </div>
         </div>
@@ -407,8 +425,8 @@
         <div class="lunch-day">
           <h3>9/8 · 松亭／青沙浦</h3>
           <div class="food-grid">
-            <article class="food-card"><div class="tags"><span class="tag">松亭</span><span class="tag">海鮮</span></div><h4>松亭海鮮餐廳</h4><p>時間最可靠：烤魚、海鮮湯或生魚片。11:15 開始吃，12:20 前離開。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=seafood+restaurant+Songjeong+Beach+Busan" target="_blank">附近餐廳 ↗</a></div></article>
-            <article class="food-card"><div class="tags"><span class="tag">青沙浦</span><span class="tag">烤貝</span></div><h4>Cheongsapo Shellfish Village</h4><p>海景烤貝氣氛最好；需抓緊時間，最晚 12:45 離開去觀景台。</p><div class="food-actions"><a href="https://www.google.com/maps/search/?api=1&query=Cheongsapo+shellfish+restaurant+Busan" target="_blank">附近餐廳 ↗</a></div></article>
+            <article class="food-card"><div class="tags"><span class="tag">松亭</span><span class="tag">海鮮</span></div><h4>松亭海鮮餐廳</h4><p>時間最可靠：烤魚、海鮮湯或生魚片。11:15 開始吃，12:20 前離開。</p><div class="food-actions"><a href="https://map.naver.com/p/search/%EC%86%A1%EC%A0%95%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5%20%ED%95%B4%EC%82%B0%EB%AC%BC" target="_blank" rel="noreferrer">Naver 附近餐廳 ↗</a></div></article>
+            <article class="food-card"><div class="tags"><span class="tag">青沙浦</span><span class="tag">烤貝</span></div><h4>Cheongsapo Shellfish Village</h4><p>海景烤貝氣氛最好；需抓緊時間，最晚 12:45 離開去觀景台。</p><div class="food-actions"><a href="https://map.naver.com/p/search/%EC%B2%AD%EC%82%AC%ED%8F%AC%20%EC%A1%B0%EA%B0%9C%EA%B5%AC%EC%9D%B4" target="_blank" rel="noreferrer">Naver 附近餐廳 ↗</a></div></article>
             <article class="food-card"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">蕎麥麵</span></div><h4>Moemiljip 뫼밀집</h4><span class="hours">週二 11:30–20:30 · 15:30–17:00 午休</span><p>Park Hyatt 旁的自製蕎麥麵；適合作為東岸臨時取消時的備案。</p><div class="food-actions"><a href="https://map.naver.com/p/search/%EB%AB%BC%EB%B0%80%EC%A7%91%20%EB%A7%88%EB%A6%B0%EC%8B%9C%ED%8B%B0" target="_blank">Naver Map ↗</a><a href="https://guide.michelin.com/us/en/busan-region/busan_1025838/restaurant/moemiljip" target="_blank">米其林 ↗</a></div></article>
           </div>
         </div>
@@ -418,25 +436,25 @@
     <section id="map-section">
       <div class="section-head">
         <h2>Maps that open.</h2>
-        <p>不依賴 Leaflet 或 API key。地圖可直接拖曳；「開啟本日完整路線」會交給手機的 Google Maps。韓國步行與大眾運輸可再用 Naver Map 複核。</p>
+        <p>Naver Map 是主要導航工具：每站都有韓文搜尋連結。內嵌 Google 地圖只作全區概覽，因此不需要申請任何 API key。</p>
       </div>
       <div class="map-shell">
         <div class="map-filter" aria-label="地圖日期篩選">
-          <button class="active" data-map="https://maps.google.com/maps?q=Oryukdo%20Skywalk%20Busan&amp;z=12&amp;output=embed" data-route="https://www.google.com/maps/dir/?api=1&amp;origin=The+Westin+Josun+Busan&amp;destination=Hongdan+Busan&amp;waypoints=Oryukdo+Skywalk%7CGwangalli+Beach&amp;travelmode=driving">9/5 · 東南岸</button>
-          <button data-map="https://maps.google.com/maps?q=Gamcheon%20Culture%20Village%20Busan&amp;z=12&amp;output=embed" data-route="https://www.google.com/maps/dir/?api=1&amp;origin=Park+Hyatt+Busan&amp;destination=Busan+Tower&amp;waypoints=Gamcheon+Culture+Village%7CSongdo+Bay+Station%7CJagalchi+Market%7CBupyeong+Kkangtong+Market&amp;travelmode=driving">9/6 · 西釜山</button>
-          <button data-map="https://maps.google.com/maps?q=Jeonpo%20Cafe%20Street%20Busan&amp;z=12&amp;output=embed" data-route="https://www.google.com/maps/dir/?api=1&amp;origin=Park+Hyatt+Busan&amp;destination=Make+Zero+Busan&amp;waypoints=Lotte+Duty+Free+Busan%7CJeonpo+Cafe+Street%7CHuinnyeoul+Culture+Village%7CARP+Busan&amp;travelmode=driving">9/7 · 西面影島</button>
-          <button data-map="https://maps.google.com/maps?q=Haedong%20Yonggungsa%20Busan&amp;z=12&amp;output=embed" data-route="https://www.google.com/maps/dir/?api=1&amp;origin=Park+Hyatt+Busan&amp;destination=Park+Hyatt+Busan&amp;waypoints=Haedong+Yonggungsa%7CSongjeong+Beach%7CCheongsapo+Daritdol+Observatory%7CMipo+Station&amp;travelmode=driving">9/8 · 東岸</button>
+          <button class="active" data-map="https://maps.google.com/maps?q=Oryukdo%20Skywalk%20Busan&amp;z=12&amp;output=embed" data-route="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%9B%8C%ED%81%AC">9/5 · 東南岸</button>
+          <button data-map="https://maps.google.com/maps?q=Gamcheon%20Culture%20Village%20Busan&amp;z=12&amp;output=embed" data-route="https://map.naver.com/p/search/%EA%B0%90%EC%B2%9C%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84">9/6 · 西釜山</button>
+          <button data-map="https://maps.google.com/maps?q=Jeonpo%20Cafe%20Street%20Busan&amp;z=12&amp;output=embed" data-route="https://map.naver.com/p/search/%EB%A1%AF%EB%8D%B0%EB%A9%B4%EC%84%B8%EC%A0%90%20%EB%B6%80%EC%82%B0%EC%A0%90">9/7 · 西面影島</button>
+          <button data-map="https://maps.google.com/maps?q=Haedong%20Yonggungsa%20Busan&amp;z=12&amp;output=embed" data-route="https://map.naver.com/p/search/%ED%95%B4%EB%8F%99%EC%9A%A9%EA%B6%81%EC%82%AC">9/8 · 東岸</button>
         </div>
         <div class="map-frame">
           <iframe id="trip-map" title="釜山每日地圖" src="https://maps.google.com/maps?q=Oryukdo%20Skywalk%20Busan&amp;z=12&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
-          <a id="map-open" class="map-open" href="https://www.google.com/maps/dir/?api=1&amp;origin=The+Westin+Josun+Busan&amp;destination=Hongdan+Busan&amp;waypoints=Oryukdo+Skywalk%7CGwangalli+Beach&amp;travelmode=driving" target="_blank" rel="noreferrer">開啟本日完整路線 ↗</a>
+          <a id="map-open" class="map-open" href="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%9B%8C%ED%81%AC" target="_blank" rel="noreferrer">在 Naver Map 開啟 ↗</a>
         </div>
       </div>
       <div class="route-summary">
-        <article class="mini-route"><strong>9/5 · 東南岸</strong><p>機場→飯店 50–70m<br>飯店→五六島 25–35m<br>廣安里→飯店 15–25m</p><a href="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%9B%8C%ED%81%AC" target="_blank" rel="noreferrer">Naver Map 景點 ↗</a></article>
-        <article class="mini-route"><strong>9/6 · 西釜山</strong><p>Park Hyatt→甘川 45–65m<br>甘川→松島 15–25m<br>南浦→飯店 35–55m</p><a href="https://map.naver.com/p/search/%EA%B0%90%EC%B2%9C%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">Naver Map 景點 ↗</a></article>
-        <article class="mini-route"><strong>9/7 · 西面影島</strong><p>飯店→西面 25–40m<br>田浦→白淺 30–45m<br>南川→田浦 20–30m</p><a href="https://map.naver.com/p/search/%ED%9D%B0%EC%97%AC%EC%9A%B8%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">Naver Map 景點 ↗</a></article>
-        <article class="mini-route"><strong>9/8 · 東岸</strong><p>飯店→龍宮寺 35–50m<br>龍宮寺→松亭 15–20m<br>飯店→機場 45–70m</p><a href="https://map.naver.com/p/search/%ED%95%B4%EB%8F%99%EC%9A%A9%EA%B6%81%EC%82%AC" target="_blank" rel="noreferrer">Naver Map 景點 ↗</a></article>
+        <article class="mini-route"><strong>9/5 · 東南岸</strong><p>機場→飯店 50–70m<br>飯店→五六島 25–35m<br>廣安里→飯店 15–25m</p><div class="stop-links"><a href="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%9B%8C%ED%81%AC" target="_blank" rel="noreferrer">五六島</a><a href="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%ED%95%B4%EB%A7%9E%EC%9D%B4%EA%B3%B5%EC%9B%90" target="_blank" rel="noreferrer">日出公園</a><a href="https://map.naver.com/p/search/%EC%9D%B4%EA%B8%B0%EB%8C%80%EA%B3%B5%EC%9B%90" target="_blank" rel="noreferrer">二妓台</a><a href="https://map.naver.com/p/search/%ED%95%B4%EC%9A%B4%EB%8C%80%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noreferrer">海雲台</a><a href="https://map.naver.com/p/search/%EA%B4%91%EC%95%88%EB%A6%AC%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noreferrer">廣安里</a></div></article>
+        <article class="mini-route"><strong>9/6 · 西釜山</strong><p>Park Hyatt→甘川 45–65m<br>甘川→松島 15–25m<br>南浦→飯店 35–55m</p><div class="stop-links"><a href="https://map.naver.com/p/search/%EA%B0%90%EC%B2%9C%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">甘川</a><a href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noreferrer">松島海灘</a><a href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%ED%95%B4%EC%83%81%EC%BC%80%EC%9D%B4%EB%B8%94%EC%B9%B4" target="_blank" rel="noreferrer">松島纜車</a><a href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%EC%8A%A4%EC%B9%B4%EC%9D%B4%ED%8C%8C%ED%81%AC" target="_blank" rel="noreferrer">天空公園</a><a href="https://map.naver.com/p/search/%EC%9E%90%EA%B0%88%EC%B9%98%EC%8B%9C%EC%9E%A5" target="_blank" rel="noreferrer">札嘎其</a><a href="https://map.naver.com/p/search/BIFF%EA%B4%91%EC%9E%A5" target="_blank" rel="noreferrer">BIFF</a><a href="https://map.naver.com/p/search/%EA%B5%AD%EC%A0%9C%EC%8B%9C%EC%9E%A5" target="_blank" rel="noreferrer">國際市場</a><a href="https://map.naver.com/p/search/%EB%B6%80%ED%8F%89%EA%B9%A1%ED%86%B5%EC%8B%9C%EC%9E%A5" target="_blank" rel="noreferrer">富平</a><a href="https://map.naver.com/p/search/%EC%9A%A9%EB%91%90%EC%82%B0%EA%B3%B5%EC%9B%90" target="_blank" rel="noreferrer">龍頭山</a><a href="https://map.naver.com/p/search/%EB%B6%80%EC%82%B0%ED%83%80%EC%9B%8C" target="_blank" rel="noreferrer">釜山塔</a></div></article>
+        <article class="mini-route"><strong>9/7 · 西面影島</strong><p>飯店→西面 25–40m<br>田浦→白淺 30–45m<br>南川→田浦 20–30m</p><div class="stop-links"><a href="https://map.naver.com/p/search/%EB%A1%AF%EB%8D%B0%EB%A9%B4%EC%84%B8%EC%A0%90%20%EB%B6%80%EC%82%B0%EC%A0%90" target="_blank" rel="noreferrer">樂天免稅店</a><a href="https://map.naver.com/p/search/%EC%84%9C%EB%A9%B4%EC%97%AD" target="_blank" rel="noreferrer">西面</a><a href="https://map.naver.com/p/search/%EC%A0%84%ED%8F%AC%EC%B9%B4%ED%8E%98%EA%B1%B0%EB%A6%AC" target="_blank" rel="noreferrer">田浦</a><a href="https://map.naver.com/p/search/%ED%9D%B0%EC%97%AC%EC%9A%B8%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">白淺村</a><a href="https://map.naver.com/p/search/%EC%A0%88%EC%98%81%ED%95%B4%EC%95%88%EC%82%B0%EC%B1%85%EB%A1%9C" target="_blank" rel="noreferrer">絕影海岸</a><a href="https://map.naver.com/p/search/%EB%A9%94%EC%9D%B4%ED%81%AC%EC%A0%9C%EB%A1%9C%20%EB%B6%80%EC%82%B0" target="_blank" rel="noreferrer">Make Zero</a></div></article>
+        <article class="mini-route"><strong>9/8 · 東岸</strong><p>飯店→龍宮寺 35–50m<br>龍宮寺→松亭 15–20m<br>飯店→機場 45–70m</p><div class="stop-links"><a href="https://map.naver.com/p/search/%ED%95%B4%EB%8F%99%EC%9A%A9%EA%B6%81%EC%82%AC" target="_blank" rel="noreferrer">龍宮寺</a><a href="https://map.naver.com/p/search/%EC%86%A1%EC%A0%95%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noreferrer">松亭</a><a href="https://map.naver.com/p/search/%EC%B2%AD%EC%82%AC%ED%8F%AC%EB%93%B1%EB%8C%80" target="_blank" rel="noreferrer">青沙浦燈塔</a><a href="https://map.naver.com/p/search/%EC%B2%AD%EC%82%AC%ED%8F%AC%20%EB%8B%A4%EB%A6%BF%EB%8F%8C%EC%A0%84%EB%A7%9D%EB%8C%80" target="_blank" rel="noreferrer">踏石觀景台</a><a href="https://map.naver.com/p/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EB%B8%94%EB%A3%A8%EB%9D%BC%EC%9D%B8%ED%8C%8C%ED%81%AC%20%EC%B2%AD%EC%82%AC%ED%8F%AC%EC%A0%95%EA%B1%B0%EC%9E%A5" target="_blank" rel="noreferrer">天空膠囊</a><a href="https://map.naver.com/p/search/%EB%AF%B8%ED%8F%AC%EC%A0%95%EA%B1%B0%EC%9E%A5" target="_blank" rel="noreferrer">尾浦</a><a href="https://map.naver.com/p/search/%ED%95%B4%EB%A6%AC%EB%8B%A8%EA%B8%B8" target="_blank" rel="noreferrer">海理團路</a></div></article>
       </div>
     </section>
 
