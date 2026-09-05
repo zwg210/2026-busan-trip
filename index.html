@@ -9,6 +9,7 @@
   <meta http-equiv="Expires" content="0">
   <title>Lucas’s BUSAN / 4 DAYS — 個人釜山旅行手冊</title>
   <meta name="description" content="2026 年 9 月 5–8 日釜山雙人旅行：天氣調整行程、全日餐飲與甜點、調酒吧、互動地圖及訂票提醒。">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="anonymous">
   <style>
     :root {
       --ink: #163334;
@@ -212,8 +213,20 @@
     .map-filter button { min-height: 44px; border: 1px solid var(--line); padding: 8px 16px; border-radius: 99px; background: transparent; color: var(--ink); font: inherit; font-size: .88rem; font-weight: 800; cursor: pointer; }
     .map-filter button.active { background: var(--deep); color: white; }
     .map-frame { position: relative; overflow: hidden; height: min(58vh, 560px); min-height: 390px; border-radius: 20px; background: #dbe3df; }
-    .map-frame iframe { width: 100%; height: 100%; border: 0; }
-    .map-open { position: absolute; right: 14px; bottom: 14px; z-index: 2; padding: 12px 16px; border-radius: 99px; background: var(--coral); color: white; text-decoration: none; font-size: .88rem; font-weight: 900; box-shadow: 0 8px 24px rgba(0,0,0,.22); }
+    #trip-map { width: 100%; height: 100%; }
+    .map-open { position: absolute; right: 14px; bottom: 14px; z-index: 800; padding: 12px 16px; border-radius: 99px; background: var(--coral); color: white; text-decoration: none; font-size: .88rem; font-weight: 900; box-shadow: 0 8px 24px rgba(0,0,0,.22); }
+    .map-route-status { position: absolute; z-index: 800; left: 14px; top: 14px; max-width: min(420px, calc(100% - 28px)); padding: 9px 12px; border-radius: 12px; background: rgba(255,253,246,.93); color: var(--deep); font-size: .75rem; font-weight: 850; line-height: 1.4; box-shadow: 0 5px 18px rgba(0,0,0,.16); backdrop-filter: blur(8px); }
+    .map-legend { display: flex; flex-wrap: wrap; gap: 7px 14px; padding: 10px 5px 2px; color: var(--muted); font-size: .74rem; }
+    .map-legend span { display: inline-flex; align-items: center; gap: 5px; }
+    .legend-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--deep); }
+    .legend-dot.saved { background: var(--coral); }
+    .legend-line { width: 22px; border-top: 4px solid var(--sea); }
+    .legend-line.walk { border-top: 3px dashed var(--sun); }
+    .poi-marker { display: grid; place-items: center; width: 30px; height: 30px; border: 2px solid white; border-radius: 50%; background: var(--deep); color: white; font-size: .7rem; font-weight: 950; box-shadow: 0 3px 10px rgba(0,0,0,.28); }
+    .poi-marker.saved { background: var(--coral); }
+    .poi-marker.optional { background: #99730c; }
+    .leaflet-popup-content { margin: 12px 14px; line-height: 1.45; }
+    .leaflet-popup-content strong { color: var(--deep); }
     .route-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 14px; }
     .mini-route { padding: 16px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); }
     .mini-route strong { display: block; margin-bottom: 8px; }
@@ -221,6 +234,14 @@
     .mini-route a { color: var(--sea); font-size: .83rem; font-weight: 850; text-underline-offset: 3px; }
     .stop-links { display: flex; flex-wrap: wrap; gap: 7px; }
     .stop-links a { padding: 6px 9px; border-radius: 999px; background: #e4efeb; text-decoration: none; }
+
+    .audit-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+    .audit-card { padding: 19px; border: 1px solid var(--line); border-left: 5px solid var(--sea); border-radius: 18px; background: var(--card); }
+    .audit-card.warn { border-left-color: var(--sun); }
+    .audit-card.danger { border-left-color: var(--coral); }
+    .audit-card h3 { margin: 0 0 7px; font-size: 1rem; }
+    .audit-card p { margin: 0; color: var(--muted); font-size: .84rem; line-height: 1.55; }
+    .audit-card strong { color: var(--ink); }
 
     .bar-grid, .booking-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
     .bookmark-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
@@ -324,6 +345,7 @@
       .map-frame { height: 56svh; min-height: 340px; max-height: 500px; border-radius: 15px; }
       .map-open { left: 12px; right: 12px; bottom: 12px; text-align: center; }
       .route-summary { grid-template-columns: 1fr; }
+      .audit-grid { grid-template-columns: 1fr; }
       .mini-route p { min-height: 0; }
       .feature-card, .booking, .phrase { padding: 20px; }
       .feature-card { min-height: 220px; }
@@ -362,6 +384,7 @@
       <a href="#plan">四日行程</a>
       <a href="#bookmarks">書籤</a>
       <a href="#map-section">地圖</a>
+      <a href="#audit">壓測</a>
       <a href="#bars">調酒</a>
       <a href="#book">訂票</a>
       <a href="#phrase">點餐韓文</a>
@@ -371,7 +394,7 @@
   <main>
     <div class="update-banner" role="status">
       <strong>LIVE UPDATE · 9/5</strong>
-      <span>逐站溫度移至每列右上角，並新增所有行程列的營業／開放時間；站間移動時間亦保留在中間。</span>
+      <span>Bada Sand／Duplit 已排入；每日地圖顯示全部主線與 Saved 點、道路駕車連線，並新增路線壓測警示。</span>
     </div>
     <section id="weather">
       <div class="section-head">
@@ -426,9 +449,10 @@
               <article class="meal-choice"><div class="tags"><span class="tag">釜山鄉土味</span><span class="tag">快速</span></div><h4>해운대 가야밀면</h4><span class="hours">每日 10:00–20:40 · 無午休</span><p>在地人氣密麵與手工餃子；牛高湯可以，因此水密麵也能選。</p><a href="https://map.naver.com/p/search/%ED%95%B4%EC%9A%B4%EB%8C%80%20%EA%B0%80%EC%95%BC%EB%B0%80%EB%A9%B4" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">熱門備選</span></div><h4>해목 海雲台店</h4><span class="hours">週末 11:00–22:00 · LO 20:50</span><p>鰻魚飯與海鮮丼；若候位超過 20 分鐘，直接換前兩間。</p><a href="https://map.naver.com/p/search/%ED%95%B4%EB%AA%A9%20%ED%95%B4%EC%9A%B4%EB%8C%80%EC%A0%90" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
             </div></div></li>
-            <li class="meal-row"><time>13:25</time><div><b>釜山甜點插曲<span class="en">Busan Dessert Stop</span></b><small>午餐後選一間，13:55 前離開；不要動到傍晚海灘時間。</small><div class="meal-options two">
+            <li class="meal-row"><time>13:25</time><div><b>釜山甜點插曲<span class="en">Busan Dessert Stop</span></b><small>午餐後選一間，13:55 前離開；Duplit 是你指定的順路選項，但三間只選一間。</small><div class="meal-options">
               <article class="meal-choice primary"><div class="tags"><span class="tag local">必吃甜點</span><span class="tag">釜山發跡</span></div><h4>호랑이젤라떡 虎牌麻糬冰淇淋</h4><span class="hours">週六 12:00–21:30 · 下午有休息時段</span><p>糯米皮包手工 gelato，只外帶；13:25 尚未進入下午休息時段。</p><a href="https://map.naver.com/p/search/%ED%98%B8%EB%9E%91%EC%9D%B4%EC%A0%A4%EB%9D%BC%EB%96%A1%20%ED%95%B4%EC%9A%B4%EB%8C%80%EB%B3%B8%EC%A0%90" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag">釜山老字號</span><span class="tag">麵包甜點</span></div><h4>OPS 옵스 海雲台店</h4><span class="hours">每日 08:00–22:00</span><p>蘋果派、泡芙與布丁丹麥；時間落後時買了就走最穩。</p><a href="https://map.naver.com/p/search/%EC%98%B5%EC%8A%A4%20%ED%95%B4%EC%9A%B4%EB%8C%80%EC%A0%90" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
+              <article class="meal-choice"><div class="tags"><span class="tag local">你指定</span><span class="tag">海理團路</span></div><h4>듀플릿 Duplit</h4><span class="hours">每日 09:00–22:00</span><p>從海雲台站後方快進快出；點芒果提拉米蘇或外帶麵包。13:45 前未拿到就放棄，不能延誤五六島。</p><a href="https://map.naver.com/p/search/%EB%93%80%ED%94%8C%EB%A6%BF%20%ED%95%B4%EC%9A%B4%EB%8C%80" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
             </div></div></li>
             <li class="must"><time>13:55</time><div><b>Uber 前往五六島<span class="en">Uber to Oryukdo</span></b><small>甜點後直接出發，約 30–40 分；Olive Young 改在海岸行程結束後，避免整下午提著購物袋。</small></div></li>
             <li class="must"><time>14:35</time><div><b>五六島天空步道＋日出公園＋二妓台入口<span class="en">Oryukdo Skywalk + Sunrise Park + Igidae Entrance</span></b><small>保留約 2 小時；只走二妓台入口短程，強風時取消海岸段。16:35 叫 Uber 回海雲台。</small></div></li>
@@ -441,9 +465,9 @@
               <article class="meal-choice"><div class="tags"><span class="tag">在地名店</span><span class="tag">豬肉湯飯</span></div><h4>수영돼지국밥 水營豬肉湯飯</h4><span class="hours">每日 08:00–22:40 · 15:50–16:50 休息</span><p>口味清爽的豬肉湯飯與水煮肉白飯；較海邊內縮，Uber 約 10 分。</p><a href="https://map.naver.com/p/search/%EC%88%98%EC%98%81%EB%8F%BC%EC%A7%80%EA%B5%AD%EB%B0%A5" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag">超人氣</span><span class="tag">10:00 遠端候位</span></div><h4>톤쇼우 Tonshou 廣安店</h4><span class="hours">每日 11:00–22:00 · Catchtable</span><p>高人氣豬排；只有搶到合適叫號時段才選，不為它犧牲海岸行程。</p><a href="https://map.naver.com/p/search/%ED%86%A4%EC%87%BC%EC%9A%B0%20%EA%B4%91%EC%95%88%EC%A0%90" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag local">你指定</span><span class="tag">辣炒章魚</span></div><h4>착한낙지 부산남구직영점<br>善良章魚</h4><span class="hours">今晚營業狀態請看 Naver 即時頁面</span><p>可以去；選南區直營店最合理。屬於晚餐替代分支，不要排在五六島後、日落前，以免錯過 Westin 黃金時刻。</p><a href="https://map.naver.com/p/search/%EC%B0%A9%ED%95%9C%EB%82%99%EC%A7%80%20%EB%B6%80%EC%82%B0%EB%82%A8%EA%B5%AC%EC%A7%81%EC%98%81%EC%A0%90" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
-              <article class="meal-choice"><div class="tags"><span class="tag local">你指定</span><span class="tag">廣安里順路</span></div><h4>광안목 광안점<br>Gwanganmok Gwangalli</h4><span class="hours">週六 12:00–24:00 · 15:00–16:30 休息</span><p>乾式熟成、燻烤豬頸肉與五花肉，由店員烤好；就在廣安里晚餐區，動線比善良章魚更順。熱門時用 Tabling 遠端排隊。</p><a href="https://map.naver.com/p/search/%EA%B4%91%EC%95%88%EB%AA%A9%20%EA%B4%91%EC%95%88%EC%A0%90" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
+              <article class="meal-choice"><div class="tags"><span class="tag local">你指定</span><span class="tag">廣安里順路</span></div><h4>광안목 광안점<br>Gwanganmok Gwangalli</h4><span class="hours">週六 12:00–23:30 · 15:00–16:30 休息</span><p>乾式熟成、燻烤豬頸肉與五花肉，由店員烤好；就在廣安里晚餐區，動線比善良章魚更順。熱門時用 Tabling 遠端排隊。</p><a href="https://map.naver.com/p/search/%EA%B4%91%EC%95%88%EB%AA%A9%20%EA%B4%91%EC%95%88%EC%A0%90" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
             </div></div></li>
-            <li><time>22:00</time><div><b>Hongdan 原創調酒<span class="en">Hongdan Original Cocktails</span></b><small>晚餐後前往；若已累，直接回 Park Hyatt 在房內看廣安大橋。建議先以 Instagram 預約吧台位。</small></div></li>
+            <li><time>22:00</time><div><b>Hongdan 原創調酒<span class="en">Hongdan Original Cocktails</span></b><small>每日 19:00–02:00；晚餐後前往。若已累，直接回今晚的 Westin；Park Hyatt 是明晚才入住。建議先以 Instagram 預約吧台位。</small></div></li>
           </ol>
           <div class="route-actions">
             <a class="route-link" href="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%9B%8C%ED%81%AC" target="_blank" rel="noreferrer">Naver Map：開啟首站 ↗</a>
@@ -468,9 +492,9 @@
               <article class="meal-choice"><div class="tags"><span class="tag">在地高評價</span><span class="tag">貝類海鮮</span></div><h4>뚱보네 胖子家</h4><span class="hours">營業狀態請看 Naver 即時頁面</span><p>烤貝與海鮮下酒菜口碑佳；點餐別過量，保留纜車時間。</p><a href="https://map.naver.com/p/search/%EB%9A%B1%EB%B3%B4%EB%84%A4%20%EB%B6%80%EC%82%B0%20%EC%86%A1%EB%8F%84" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
             </div></div></li>
             <li class="must"><time>13:00</time><div><b>松島海上纜車＋天空公園<span class="en">Songdo Marine Cable Car + Sky Park</span></b><small>若停駛，直接把時間給札嘎其與市場。</small></div></li>
-            <li class="optional"><time>14:30</time><div><b>松島龍宮雲橋<span class="en">Songdo Yonggung Cloud Bridge</span></b><small>就在纜車天空公園端，往返快走約 25–30 分；現場另購小額門票。14:30 前還沒到橋口就跳過。</small><a class="route-link secondary" href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%EC%9A%A9%EA%B6%81%EA%B5%AC%EB%A6%84%EB%8B%A4%EB%A6%AC" target="_blank" rel="noreferrer">Naver Map ↗</a></div></li>
-            <li class="must"><time>15:20</time><div><b>札嘎其 → BIFF → 國際市場<span class="en">Jagalchi → BIFF → Gukje Market</span></b><small>松島 → 札嘎其約 15–20 分；市場之間步行各約 5–12 分。</small></div></li>
-            <li class="meal-row"><time>16:20</time><div><b>BIFF 廣場甜點<span class="en">Dessert at BIFF Square</span></b><small>市場散步中直接吃，不另外繞路。</small><div class="meal-options two">
+            <li class="optional"><time>14:05</time><div><b>松島龍宮雲橋<span class="en">Songdo Yonggung Cloud Bridge</span></b><small>就在纜車天空公園端，往返快走約 25–30 分；14:10 還沒到橋口就跳過，才能趕上回程纜車與札嘎其。</small><a class="route-link secondary" href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%EC%9A%A9%EA%B6%81%EA%B5%AC%EB%A6%84%EB%8B%A4%EB%A6%AC" target="_blank" rel="noreferrer">Naver Map ↗</a></div></li>
+            <li class="must"><time>15:15</time><div><b>札嘎其市場<span class="en">Jagalchi Market</span></b><small>雲橋端 → 回程纜車 → 札嘎其共抓 35–50 分；只逛一樓海鮮與港邊，15:55 往 BIFF。</small></div></li>
+            <li class="meal-row"><time>16:05</time><div><b>BIFF 廣場甜點＋國際市場<span class="en">BIFF Dessert + Gukje Market</span></b><small>沿札嘎其 → BIFF → 國際市場單向往北走，不再折返。</small><div class="meal-options two">
               <article class="meal-choice primary"><div class="tags"><span class="tag local">必吃小食</span><span class="tag">釜山代表</span></div><h4>BIFF 廣場 씨앗호떡 種子糖餅</h4><span class="hours">攤販約 10:00–22:00 · 售完為止</span><p>堅果籽塞進現煎糖餅；兩人先分一個，留胃給晚餐。</p><a href="https://map.naver.com/p/search/BIFF%EA%B4%91%EC%9E%A5%20%EC%94%A8%EC%95%97%ED%98%B8%EB%96%A1" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag">鹹食備選</span><span class="tag">市場經典</span></div><h4>비빔당면 拌冬粉＋魚板</h4><span class="hours">國際市場店家約 09:00–21:00</span><p>若不想吃甜，改吃小份拌冬粉、魚板與水年糕。</p><a href="https://map.naver.com/p/search/%EA%B5%AD%EC%A0%9C%EC%8B%9C%EC%9E%A5%20%EB%B9%84%EB%B9%94%EB%8B%B9%EB%A9%B4" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
             </div></div></li>
@@ -547,7 +571,10 @@
             </div></div></li>
             <li class="must"><time>12:40</time><div><b>青沙浦燈塔＋踏石觀景台<span class="en">Cheongsapo Lighthouses + Daritdol Observatory</span></b><small>松亭 → 青沙浦約 10–15 分；13:20 前到膠囊車站報到。</small></div></li>
             <li class="must"><time>13:30</time><div><b>天空膠囊：青沙浦 → 尾浦<span class="en">Sky Capsule: Cheongsapo → Mipo</span></b><small>必須預約；若停駛改 Uber 回飯店。</small></div></li>
-            <li class="optional"><time>14:20</time><div><b>尾浦／海理團路短逛<span class="en">Mipo / Haeridan-gil Quick Walk</span></b><small>只在膠囊準時抵達時加碼；14:40 必須叫車，約 15:00 回房取行李。</small></div></li>
+            <li class="meal-row optional"><time>14:20</time><div><b>尾浦／海理團路：Bada Sand 或 Duplit<span class="en">Mipo / Haeridan-gil: Bada Sand or Duplit</span></b><small>兩個你指定的 Saved 地點都放入最順窗口，但只選一間外帶；14:40 必須叫車，約 15:00 回 Park Hyatt 取行李。</small><div class="meal-options two">
+              <article class="meal-choice primary"><div class="tags"><span class="tag local">你指定</span><span class="tag">伴手禮首選</span></div><h4>부산바다샌드 Busan Bada Sand</h4><span class="hours">每日 11:00–19:00</span><p>買原味蜂蜜奶油 Sand 一盒；位於海理團路入口，外帶約 10 分鐘，不在店內停留。</p><a href="https://map.naver.com/p/search/%EB%B6%80%EC%82%B0%EB%B0%94%EB%8B%A4%EC%83%8C%EB%93%9C" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
+              <article class="meal-choice"><div class="tags"><span class="tag local">你指定</span><span class="tag">Day 1 備援</span></div><h4>듀플릿 Duplit</h4><span class="hours">每日 09:00–22:00</span><p>若 Day 1 沒吃到才在此補；與 Bada Sand 距離很近，但飛行日不要兩間都排隊。</p><a href="https://map.naver.com/p/search/%EB%93%80%ED%94%8C%EB%A6%BF%20%ED%95%B4%EC%9A%B4%EB%8C%80" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
+            </div></div></li>
             <li class="must"><time>15:30</time><div><b>Uber 前往金海機場<span class="en">Uber to Gimhae Airport</span></b><small>雖可延退至 16:00，這天不要用滿：車程約 45–70 分，目標 16:30 左右抵達，為 19:10 國際線保留約 2 小時 40 分。</small></div></li>
             <li class="meal-row"><time>16:50</time><div><b>報到後機場早晚餐<span class="en">Early Dinner after Check-in</span></b><small>先完成報到與托運；餐廳位置與安檢前後以當日航廈指示為準。17:35 前結束。</small><div class="meal-options">
               <article class="meal-choice primary"><div class="tags"><span class="tag local">首選</span><span class="tag">韓式定食</span></div><h4>명가의 뜰 名家之庭</h4><span class="hours">國際線 3F · 06:00–21:30</span><p>可點章魚麵定食或豬肉菜色；作為離韓前最後一餐最完整。</p><a href="https://map.naver.com/p/search/%EB%AA%85%EA%B0%80%EC%9D%98%20%EB%9C%B0%20%EA%B9%80%ED%95%B4%EA%B3%B5%ED%95%AD" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
@@ -572,14 +599,14 @@
       </div>
       <div class="bookmark-grid">
         <article class="bookmark">
-          <span class="status">你指定 · 已確認</span>
+          <span class="status">你指定 · 已排入</span>
           <h3>釜山海洋沙餅<span class="en">Busan Bada Sand</span></h3>
           <p>海理團路伴手禮店；每日 11:00–19:00。離海雲台站很近，建議外帶，不占正式甜點時間。</p>
           <div class="best-slot"><strong>Recommended slot</strong>Day 4 · 14:20 尾浦／海理團路短逛，與 Duplit 二選一；14:40 必須叫車。</div>
           <a href="https://map.naver.com/p/search/%EB%B6%80%EC%82%B0%EB%B0%94%EB%8B%A4%EC%83%8C%EB%93%9C" target="_blank" rel="noreferrer">Naver Map ↗</a>
         </article>
         <article class="bookmark">
-          <span class="status">你指定 · 已確認</span>
+          <span class="status">你指定 · 已排入</span>
           <h3>듀플릿<span class="en">Duplit · Haeundae</span></h3>
           <p>海理團路咖啡／麵包店；每日 09:00–22:00。若只想買麵包，與 Bada Sand 二選一即可。</p>
           <div class="best-slot"><strong>Recommended slot</strong>Day 1 · 13:25，取代虎牌麻糬或 OPS；若今天沒去，改 Day 4 · 14:20 快速外帶。</div>
@@ -653,26 +680,38 @@
 
     <section id="map-section">
       <div class="section-head">
-        <h2>Maps that open.</h2>
-        <p>Naver Map 是主要導航工具：每站都有韓文搜尋連結。內嵌 Google 地圖只作全區概覽，因此不需要申請任何 API key。</p>
+        <h2>Every stop, connected.</h2>
+        <p>每日主行程景點與所有已確認 Saved 地點都在圖上；實線依道路繪出 Uber／駕車主線，虛線是步行、纜車或天空膠囊。即時導航仍以 Naver Map 為準，不需要 Google API key。</p>
       </div>
       <div class="map-shell">
         <div class="map-filter" aria-label="地圖日期篩選">
-          <button class="active" data-map="https://maps.google.com/maps?q=Oryukdo%20Skywalk%20Busan&amp;z=12&amp;output=embed" data-route="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%9B%8C%ED%81%AC">9/5 · 東南岸</button>
-          <button data-map="https://maps.google.com/maps?q=Gamcheon%20Culture%20Village%20Busan&amp;z=12&amp;output=embed" data-route="https://map.naver.com/p/search/%EA%B0%90%EC%B2%9C%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84">9/6 · 西釜山</button>
-          <button data-map="https://maps.google.com/maps?q=Jeonpo%20Cafe%20Street%20Busan&amp;z=12&amp;output=embed" data-route="https://map.naver.com/p/search/%EB%A1%AF%EB%8D%B0%EB%A9%B4%EC%84%B8%EC%A0%90%20%EB%B6%80%EC%82%B0%EC%A0%90">9/7 · 西面影島</button>
-          <button data-map="https://maps.google.com/maps?q=Haedong%20Yonggungsa%20Busan&amp;z=12&amp;output=embed" data-route="https://map.naver.com/p/search/%ED%95%B4%EB%8F%99%EC%9A%A9%EA%B6%81%EC%82%AC">9/8 · 東岸</button>
+          <button class="active" data-day="0">9/5 · 東南岸</button>
+          <button data-day="1">9/6 · 西釜山</button>
+          <button data-day="2">9/7 · 西面影島</button>
+          <button data-day="3">9/8 · 東岸</button>
         </div>
         <div class="map-frame">
-          <iframe id="trip-map" title="釜山每日地圖" src="https://maps.google.com/maps?q=Oryukdo%20Skywalk%20Busan&amp;z=12&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          <div id="trip-map" role="application" aria-label="釜山每日景點與駕車路線地圖"></div>
+          <div id="map-route-status" class="map-route-status" aria-live="polite">正在載入道路路線…</div>
           <a id="map-open" class="map-open" href="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%9B%8C%ED%81%AC" target="_blank" rel="noreferrer">在 Naver Map 開啟 ↗</a>
         </div>
+        <div class="map-legend"><span><i class="legend-dot"></i>主行程</span><span><i class="legend-dot saved"></i>你指定 Saved</span><span><i class="legend-line"></i>道路駕車主線</span><span><i class="legend-line walk"></i>步行／非駕車</span></div>
       </div>
       <div class="route-summary">
         <article class="mini-route"><strong>9/5 · 東南岸</strong><p>機場→飯店 50–70m<br>海雲台→五六島 30–40m<br>Westin→廣安里 15–25m</p><div class="stop-links"><a href="https://map.naver.com/p/search/%EC%98%AC%EB%A6%AC%EB%B8%8C%EC%98%81%20%ED%95%B4%EC%9A%B4%EB%8C%80%EC%97%AD%EC%A0%90" target="_blank" rel="noreferrer">Olive Young</a><a href="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%9B%8C%ED%81%AC" target="_blank" rel="noreferrer">五六島</a><a href="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%ED%95%B4%EB%A7%9E%EC%9D%B4%EA%B3%B5%EC%9B%90" target="_blank" rel="noreferrer">日出公園</a><a href="https://map.naver.com/p/search/%EC%9D%B4%EA%B8%B0%EB%8C%80%EA%B3%B5%EC%9B%90" target="_blank" rel="noreferrer">二妓台</a><a href="https://map.naver.com/p/search/%EB%88%84%EB%A6%AC%EB%A7%88%EB%A3%A8%20APEC%ED%95%98%EC%9A%B0%EC%8A%A4" target="_blank" rel="noreferrer">Nurimaru</a><a href="https://map.naver.com/p/search/%EC%B0%A9%ED%95%9C%EB%82%99%EC%A7%80%20%EB%B6%80%EC%82%B0%EB%82%A8%EA%B5%AC%EC%A7%81%EC%98%81%EC%A0%90" target="_blank" rel="noreferrer">善良章魚</a><a href="https://map.naver.com/p/search/%EA%B4%91%EC%95%88%EB%A6%AC%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noreferrer">廣安里</a></div></article>
         <article class="mini-route"><strong>9/6 · 西釜山</strong><p>Park Hyatt→甘川 45–65m<br>甘川→松島 15–25m<br>南浦→飯店 35–55m</p><div class="stop-links"><a href="https://map.naver.com/p/search/%EA%B0%90%EC%B2%9C%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">甘川</a><a href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noreferrer">松島海灘</a><a href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%ED%95%B4%EC%83%81%EC%BC%80%EC%9D%B4%EB%B8%94%EC%B9%B4" target="_blank" rel="noreferrer">松島纜車</a><a href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%EC%8A%A4%EC%B9%B4%EC%9D%B4%ED%8C%8C%ED%81%AC" target="_blank" rel="noreferrer">天空公園</a><a href="https://map.naver.com/p/search/%EC%9E%90%EA%B0%88%EC%B9%98%EC%8B%9C%EC%9E%A5" target="_blank" rel="noreferrer">札嘎其</a><a href="https://map.naver.com/p/search/BIFF%EA%B4%91%EC%9E%A5" target="_blank" rel="noreferrer">BIFF</a><a href="https://map.naver.com/p/search/%EA%B5%AD%EC%A0%9C%EC%8B%9C%EC%9E%A5" target="_blank" rel="noreferrer">國際市場</a><a href="https://map.naver.com/p/search/%EB%B6%80%ED%8F%89%EA%B9%A1%ED%86%B5%EC%8B%9C%EC%9E%A5" target="_blank" rel="noreferrer">富平</a><a href="https://map.naver.com/p/search/%EC%9A%A9%EB%91%90%EC%82%B0%EA%B3%B5%EC%9B%90" target="_blank" rel="noreferrer">龍頭山</a><a href="https://map.naver.com/p/search/%EB%B6%80%EC%82%B0%ED%83%80%EC%9B%8C" target="_blank" rel="noreferrer">釜山塔</a></div></article>
         <article class="mini-route"><strong>9/7 · 西面影島</strong><p>飯店→西面 25–40m<br>田浦→Momos 30–45m<br>白淺→西面 30–45m</p><div class="stop-links"><a href="https://map.naver.com/p/search/%EB%A1%AF%EB%8D%B0%EB%A9%B4%EC%84%B8%EC%A0%90%20%EB%B6%80%EC%82%B0%EC%A0%90" target="_blank" rel="noreferrer">樂天免稅店</a><a href="https://map.naver.com/p/search/%EC%84%9C%EB%A9%B4%EC%97%AD" target="_blank" rel="noreferrer">西面</a><a href="https://map.naver.com/p/search/%EC%A0%84%ED%8F%AC%EC%B9%B4%ED%8E%98%EA%B1%B0%EB%A6%AC" target="_blank" rel="noreferrer">田浦</a><a href="https://map.naver.com/p/search/%ED%9D%B0%EC%97%AC%EC%9A%B8%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">白淺村</a><a href="https://map.naver.com/p/search/%EC%A0%88%EC%98%81%ED%95%B4%EC%95%88%EC%82%B0%EC%B1%85%EB%A1%9C" target="_blank" rel="noreferrer">絕影海岸</a><a href="https://map.naver.com/p/search/%EB%A9%94%EC%9D%B4%ED%81%AC%EC%A0%9C%EB%A1%9C%20%EB%B6%80%EC%82%B0" target="_blank" rel="noreferrer">Make Zero</a></div></article>
         <article class="mini-route"><strong>9/8 · 東岸</strong><p>飯店→龍宮寺 35–50m<br>龍宮寺→松亭 15–20m<br>飯店→機場 45–70m</p><div class="stop-links"><a href="https://map.naver.com/p/search/%ED%95%B4%EB%8F%99%EC%9A%A9%EA%B6%81%EC%82%AC" target="_blank" rel="noreferrer">龍宮寺</a><a href="https://map.naver.com/p/search/%EC%86%A1%EC%A0%95%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noreferrer">松亭</a><a href="https://map.naver.com/p/search/%EC%B2%AD%EC%82%AC%ED%8F%AC%EB%93%B1%EB%8C%80" target="_blank" rel="noreferrer">青沙浦燈塔</a><a href="https://map.naver.com/p/search/%EC%B2%AD%EC%82%AC%ED%8F%AC%20%EB%8B%A4%EB%A6%BF%EB%8F%8C%EC%A0%84%EB%A7%9D%EB%8C%80" target="_blank" rel="noreferrer">踏石觀景台</a><a href="https://map.naver.com/p/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EB%B8%94%EB%A3%A8%EB%9D%BC%EC%9D%B8%ED%8C%8C%ED%81%AC%20%EC%B2%AD%EC%82%AC%ED%8F%AC%EC%A0%95%EA%B1%B0%EC%9E%A5" target="_blank" rel="noreferrer">天空膠囊</a><a href="https://map.naver.com/p/search/%EB%AF%B8%ED%8F%AC%EC%A0%95%EA%B1%B0%EC%9E%A5" target="_blank" rel="noreferrer">尾浦</a><a href="https://map.naver.com/p/search/%ED%95%B4%EB%A6%AC%EB%8B%A8%EA%B8%B8" target="_blank" rel="noreferrer">海理團路</a></div></article>
+      </div>
+    </section>
+
+    <section id="audit">
+      <div class="section-head"><h2>Route stress test.</h2><p>以快走、快吃、主要搭 Uber 為前提，檢查飯店轉移、營業時間、天候備案、天空膠囊預約與 9/8 19:10 航班。</p></div>
+      <div class="audit-grid">
+        <article class="audit-card"><h3>DAY 1 · 可行，已修正住宿錯置</h3><p><strong>通過：</strong>機場 → Westin → 五六島 → 海雲台 → 廣安里方向合理。Duplit 只能取代其他甜點；原本酒吧後誤寫回 Park Hyatt，已改為今晚真正住宿的 Westin。</p></article>
+        <article class="audit-card warn"><h3>DAY 2 · 雲橋是唯一脆弱組合</h3><p><strong>條件式通過：</strong>雲橋往返加回程纜車與 Uber，舊版 14:30→15:20 幾乎無緩衝。已提前到 14:05；14:10 還沒到橋口就跳過。南浦改成札嘎其 → BIFF／國際市場單向北走，消除折返。</p></article>
+        <article class="audit-card warn"><h3>DAY 3 · 有意識的跨區往返</h3><p><strong>可行但車程較碎：</strong>Park Hyatt → 西面 → 影島 → 西面 → Park Hyatt 是約 44 km 的基準道路圈。因 Make Zero 與晚餐都在田浦，回西面合理；若午後仍下大雨，跳過海岸隧道可回收 35–60 分鐘。</p></article>
+        <article class="audit-card danger"><h3>DAY 4 · 航班是硬截止</h3><p><strong>不可延誤：</strong>Bada Sand 與 Duplit 都已放在 14:20，但只選一間；14:40 叫車、15:00 取行李、15:30 離開 Park Hyatt。任何早段延誤超過 20 分鐘，先刪海理團路，不可壓縮機場緩衝。</p></article>
       </div>
     </section>
 
@@ -710,7 +749,7 @@
       <strong>BUSAN / 05–08 SEP 2026 · LIVE REVISION 9/5</strong><br>
       天氣與設施營運可能隨颱風快速改變；本頁資料請配合當日官方公告使用。
       <div class="credits">
-        <span>地圖：Google Maps／Naver Map</span>
+        <span>地圖：<a href="https://www.openstreetmap.org/" target="_blank" rel="noreferrer">OpenStreetMap</a> 圖磚、<a href="https://project-osrm.org/" target="_blank" rel="noreferrer">OSRM</a> 道路線；即時導航開 Naver Map</span>
         <span>營業時間：<a href="https://www.visitbusan.net/" target="_blank" rel="noreferrer">Visit Busan</a>、<a href="https://english.visitkorea.or.kr/" target="_blank" rel="noreferrer">VISITKOREA</a>、<a href="https://www.bluelinepark.com/eng/" target="_blank" rel="noreferrer">Blue Line Park</a>、<a href="https://en.busanaircruise.co.kr/" target="_blank" rel="noreferrer">Busan Air Cruise</a> 及各店即時頁面</span>
         <span>餐飲實景：各店 DiningCode 店家頁、店家實訪文章及 <a href="https://menu.busan.go.kr/" target="_blank" rel="noreferrer">Busan City 官方餐飲頁</a>；每張卡可開啟原始來源</span>
         <span>照片：<a href="https://commons.wikimedia.org/wiki/File:Busan_City_Haeundae_Beach_KOGL_(01).jpg" target="_blank">Busan City</a></span>
@@ -722,24 +761,25 @@
     </div>
   </footer>
 
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin="anonymous"></script>
   <script>
     const initialDestinationKeys = [
       "五六島天空步道", "甘川文化村", "松島海灘＋午餐", "松島海上纜車",
-      "札嘎其 → BIFF", "BIFF 廣場甜點", "龍頭山公園", "富平罐頭市場",
+      "札嘎其市場", "BIFF 廣場甜點＋國際市場", "龍頭山公園", "富平罐頭市場",
       "樂天免稅店", "田浦咖啡街", "白淺文化村", "海福 → 海東龍宮寺",
       "前往松亭海灘", "松亭午餐", "青沙浦燈塔", "天空膠囊：青沙浦",
       "尾浦／海理團路", "晚餐：廣安里"
     ];
     const savedDestinationKeys = [
       "Olive Young 海雲台站店", "Westin 海灘黃金時刻",
-      "Mammoth Coffee 西面", "海福鮑魚粥早餐"
+      "Mammoth Coffee 西面", "海福鮑魚粥早餐", "Bada Sand 或 Duplit"
     ];
     const logisticsKeys = [
       "抵達金海機場", "Uber 前往五六島", "入住 Westin", "Westin → Park Hyatt",
       "Westin 早餐", "Park Hyatt 早餐", "Uber 前往金海機場",
       "報到後機場早晚餐", "領取線上免稅預購", "抵達登機門"
     ];
-    const savedRestaurantKeys = ["착한낙지", "善良章魚", "광안목", "해복"];
+    const savedRestaurantKeys = ["착한낙지", "善良章魚", "광안목", "해복", "부산바다샌드", "듀플릿"];
 
     function originTag(type, label) {
       const tag = document.createElement("span");
@@ -789,12 +829,12 @@
         ["甜點候選：各店時間見下方", "售完可能提早結束"],
         ["Uber 24 小時", "依附近供車"],
         ["天空步道 09:00–19:00", "6–9月；強風可暫停開放"],
-        ["通常 10:00–23:00", "Olive Young 請以 Naver 當日頁面為準"],
+        ["10:00–22:30", "Olive Young 海雲台站店"],
         ["飯店前台 24 小時", "客房入住依訂房"],
         ["海雲台海灘全天開放", "海灘設施另有時段"],
         ["冬柏島步道全天開放", "Nurimaru 館舍通常 09:00–18:00"],
         ["晚餐候選：各店時間見下方", "分店與候位狀況不同"],
-        ["依 Instagram 當日公告", "Hongdan 建議先預約"]
+        ["19:00–02:00", "Hongdan 建議先預約"]
       ],
       [
         ["Camellia 早餐 06:30–10:00", "住客用餐"],
@@ -803,8 +843,8 @@
         ["松島海灘全天開放", "午餐候選時間見下方"],
         ["09:00–21:00", "售票通常提早 30 分結束；看風況"],
         ["09:00–18:00", "17:30 最後入場；1、3週週一休"],
-        ["札嘎其 02:00–22:00；國際市場多為 09:00–20:00", "個別攤店不同"],
-        ["甜點候選：各店時間見下方", "BIFF 廣場本身全天可走"],
+        ["札嘎其 02:00–22:00", "第 1、3 週週二休；今天週日可行"],
+        ["國際市場多為 09:00–20:00", "BIFF 攤販與個別商店不同"],
         ["書店多約 10:00–19:00", "各店公休與時間不同"],
         ["公園全天；釜山塔 10:00–22:00", "全年開放"],
         ["夜市 19:30–24:00", "晚餐候選時間見下方"]
@@ -829,7 +869,7 @@
         ["午餐候選：各店時間見下方", "12:25 前離開"],
         ["燈塔全天；踏石觀景台 09:00–21:00", "9月時段；天候可關閉"],
         ["08:30–19:30", "天空膠囊 9月時段；依預約班次"],
-        ["街區全天可走", "沿線店家各自營業"],
+        ["Bada Sand 11:00–19:00；Duplit 09:00–22:00", "只能二選一外帶"],
         ["Uber 24 小時", "依交通與附近供車"],
         ["航廈餐飲多約 06:00–21:00", "各櫃位不同"],
         ["出境免稅店 06:30–21:30", "取貨櫃檯依當日航班"],
@@ -871,7 +911,7 @@
         ["🚕", "Uber", "15–25 分"],
         ["🚶", "步行至纜車站", "3–8 分"],
         ["🚶", "天空公園步行", "5–10 分"],
-        ["🚠", "纜車回程＋Uber", "25–35 分"],
+        ["🚠", "纜車回程＋Uber", "35–50 分"],
         ["🚶", "市場步行", "5–8 分"],
         ["🚶", "步行", "8–12 分"],
         ["🚶", "步行", "12–18 分"],
@@ -1072,13 +1112,13 @@
         source: "https://www.visitbusan.net/en/index.do?lang_cd=en&menuCd=DOM_000000302011001000&uc_seq=1217"
       },
       {
-        key: "札嘎其 → BIFF",
+        key: "札嘎其市場",
         history: "札嘎其的魚攤可追溯至日治時期，韓戰避難人口又擴大了市場；國際市場承接戰後物資交易，BIFF 廣場則因 1996 年首屆釜山影展成為電影地標。",
         highlight: "一次看港都鮮魚、戰後商業巷與電影手印街；照札嘎其→BIFF→國際市場走最順。",
         source: "https://www.visitbusan.net/en/index.do?lang_cd=en&menuCd=DOM_000000303011001000&uc_seq=412"
       },
       {
-        key: "BIFF 廣場甜點",
+        key: "BIFF 廣場甜點＋國際市場",
         history: "1996 年首屆釜山國際影展在此一帶舉行後，舊戲院街被命名為 BIFF 廣場，地面手印記錄亞洲電影人的到訪。",
         highlight: "種子糖餅是最具釜山辨識度的街頭點心；邊看手印邊吃即可，不需另開一段行程。",
         source: "https://www.visitbusan.net/en/index.do?lang_cd=en&menuCd=DOM_000000302011001000&uc_seq=391"
@@ -1168,7 +1208,7 @@
         source: "https://www.visitbusan.net/en/index.do?lang_cd=en&menuCd=DOM_000000302002000000&page_no=10&ucl_seq=8"
       },
       {
-        key: "尾浦／海理團路",
+        key: "尾浦／海理團路：Bada Sand 或 Duplit",
         history: "舊鐵路移線後，尾浦周邊與海雲台站後方低樓街區逐漸轉成海理團路的咖啡、麵包與小店聚落。",
         highlight: "這是 Bada Sand、Duplit 最自然的外帶窗；時間只有 20 分鐘，挑一間即可。",
         source: "https://www.visitbusan.net/en/index.do?lang_cd=en&menuCd=DOM_000000302011001000&uc_seq=1211"
@@ -1186,8 +1226,8 @@
       ["松島海灘＋午餐", "松島早期以海水浴、跳水台和纜車吸引城市居民，是釜山把自然海岸轉成公共休閒空間的重要案例。今日海灣尺度不大，站在沙灘東側便能同時看到海上步道、纜車和遠方貨輪；午餐後沿岸走 10 分鐘已足夠建立整體印象。"],
       ["松島海上纜車", "纜車跨出陸地後，腳下景觀會從沙灘迅速轉成岩岸，外側則是釜山港繁忙的航路。去程站靠海側看城市弧線，回程再看松島住宅沿山坡堆疊；若搭水晶車廂，透明地板有趣，但真正精彩的是水平視線的海岸全貌。"],
       ["松島龍宮雲橋", "雲橋落在較粗獷的岩岸端，氣質與松島沙灘的人工休閒設施不同。走到橋中段回頭看，能把天空公園、纜車塔與海蝕地形疊在一起；橋面曝曬且風大，行程落後或天候轉差時應把它視為第一個可刪除項。"],
-      ["札嘎其 → BIFF", "三個市場代表不同階段的釜山：札嘎其是港口漁業與女性攤商文化，國際市場承接戰後物資與避難者生計，BIFF 則把舊戲院區連到亞洲電影城市的形象。沿途注意市場招牌、攤位商品與街道尺度如何改變，比只在地標拍照更能讀出城市歷史。"],
-      ["BIFF 廣場甜點", "廣場的電影手印與街頭小吃共享同一條步行街，正好呈現南浦洞從戲院街轉為大眾文化空間的過程。種子糖餅的特色是炸得酥脆後剪開、塞入葵花籽與堅果；趁熱分一個，留胃給富平市場，體驗會比一次買多攤更好。"],
+      ["札嘎其市場", "三個市場代表不同階段的釜山：札嘎其是港口漁業與女性攤商文化，國際市場承接戰後物資與避難者生計，BIFF 則把舊戲院區連到亞洲電影城市的形象。沿途注意市場招牌、攤位商品與街道尺度如何改變，比只在地標拍照更能讀出城市歷史。"],
+      ["BIFF 廣場甜點＋國際市場", "廣場的電影手印與街頭小吃共享同一條步行街，正好呈現南浦洞從戲院街轉為大眾文化空間的過程。種子糖餅的特色是炸得酥脆後剪開、塞入葵花籽與堅果；趁熱分一個，留胃給富平市場，體驗會比一次買多攤更好。"],
       ["寶水洞書店街", "二手書交易最初不只是懷舊產業，而是避難家庭、學生與臨時學校交換稀缺教材的方法。今天店數雖不如全盛期，書堆延伸到狹巷、店主手寫分類與老式階梯仍保存那種自發市場感；放慢腳步翻一本舊攝影集，比快速穿過更有味道。"],
       ["龍頭山公園", "龍頭山雖不高，位置卻正對舊港區，因此在城市尚未大量興建高樓前就是重要瞭望點。搭手扶梯上山後先繞塔基一圈，比較港口、影島與南浦巷弄三個方向；若不上塔，公園平台也足以看出釜山『山貼著港』的地形。"],
       ["富平罐頭市場晚餐", "『罐頭』二字留下戰後舶來品、軍需品與走私貨在市場流通的記憶，今日則由夜市小吃延續它吸收外來飲食的性格。19:30 左右推車陸續進場最有氣氛；兩人先繞一圈再決定，每攤只點一份共享，才能同時吃到魚板、水年糕與炸物。"],
@@ -1202,7 +1242,7 @@
       ["前往松亭海灘", "松亭的沙灘弧線較短，背後建築尺度也比海雲台低，因此仍帶有海邊小鎮感。衝浪店與初學者讓水面比傳統浴場更有動態；你只需沿中央段走到竹島方向看一眼，不必把它安排成長時間玩水站。"],
       ["青沙浦燈塔", "紅白燈塔分立防波堤兩側，是漁船進港的實用設施，也因顏色對比成為青沙浦最常見的畫面。踏石觀景台則把沿岸礁石意象轉成伸向海面的曲線平台；先從遠處拍完整形狀，再穿鞋套走透明段，會比只拍腳下更完整。"],
       ["天空膠囊：青沙浦", "膠囊速度刻意放慢，重點是把舊鐵路沿線原本稍縱即逝的海景變成約半小時的觀看體驗。由青沙浦往尾浦時，海通常在座位外側持續展開，接近終點才逐漸出現 LCT 與海雲台天際線；上車後先拍海，後段再拍城市，畫面不會重複。"],
-      ["尾浦／海理團路", "尾浦仍保有小港與漁業痕跡，海理團路則在舊鐵路和住宅巷弄周邊長出新一代烘焙、甜點與選物店。兩區反映海雲台不只有高樓與大沙灘；不過你的機場時間很緊，抵達後直接選 Bada Sand 或 Duplit，一買到就回飯店。"]
+      ["尾浦／海理團路：Bada Sand 或 Duplit", "尾浦仍保有小港與漁業痕跡，海理團路則在舊鐵路和住宅巷弄周邊長出新一代烘焙、甜點與選物店。兩區反映海雲台不只有高樓與大沙灘；不過你的機場時間很緊，抵達後直接選 Bada Sand 或 Duplit，一買到就回飯店。"]
     ]);
 
     function initPlaceInsights() {
@@ -1250,7 +1290,9 @@
       ["명가의 뜰", "nakji", "章魚拌麵定食 · 낙지소면반상"],
       ["플레이보6", "hoe", "壽司組合＋魚板，依當日櫃檯品項"],
       ["K라면바", "kalguksu", "非牛肉口味拉麵＋蛋（現場確認湯底）"],
-      ["해복", "miyeok-guk", "普通鮑魚粥 · 전복죽 ₩16,000；想加量再選特鮑魚粥"]
+      ["해복", "miyeok-guk", "普通鮑魚粥 · 전복죽 ₩16,000；想加量再選特鮑魚粥"],
+      ["부산바다샌드", "bread", "原味蜂蜜奶油 부산바다샌드 1 盒"],
+      ["듀플릿", "bread", "芒果提拉米蘇；趕時間則外帶當日麵包"]
     ];
 
     async function initMeals() {
@@ -1340,14 +1382,131 @@
     }
     initMeals();
 
-    document.querySelectorAll('.map-filter button').forEach(button => {
-      button.addEventListener('click', () => {
-        document.querySelectorAll('.map-filter button').forEach(b => b.classList.remove('active'));
-        button.classList.add('active');
-        document.getElementById('trip-map').src = button.dataset.map;
-        document.getElementById('map-open').href = button.dataset.route;
+    const dailyMapData = [
+      {
+        naver: "https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%9B%8C%ED%81%AC",
+        points: [
+          ["金海機場", 35.180077, 128.936401], ["Westin Josun", 35.155970, 129.154197],
+          ["Duplit · Saved", 35.166260, 129.161614, "saved"], ["五六島天空步道", 35.101543, 129.121695],
+          ["Olive Young 海雲台站 · Saved", 35.159813, 129.161892, "saved"], ["Westin 海灘 · Saved", 35.156300, 129.153800, "saved"],
+          ["Nurimaru · Optional", 35.152354, 129.151369, "optional"], ["善良章魚 · Saved 分支", 35.126394, 129.089822, "saved optional"],
+          ["廣安木 · Saved／晚餐主線", 35.160255, 129.128674, "saved"], ["Hongdan", 35.155834, 129.120503]
+        ],
+        driveGroups: [[0, 1, 2, 3, 4, 1, 8, 9, 1]],
+        nonDrive: [[1, 5, "飯店 → 海灘步行"], [5, 6, "冬柏島步行"], [7, 9, "善良章魚替代分支"]]
+      },
+      {
+        naver: "https://map.naver.com/p/search/%EA%B0%90%EC%B2%9C%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84",
+        points: [
+          ["Westin Josun", 35.155970, 129.154197], ["Park Hyatt", 35.156825, 129.141430],
+          ["甘川文化村", 35.096337, 129.008790], ["松島海灘", 35.076239, 129.015999],
+          ["松島灣纜車站", 35.077300, 129.017500], ["松島天空公園", 35.061531, 129.020441],
+          ["松島龍宮雲橋 · Optional", 35.061921, 129.021948, "optional"], ["札嘎其市場", 35.096628, 129.030689],
+          ["BIFF 廣場", 35.098899, 129.029055], ["國際市場", 35.100624, 129.028016],
+          ["寶水洞書店街 · Optional", 35.103349, 129.026911, "optional"], ["釜山塔", 35.101302, 129.032230],
+          ["富平罐頭市場", 35.101700, 129.026300], ["Park Hyatt", 35.156825, 129.141430]
+        ],
+        driveGroups: [[0, 1, 2, 3], [7, 13]],
+        nonDrive: [[3, 4, "步行至纜車"], [4, 5, "松島纜車"], [5, 6, "雲橋步行"], [7, 8, "南浦步行"], [8, 9, "南浦步行"], [9, 10, "步行"], [10, 11, "步行"], [11, 12, "步行"]]
+      },
+      {
+        naver: "https://map.naver.com/p/search/%EB%A1%AF%EB%8D%B0%EB%A9%B4%EC%84%B8%EC%A0%90%20%EB%B6%80%EC%82%B0%EC%A0%90",
+        points: [
+          ["Park Hyatt", 35.156825, 129.141430], ["樂天免稅店釜山店", 35.157900, 129.056800],
+          ["Mammoth Coffee · Saved", 35.152582, 129.058406, "saved"], ["田浦咖啡街", 35.155000, 129.063000],
+          ["Momos Coffee 影島", 35.096863, 129.044241], ["白淺文化村", 35.077755, 129.045259],
+          ["絕影海岸隧道 · Optional", 35.075500, 129.044000, "optional"], ["西面／田浦晚餐", 35.155500, 129.060000],
+          ["Make Zero", 35.157784, 129.061587], ["Park Hyatt", 35.156825, 129.141430]
+        ],
+        driveGroups: [[0, 1, 2, 4, 5, 7, 8, 9]],
+        nonDrive: [[1, 2, "西面步行"], [2, 3, "田浦步行"], [5, 6, "海岸步道"], [7, 8, "晚餐後步行"]]
+      },
+      {
+        naver: "https://map.naver.com/p/search/%ED%95%B4%EB%8F%99%EC%9A%A9%EA%B6%81%EC%82%AC",
+        points: [
+          ["Park Hyatt", 35.156825, 129.141430], ["海福鮑魚粥 · Saved", 35.159832, 129.169737, "saved"],
+          ["海東龍宮寺", 35.188434, 129.222976], ["松亭海灘", 35.182145, 129.204480],
+          ["水月鏡花", 35.180200, 129.201000], ["松亭午餐", 35.181000, 129.202500],
+          ["青沙浦踏石觀景台", 35.159800, 129.191700], ["青沙浦膠囊站", 35.161700, 129.190500],
+          ["尾浦膠囊站", 35.159000, 129.171100], ["Bada Sand · Saved／主選", 35.164892, 129.158030, "saved"],
+          ["Duplit · Saved／備援", 35.166260, 129.161614, "saved optional"], ["Park Hyatt 取行李", 35.156825, 129.141430],
+          ["金海機場", 35.180077, 128.936401]
+        ],
+        driveGroups: [[0, 1, 2, 3, 6], [8, 9, 11, 12]],
+        nonDrive: [[3, 4, "松亭步行"], [4, 5, "松亭步行"], [6, 7, "步行至膠囊站"], [7, 8, "天空膠囊"], [9, 10, "二選一；不可兩間都排"]]
+      }
+    ];
+
+    const tripMap = L.map("trip-map", { scrollWheelZoom: false, zoomControl: true });
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: "&copy; OpenStreetMap contributors"
+    }).addTo(tripMap);
+    let mapLayers = L.layerGroup().addTo(tripMap);
+    let mapRenderToken = 0;
+
+    function markerIcon(index, style = "") {
+      return L.divIcon({
+        className: "",
+        html: `<span class="poi-marker ${style}">${index + 1}</span>`,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15],
+        popupAnchor: [0, -14]
+      });
+    }
+
+    async function renderDailyMap(dayIndex) {
+      const token = ++mapRenderToken;
+      const day = dailyMapData[dayIndex];
+      mapLayers.clearLayers();
+      const bounds = [];
+      day.points.forEach((point, index) => {
+        const [, lat, lng, style = ""] = point;
+        bounds.push([lat, lng]);
+        L.marker([lat, lng], { icon: markerIcon(index, style) })
+          .bindPopup(`<strong>${index + 1}. ${point[0]}</strong><br>${style.includes("saved") ? "你指定收藏 · Saved" : style.includes("optional") ? "天候／時間允許才去" : "本日行程點"}`)
+          .addTo(mapLayers);
+      });
+      day.nonDrive.forEach(([from, to, label]) => {
+        const line = L.polyline([
+          [day.points[from][1], day.points[from][2]],
+          [day.points[to][1], day.points[to][2]]
+        ], { color: "#c49316", weight: 4, dashArray: "7 8", opacity: .9 }).bindTooltip(label);
+        line.addTo(mapLayers);
+      });
+      tripMap.fitBounds(bounds, { padding: [28, 28], maxZoom: 14 });
+      document.getElementById("map-open").href = day.naver;
+      const status = document.getElementById("map-route-status");
+      status.textContent = "正在依道路載入駕車主線…";
+      try {
+        const routes = await Promise.all(day.driveGroups.map(async group => {
+          const coordinates = group.map(index => `${day.points[index][2]},${day.points[index][1]}`).join(";");
+          const response = await fetch(`https://router.project-osrm.org/route/v1/driving/${coordinates}?overview=full&geometries=geojson&steps=false`);
+          if (!response.ok) throw new Error("route unavailable");
+          const data = await response.json();
+          if (data.code !== "Ok" || !data.routes?.[0]) throw new Error("route unavailable");
+          return data.routes[0];
+        }));
+        if (token !== mapRenderToken) return;
+        routes.forEach(route => L.geoJSON(route.geometry, { style: { color: "#0b6668", weight: 5, opacity: .82 } }).addTo(mapLayers));
+        const distance = routes.reduce((sum, route) => sum + route.distance, 0) / 1000;
+        const duration = routes.reduce((sum, route) => sum + route.duration, 0) / 60;
+        status.textContent = `道路基準 ${distance.toFixed(0)} km · 無交通約 ${Math.round(duration)} 分；行程已另加尖峰緩衝`;
+      } catch (_) {
+        if (token !== mapRenderToken) return;
+        day.driveGroups.forEach(group => L.polyline(group.map(index => [day.points[index][1], day.points[index][2]]), { color: "#0b6668", weight: 5, opacity: .72 }).addTo(mapLayers));
+        status.textContent = "道路服務暫時無法連線；目前顯示駕車順序，實際導航請開 Naver Map";
+      }
+    }
+
+    document.querySelectorAll(".map-filter button").forEach(button => {
+      button.addEventListener("click", () => {
+        document.querySelectorAll(".map-filter button").forEach(item => item.classList.remove("active"));
+        button.classList.add("active");
+        renderDailyMap(Number(button.dataset.day));
       });
     });
+    renderDailyMap(0);
   </script>
 </body>
 </html>

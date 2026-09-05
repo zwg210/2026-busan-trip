@@ -750,5 +750,57 @@
       }
     ],
     "source": "https://dailyguidehub.tistory.com/93"
+  },
+  {
+    "key": "부산바다샌드",
+    "slug": "bada-sand",
+    "query": "부산바다샌드 해리단길",
+    "title": "부산바다샌드 - 해리단길 디저트, 우동 맛집 - 다이닝코드",
+    "image": "assets/food/locations/bada-sand-1.webp",
+    "images": [
+      {
+        "image": "assets/food/locations/bada-sand-1.webp",
+        "source": "https://www.diningcode.com/profile.php?rid=NoByl44fMq7D"
+      },
+      {
+        "image": "assets/food/locations/bada-sand-2.webp",
+        "source": "https://www.diningcode.com/profile.php?rid=NoByl44fMq7D"
+      },
+      {
+        "image": "assets/food/locations/bada-sand-3.webp",
+        "source": "https://www.diningcode.com/profile.php?rid=NoByl44fMq7D"
+      },
+      {
+        "image": "assets/food/locations/bada-sand-4.webp",
+        "source": "https://www.diningcode.com/profile.php?rid=NoByl44fMq7D"
+      }
+    ],
+    "source": "https://www.diningcode.com/profile.php?rid=NoByl44fMq7D"
+  },
+  {
+    "key": "듀플릿",
+    "slug": "duplit",
+    "query": "듀플릿 해리단길",
+    "title": "듀플릿 - 해리단길 펍, 카페 맛집 - 다이닝코드",
+    "image": "assets/food/locations/duplit-1.webp",
+    "images": [
+      {
+        "image": "assets/food/locations/duplit-1.webp",
+        "source": "https://www.diningcode.com/profile.php?rid=fomP5UR5I7Bg"
+      },
+      {
+        "image": "assets/food/locations/duplit-2.webp",
+        "source": "https://www.diningcode.com/profile.php?rid=fomP5UR5I7Bg"
+      },
+      {
+        "image": "assets/food/locations/duplit-3.webp",
+        "source": "https://www.diningcode.com/profile.php?rid=fomP5UR5I7Bg"
+      },
+      {
+        "image": "assets/food/locations/duplit-4.webp",
+        "source": "https://www.diningcode.com/profile.php?rid=fomP5UR5I7Bg"
+      }
+    ],
+    "source": "https://www.diningcode.com/profile.php?rid=fomP5UR5I7Bg"
   }
 ]

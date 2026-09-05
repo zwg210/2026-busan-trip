@@ -31,7 +31,9 @@ const places = [
   ["명가의 뜰", "myeongga-airport", "명가의 뜰 김해공항"],
   ["플레이보6", "flavour6-airrail", "플레이보6 에어레일 김해공항"],
   ["K라면바", "k-ramen-airport", "K라면바 김해공항"],
-  ["해복", "haebok", "해복 해운대 엘시티"]
+  ["해복", "haebok", "해복 해운대 엘시티"],
+  ["부산바다샌드", "bada-sand", "부산바다샌드 해리단길"],
+  ["듀플릿", "duplit", "듀플릿 해리단길"]
 ];
 
 const expectedNames = {
@@ -54,7 +56,9 @@ const exactProfiles = {
   "개미집": "OQBJXOse09dg",
   "모모스커피": "3WZjdTKERcnH",
   "白淺村海景咖啡": "2By2KSn1ocZ5",
-  "해복": "e8yNxohUB52n"
+  "해복": "e8yNxohUB52n",
+  "부산바다샌드": "NoByl44fMq7D",
+  "듀플릿": "fomP5UR5I7Bg"
 };
 
 const exactPages = {
