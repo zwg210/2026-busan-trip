@@ -111,6 +111,13 @@
     .weather strong { font-size: 1.1rem; }
     .weather p { margin: 3px 0 0; color: var(--muted); font-size: .88rem; }
 
+    .day-filter { display: flex; align-items: center; gap: 8px; overflow-x: auto; margin: 0 0 22px; padding: 4px 1px 8px; scrollbar-width: none; }
+    .day-filter::-webkit-scrollbar { display: none; }
+    .day-filter button { flex: 0 0 auto; min-height: 44px; padding: 9px 15px; border: 1px solid var(--line); border-radius: 999px; background: var(--card); color: var(--ink); font: inherit; font-size: .82rem; font-weight: 850; cursor: pointer; }
+    .day-filter button.active { border-color: var(--deep); background: var(--deep); color: white; }
+    .day-filter button:focus-visible { outline: 3px solid rgba(11,102,104,.25); outline-offset: 2px; }
+    .day-card[hidden] { display: none; }
+
     .day-card { display: grid; grid-template-columns: 36% 1fr; overflow: hidden; border-radius: 28px; background: var(--card); box-shadow: var(--shadow); margin: 0 0 30px; }
     .day-photo { position: sticky; top: 82px; align-self: start; width: 100%; aspect-ratio: 4 / 5; overflow: hidden; background: #d9dfd7; }
     .day-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center; }
@@ -175,6 +182,8 @@
     .meal-options.one { grid-template-columns: minmax(0, 1fr); max-width: 390px; }
     .meal-options.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     .meal-options.four { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .meal-carousel-controls { display: none; }
+    .meal-carousel-controls[hidden] { display: none; }
     .meal-choice { display: flex; flex-direction: column; min-width: 0; padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: #fff; }
     .meal-choice.primary { border-color: var(--sea); background: #f1f8f5; box-shadow: inset 0 3px 0 var(--sea); }
     .meal-photo { position: relative; overflow: hidden; height: 160px; margin: -12px -12px 12px; border-radius: 13px 13px 0 0; background: #dbe3df; }
@@ -328,7 +337,17 @@
       .travel-connector { grid-column: 1 / -1; margin-left: 68px; }
       .route-actions { display: grid; grid-template-columns: 1fr; }
       .route-link { width: 100%; min-height: 48px; justify-content: center; text-align: center; }
-      .meal-options, .meal-options.two, .meal-options.four, .bar-grid { grid-template-columns: 1fr; }
+      .day-filter { position: sticky; z-index: 20; top: 8px; margin-inline: -4px; padding: 7px 5px; border: 1px solid var(--line); border-radius: 999px; background: rgba(244,241,232,.94); box-shadow: 0 8px 22px rgba(18,35,35,.1); backdrop-filter: blur(12px); }
+      .day-filter button { min-height: 40px; padding: 7px 13px; background: rgba(255,253,246,.95); }
+      .meal-carousel-controls { display: flex; align-items: center; justify-content: space-between; gap: 9px; margin: 12px 0 7px; }
+      .meal-carousel-controls span { min-width: 72px; color: var(--muted); font-size: .74rem; font-weight: 850; text-align: center; }
+      .meal-carousel-controls button { display: grid; place-items: center; width: 44px; height: 40px; border: 1px solid var(--sea); border-radius: 999px; background: white; color: var(--sea); font: 900 1.1rem/1 system-ui, sans-serif; cursor: pointer; }
+      .meal-carousel-controls button:disabled { opacity: .28; }
+      .meal-options, .meal-options.two, .meal-options.four { display: flex; grid-template-columns: none; gap: 10px; overflow-x: auto; margin-right: -18px; padding: 2px 18px 10px 0; scroll-behavior: smooth; scroll-snap-type: x mandatory; overscroll-behavior-x: contain; scrollbar-width: none; }
+      .meal-options::-webkit-scrollbar { display: none; }
+      .meal-options.one { display: grid; max-width: none; overflow: visible; margin-right: 0; padding-right: 0; }
+      .meal-options:not(.one) > .meal-choice { flex: 0 0 calc(100% - 24px); scroll-snap-align: start; scroll-snap-stop: always; }
+      .bar-grid { grid-template-columns: 1fr; }
       .bookmark-grid { grid-template-columns: 1fr; }
       .bookmark { min-height: 0; }
       .weather { padding: 14px; }
@@ -336,7 +355,8 @@
       .meal-choice { padding: 13px; }
       .meal-photo { height: 210px; margin: -13px -13px 12px; }
       .meal-photo-track a:hover img { transform: none; }
-      .gallery-nav { display: none; }
+      .meal-photo-track { overflow-x: hidden; touch-action: pan-y; }
+      .gallery-nav { display: block; }
       .meal-tools { position: sticky; z-index: 5; top: 8px; justify-content: space-between; padding: 8px; border: 1px solid var(--line); border-radius: 999px; background: rgba(255,255,255,.92); box-shadow: 0 8px 22px rgba(18,35,35,.1); backdrop-filter: blur(10px); }
       .meal-choice a { min-height: 38px; }
       .map-shell { padding: 7px; border-radius: 20px; }
@@ -394,7 +414,7 @@
   <main>
     <div class="update-banner" role="status">
       <strong>LIVE UPDATE · 9/5</strong>
-      <span>Bada Sand／Duplit 已排入；每日地圖顯示全部主線與 Saved 點、道路駕車連線，並新增路線壓測警示。</span>
+      <span>預報已刷新；新增日期快速篩選，手機版餐廳選項可左右滑動或按箭頭切換。</span>
     </div>
     <section id="weather">
       <div class="section-head">
@@ -407,12 +427,12 @@
         <a class="text-link" href="https://www.weather.go.kr/w/forecast/overall/short-term.do?stnId=159" target="_blank" rel="noreferrer">KMA 即時預報 ↗</a>
       </div>
       <div class="weather-grid">
-        <article class="weather"><div class="day">SAT · 9/5</div><div class="wx">☀️</div><strong>25–28°C</strong><p>晴到少雲；沿岸陣風強</p></article>
-        <article class="weather"><div class="day">SUN · 9/6</div><div class="wx">🌦️</div><strong>24–28°C</strong><p>雲量增加、偶有短雨；海風強</p></article>
-        <article class="weather"><div class="day">MON · 9/7</div><div class="wx">🌦️</div><strong>24–27°C</strong><p>上午零星雨，午後逐漸轉乾</p></article>
-        <article class="weather"><div class="day">TUE · 9/8</div><div class="wx">☀️</div><strong>20–30°C</strong><p>晴到少雲；午後偏熱</p></article>
+        <article class="weather"><div class="day">SAT · 9/5</div><div class="wx">🌤️</div><strong>24–28°C</strong><p>晴到少雲；降雨約 2%，沿岸陣風強</p></article>
+        <article class="weather"><div class="day">SUN · 9/6</div><div class="wx">☁️</div><strong>23–27°C</strong><p>白天大致乾燥；晚間短雨風險約 14%</p></article>
+        <article class="weather"><div class="day">MON · 9/7</div><div class="wx">🌦️</div><strong>23–27°C</strong><p>早段可能毛毛雨，午後轉晴乾燥</p></article>
+        <article class="weather"><div class="day">TUE · 9/8</div><div class="wx">🌤️</div><strong>20–29°C</strong><p>晴到少雲；降雨約 4%，午後偏熱</p></article>
       </div>
-      <p class="forecast-note" id="forecast-status">逐站溫度採 Haeundae、Oryukdo、西釜山、影島、西面與機張的逐時預報；頁面開啟時會更新。資料：<a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo ↗</a></p>
+      <p class="forecast-note" id="forecast-status">9/5 最新預報：逐站溫度採 Haeundae、Oryukdo、西釜山、影島、西面與機張的逐時資料；頁面開啟時會再次更新。資料：<a href="https://open-meteo.com/" target="_blank" rel="noreferrer">Open-Meteo ↗</a></p>
     </section>
 
     <section id="plan">
@@ -422,6 +442,13 @@
       </div>
       <div class="food-preference"><strong>用餐原則：</strong>每個實際用餐時段直接列出順路選項，標示「在地優先」者以本地口碑與路線為首選；Bib Gourmand 只作加分，不看星級。餐廳可供應牛肉，只需避開牛肉主菜，牛高湯可以。</div>
       <div class="place-check"><strong>店名核對：</strong>「善良章魚／착한낙지」已加入今晚晚餐分支。搜尋不到能唯一對應的「CHILO BUSAN」店家；請傳 Naver Map 或 Instagram 連結，我再放入正確日程，暫不讓錯誤地點影響路線。</div>
+      <div class="day-filter" role="group" aria-label="依日期篩選行程">
+        <button class="active" type="button" data-plan-day="all" aria-pressed="true">全部 · All</button>
+        <button type="button" data-plan-day="0" aria-pressed="false">9/5 · Day 1</button>
+        <button type="button" data-plan-day="1" aria-pressed="false">9/6 · Day 2</button>
+        <button type="button" data-plan-day="2" aria-pressed="false">9/7 · Day 3</button>
+        <button type="button" data-plan-day="3" aria-pressed="false">9/8 · Day 4</button>
+      </div>
       <div class="origin-legend" aria-label="地點來源標籤說明">
         <strong>標籤：</strong>
         <span class="origin-tag initial">原始行程 · Initial</span>
@@ -822,6 +849,23 @@
     }
     initOriginTags();
 
+    function initDayFilter() {
+      const buttons = [...document.querySelectorAll("[data-plan-day]")];
+      const days = [...document.querySelectorAll("#plan > .day-card")];
+      buttons.forEach(button => {
+        button.addEventListener("click", () => {
+          const selected = button.dataset.planDay;
+          days.forEach((day, index) => { day.hidden = selected !== "all" && Number(selected) !== index; });
+          buttons.forEach(item => {
+            const active = item === button;
+            item.classList.toggle("active", active);
+            item.setAttribute("aria-pressed", String(active));
+          });
+        });
+      });
+    }
+    initDayFilter();
+
     const operatingHours = [
       [
         ["國際線航廈約 05:00–23:00", "航班作業優先"],
@@ -970,10 +1014,10 @@
     const forecastDates = ["2026-09-05", "2026-09-06", "2026-09-07", "2026-09-08"];
     const forecastZones = ["haeundae", "oryukdo", "west", "yeongdo", "gijang", "seomyeon"];
     const forecastFallbacks = [
-      [27, 28, 28, 28, 28, 27, 27, 27, 27, 27, 25],
-      [25, 26, 27, 28, 28, 28, 27, 27, 27, 27, 25],
-      [25, 26, 27, 27, 27, 27, 27, 26, 25, 25],
-      [23, 24, 27, 28, 28, 28, 29, 29, 28, 29, 28, 27]
+      [27, 28, 28, 28, 28, 27, 26, 26, 25, 25, 25],
+      [25, 25, 26, 27, 26, 26, 26, 26, 25, 25, 25],
+      [24, 26, 27, 27, 27, 27, 26, 25, 24, 24],
+      [23, 23, 27, 28, 29, 28, 28, 28, 27, 26, 24, 24]
     ];
 
     function forecastZone(dayIndex, title) {
@@ -1380,7 +1424,72 @@
     });
     renderSavedMeals();
     }
-    initMeals();
+
+    function initMealCarousels() {
+      document.querySelectorAll(".meal-options").forEach((track, groupIndex) => {
+        const cards = [...track.querySelectorAll(":scope > .meal-choice")];
+        if (cards.length < 2) return;
+
+        track.tabIndex = 0;
+        track.setAttribute("role", "region");
+        track.setAttribute("aria-label", `用餐選項 ${groupIndex + 1}；手機可左右滑動`);
+
+        const controls = document.createElement("div");
+        controls.className = "meal-carousel-controls";
+        const previous = document.createElement("button");
+        previous.type = "button";
+        previous.textContent = "←";
+        previous.setAttribute("aria-label", "上一個餐廳選項");
+        const status = document.createElement("span");
+        status.setAttribute("aria-live", "polite");
+        const next = document.createElement("button");
+        next.type = "button";
+        next.textContent = "→";
+        next.setAttribute("aria-label", "下一個餐廳選項");
+        controls.append(previous, status, next);
+        track.before(controls);
+
+        const visibleCards = () => cards.filter(card => !card.hidden);
+        const activeIndex = visible => {
+          if (!visible.length) return 0;
+          const left = track.getBoundingClientRect().left;
+          return visible.reduce((best, card, index) => {
+            const distance = Math.abs(card.getBoundingClientRect().left - left);
+            return distance < best.distance ? { index, distance } : best;
+          }, { index: 0, distance: Infinity }).index;
+        };
+        const update = () => {
+          const visible = visibleCards();
+          controls.hidden = visible.length < 2;
+          if (!visible.length) {
+            status.textContent = "0 / 0";
+            return;
+          }
+          const index = activeIndex(visible);
+          status.textContent = `${index + 1} / ${visible.length} · 左右滑`;
+          previous.disabled = index === 0;
+          next.disabled = index === visible.length - 1;
+        };
+        const move = direction => {
+          const visible = visibleCards();
+          if (!visible.length) return;
+          const index = Math.max(0, Math.min(visible.length - 1, activeIndex(visible) + direction));
+          const firstLeft = visible[0].offsetLeft;
+          track.scrollTo({ left: visible[index].offsetLeft - firstLeft, behavior: "smooth" });
+          window.setTimeout(update, 350);
+        };
+        previous.addEventListener("click", () => move(-1));
+        next.addEventListener("click", () => move(1));
+        let frame;
+        track.addEventListener("scroll", () => {
+          window.cancelAnimationFrame(frame);
+          frame = window.requestAnimationFrame(update);
+        }, { passive: true });
+        new MutationObserver(update).observe(track, { attributes: true, attributeFilter: ["hidden"], subtree: true });
+        update();
+      });
+    }
+    initMeals().then(initMealCarousels);
 
     const dailyMapData = [
       {
