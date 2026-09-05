@@ -110,6 +110,8 @@
     .weather .wx { margin: 12px 0 7px; font-size: 1.65rem; }
     .weather strong { font-size: 1.1rem; }
     .weather p { margin: 3px 0 0; color: var(--muted); font-size: .88rem; }
+    .visited-note { display: flex; flex-wrap: wrap; align-items: center; gap: 7px 12px; margin: 4px 0 12px; padding: 10px 12px; border-radius: 12px; background: #e5f2ee; color: var(--deep); font-size: .78rem; font-weight: 850; }
+    .visited-note a { color: var(--sea); text-underline-offset: 3px; }
 
     .day-filter { display: flex; align-items: center; gap: 8px; overflow-x: auto; margin: 0 0 22px; padding: 4px 1px 8px; scrollbar-width: none; }
     .day-filter::-webkit-scrollbar { display: none; }
@@ -414,7 +416,7 @@
   <main>
     <div class="update-banner" role="status">
       <strong>LIVE UPDATE · 9/5</strong>
-      <span>預報已刷新；新增日期快速篩選，手機版餐廳選項可左右滑動或按箭頭切換。</span>
+      <span>白淺村與絕影隧道已標成 Saved；海雲台傳統市場記為今日已訪，並新增相似景點刪減建議。</span>
     </div>
     <section id="weather">
       <div class="section-head">
@@ -469,6 +471,7 @@
         </div>
         <div class="day-content">
           <div class="day-title"><h3>東南海岸<span class="en">Southeast Coast</span></h3><span>Westin Josun<br>入住日 · Check-in</span></div>
+          <div class="visited-note"><span>✓ 今日已訪 · Visited today</span><strong>海雲台傳統市場 · Haeundae Traditional Market</strong><a href="https://map.naver.com/p/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EC%A0%84%ED%86%B5%EC%8B%9C%EC%9E%A5" target="_blank" rel="noreferrer">Naver Map ↗</a></div>
           <ol class="timeline">
             <li><time>10:20</time><div><b>抵達金海機場<span class="en">Arrive at Gimhae Airport</span></b><small>領行李後 Uber Taxi 前往飯店，約 50–70 分鐘；週六中午預留高值。</small></div></li>
             <li class="meal-row"><time>12:20</time><div><b>Westin 寄放行李＋海雲台午餐<span class="en">Westin Bag Drop + Haeundae Lunch</span></b><small>13:15 前結帳；依候位時間現場選一間。</small><div class="meal-options">
@@ -519,9 +522,9 @@
               <article class="meal-choice"><div class="tags"><span class="tag">在地高評價</span><span class="tag">貝類海鮮</span></div><h4>뚱보네 胖子家</h4><span class="hours">營業狀態請看 Naver 即時頁面</span><p>烤貝與海鮮下酒菜口碑佳；點餐別過量，保留纜車時間。</p><a href="https://map.naver.com/p/search/%EB%9A%B1%EB%B3%B4%EB%84%A4%20%EB%B6%80%EC%82%B0%20%EC%86%A1%EB%8F%84" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
             </div></div></li>
             <li class="must"><time>13:00</time><div><b>松島海上纜車＋天空公園<span class="en">Songdo Marine Cable Car + Sky Park</span></b><small>若停駛，直接把時間給札嘎其與市場。</small></div></li>
-            <li class="optional"><time>14:05</time><div><b>松島龍宮雲橋<span class="en">Songdo Yonggung Cloud Bridge</span></b><small>就在纜車天空公園端，往返快走約 25–30 分；14:10 還沒到橋口就跳過，才能趕上回程纜車與札嘎其。</small><a class="route-link secondary" href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%EC%9A%A9%EA%B6%81%EA%B5%AC%EB%A6%84%EB%8B%A4%EB%A6%AC" target="_blank" rel="noreferrer">Naver Map ↗</a></div></li>
+            <li class="optional"><time>14:05</time><div><b>松島龍宮雲橋<span class="en">Songdo Yonggung Cloud Bridge</span></b><small>與五六島、踏石觀景台同屬海上觀景設施，是最值得先刪的重複點。只有 14:10 前已到橋口、風況安全才走；否則直接回程纜車。</small><a class="route-link secondary" href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%EC%9A%A9%EA%B6%81%EA%B5%AC%EB%A6%84%EB%8B%A4%EB%A6%AC" target="_blank" rel="noreferrer">Naver Map ↗</a></div></li>
             <li class="must"><time>15:15</time><div><b>札嘎其市場<span class="en">Jagalchi Market</span></b><small>雲橋端 → 回程纜車 → 札嘎其共抓 35–50 分；只逛一樓海鮮與港邊，15:55 往 BIFF。</small></div></li>
-            <li class="meal-row"><time>16:05</time><div><b>BIFF 廣場甜點＋國際市場<span class="en">BIFF Dessert + Gukje Market</span></b><small>沿札嘎其 → BIFF → 國際市場單向往北走，不再折返。</small><div class="meal-options two">
+            <li class="meal-row"><time>16:05</time><div><b>BIFF 廣場甜點＋國際市場快閃<span class="en">BIFF Dessert + Gukje Market Quick Pass</span></b><small>你今天已逛海雲台傳統市場；保留 BIFF 代表小食，國際市場只順路穿過。時間落後就取消國際市場，不影響札嘎其與富平。</small><div class="meal-options two">
               <article class="meal-choice primary"><div class="tags"><span class="tag local">必吃小食</span><span class="tag">釜山代表</span></div><h4>BIFF 廣場 씨앗호떡 種子糖餅</h4><span class="hours">攤販約 10:00–22:00 · 售完為止</span><p>堅果籽塞進現煎糖餅；兩人先分一個，留胃給晚餐。</p><a href="https://map.naver.com/p/search/BIFF%EA%B4%91%EC%9E%A5%20%EC%94%A8%EC%95%97%ED%98%B8%EB%96%A1" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag">鹹食備選</span><span class="tag">市場經典</span></div><h4>비빔당면 拌冬粉＋魚板</h4><span class="hours">國際市場店家約 09:00–21:00</span><p>若不想吃甜，改吃小份拌冬粉、魚板與水年糕。</p><a href="https://map.naver.com/p/search/%EA%B5%AD%EC%A0%9C%EC%8B%9C%EC%9E%A5%20%EB%B9%84%EB%B9%94%EB%8B%B9%EB%A9%B4" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
             </div></div></li>
@@ -561,8 +564,8 @@
               <article class="meal-choice primary"><div class="tags"><span class="tag local">必去咖啡</span><span class="tag">世界冠軍團隊</span></div><h4>모모스커피 영도 로스터리</h4><span class="hours">每日 08:00–18:00 · LO 17:30</span><p>選手沖咖啡，甜點可配巧克力慕斯捲或 cheese terrine；可能需候位。</p><a href="https://map.naver.com/p/search/%EB%AA%A8%EB%AA%A8%EC%8A%A4%EC%BB%A4%ED%94%BC%20%EC%98%81%EB%8F%84%20%EB%A1%9C%EC%8A%A4%ED%84%B0%EB%A6%AC" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag">時間備案</span><span class="tag">直接前往海岸</span></div><h4>白淺村海景咖啡</h4><span class="hours">店家多約 11:00–19:00</span><p>Momos 排隊太長就跳過，在村內挑一間海景咖啡，不額外繞路。</p><a href="https://map.naver.com/p/search/%ED%9D%B0%EC%97%AC%EC%9A%B8%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84%20%EC%B9%B4%ED%8E%98" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
             </div></div></li>
-            <li class="must"><time>16:20</time><div><b>白淺文化村＋絕影海岸<span class="en">Huinnyeoul Culture Village + Jeoryeong Coast</span></b><small>Momos → 白淺約 15–25 分；乾燥才走絕影海岸步道，濕滑時留在上層村落。</small></div></li>
-            <li class="optional"><time>17:25</time><div><b>絕影海岸隧道<span class="en">Jeoryeong Coastal Tunnel</span></b><small>步道乾燥、體力足才往返；多抓 25–35 分鐘。濕滑或浪大時完全不要下去。</small><a class="route-link secondary" href="https://map.naver.com/p/search/%EC%A0%88%EC%98%81%ED%95%B4%EC%95%88%EC%82%B0%EC%B1%85%EB%A1%9C%20%ED%84%B0%EB%84%90" target="_blank" rel="noreferrer">Naver Map ↗</a></div></li>
+            <li class="must"><time>16:20</time><div><b>白淺文化村＋絕影海岸<span class="en">Huinnyeoul Culture Village + Jeoryeong Coast</span></b><small>你指定的 Saved 主站；Momos → 白淺約 15–25 分。先走上層村巷與海景，再由階梯下切海岸步道。</small><a class="route-link secondary" href="https://map.naver.com/p/search/%ED%9D%B0%EC%97%AC%EC%9A%B8%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">Naver Map ↗</a></div></li>
+            <li class="optional"><time>17:25</time><div><b>絕影海岸隧道<span class="en">Jeoryeong Coastal Tunnel</span></b><small>你指定的 Saved 天候條件站；步道乾燥、風浪安全才往返，多抓 25–35 分鐘。若濕滑或浪大，仍視為已完成白淺村，不冒險下去。</small><a class="route-link secondary" href="https://map.naver.com/p/search/%EC%A0%88%EC%98%81%ED%95%B4%EC%95%88%EC%82%B0%EC%B1%85%EB%A1%9C%20%ED%84%B0%EB%84%90" target="_blank" rel="noreferrer">Naver Map ↗</a></div></li>
             <li class="meal-row"><time>19:15</time><div><b>回西面／田浦晚餐<span class="en">Dinner in Seomyeon / Jeonpo</span></b><small>白淺 → 西面約 30–45 分；兩間都方便銜接 Make Zero。原候選 Last Chunsun 西面店已確認停業並移除。</small><div class="meal-options two">
               <article class="meal-choice primary"><div class="tags"><span class="tag local">在地優先</span><span class="tag">日式酒菜</span></div><h4>소수인 Sosuin</h4><span class="hours">週一 17:00–24:00</span><p>西面在地人氣日式小料理；適合兩人分食海鮮、炸物與飯麵。</p><a href="https://map.naver.com/p/search/%EC%86%8C%EC%88%98%EC%9D%B8%20%EC%84%9C%EB%A9%B4" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
               <article class="meal-choice"><div class="tags"><span class="tag michelin">Bib Gourmand</span><span class="tag">若午餐沒吃</span></div><h4>바오하우스 Bao Haus</h4><span class="hours">17:00–21:00 晚餐時段</span><p>午餐若選刀切麵或湯飯，晚餐仍可改吃刈包與台式小食。</p><a href="https://map.naver.com/p/search/%EB%B0%94%EC%98%A4%ED%95%98%EC%9A%B0%EC%8A%A4%20%EC%A0%84%ED%8F%AC" target="_blank" rel="noreferrer">Naver Map ↗</a></article>
@@ -702,6 +705,20 @@
           <div class="best-slot"><strong>Recommended slot</strong>Day 1 · 18:20–18:55；今日日落約 18:45。</div>
           <a href="https://map.naver.com/p/search/%EC%9B%A8%EC%8A%A4%ED%8B%B4%20%EC%A1%B0%EC%84%A0%20%EB%B6%80%EC%82%B0" target="_blank" rel="noreferrer">Naver Map ↗</a>
         </article>
+        <article class="bookmark">
+          <span class="status">你指定 · 已排入</span>
+          <h3>白淺文化村<span class="en">Huinnyeoul Culture Village · 흰여울문화마을</span></h3>
+          <p>韓戰避難居民沿影島海崖形成的聚落；上層窄巷、白牆與釜山外港海景，比甘川更偏向海岸散步。</p>
+          <div class="best-slot"><strong>Recommended slot</strong>Day 3 · 16:20；先走上層村落，再依風浪與地面狀況下切絕影海岸。</div>
+          <a href="https://map.naver.com/p/search/%ED%9D%B0%EC%97%AC%EC%9A%B8%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">Naver Map ↗</a>
+        </article>
+        <article class="bookmark">
+          <span class="status">你指定 · 天候條件</span>
+          <h3>絕影海岸隧道<span class="en">Jeoryeong Coastal Tunnel · 절영해안터널</span></h3>
+          <p>2018 年完成的海岸步道隧道；出口把海平線框成明亮矩形，是白淺村下層路線最具辨識度的畫面。</p>
+          <div class="best-slot"><strong>Recommended slot</strong>Day 3 · 17:25；乾燥且風浪安全才走，往返抓 25–35 分鐘。</div>
+          <a href="https://map.naver.com/p/search/%EC%A0%88%EC%98%81%ED%95%B4%EC%95%88%EC%82%B0%EC%B1%85%EB%A1%9C%20%ED%84%B0%EB%84%90" target="_blank" rel="noreferrer">Naver Map ↗</a>
+        </article>
       </div>
     </section>
 
@@ -727,7 +744,7 @@
       <div class="route-summary">
         <article class="mini-route"><strong>9/5 · 東南岸</strong><p>機場→飯店 50–70m<br>海雲台→五六島 30–40m<br>Westin→廣安里 15–25m</p><div class="stop-links"><a href="https://map.naver.com/p/search/%EC%98%AC%EB%A6%AC%EB%B8%8C%EC%98%81%20%ED%95%B4%EC%9A%B4%EB%8C%80%EC%97%AD%EC%A0%90" target="_blank" rel="noreferrer">Olive Young</a><a href="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%EC%8A%A4%EC%B9%B4%EC%9D%B4%EC%9B%8C%ED%81%AC" target="_blank" rel="noreferrer">五六島</a><a href="https://map.naver.com/p/search/%EC%98%A4%EB%A5%99%EB%8F%84%20%ED%95%B4%EB%A7%9E%EC%9D%B4%EA%B3%B5%EC%9B%90" target="_blank" rel="noreferrer">日出公園</a><a href="https://map.naver.com/p/search/%EC%9D%B4%EA%B8%B0%EB%8C%80%EA%B3%B5%EC%9B%90" target="_blank" rel="noreferrer">二妓台</a><a href="https://map.naver.com/p/search/%EB%88%84%EB%A6%AC%EB%A7%88%EB%A3%A8%20APEC%ED%95%98%EC%9A%B0%EC%8A%A4" target="_blank" rel="noreferrer">Nurimaru</a><a href="https://map.naver.com/p/search/%EC%B0%A9%ED%95%9C%EB%82%99%EC%A7%80%20%EB%B6%80%EC%82%B0%EB%82%A8%EA%B5%AC%EC%A7%81%EC%98%81%EC%A0%90" target="_blank" rel="noreferrer">善良章魚</a><a href="https://map.naver.com/p/search/%EA%B4%91%EC%95%88%EB%A6%AC%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noreferrer">廣安里</a></div></article>
         <article class="mini-route"><strong>9/6 · 西釜山</strong><p>Park Hyatt→甘川 45–65m<br>甘川→松島 15–25m<br>南浦→飯店 35–55m</p><div class="stop-links"><a href="https://map.naver.com/p/search/%EA%B0%90%EC%B2%9C%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">甘川</a><a href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noreferrer">松島海灘</a><a href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%ED%95%B4%EC%83%81%EC%BC%80%EC%9D%B4%EB%B8%94%EC%B9%B4" target="_blank" rel="noreferrer">松島纜車</a><a href="https://map.naver.com/p/search/%EC%86%A1%EB%8F%84%EC%8A%A4%EC%B9%B4%EC%9D%B4%ED%8C%8C%ED%81%AC" target="_blank" rel="noreferrer">天空公園</a><a href="https://map.naver.com/p/search/%EC%9E%90%EA%B0%88%EC%B9%98%EC%8B%9C%EC%9E%A5" target="_blank" rel="noreferrer">札嘎其</a><a href="https://map.naver.com/p/search/BIFF%EA%B4%91%EC%9E%A5" target="_blank" rel="noreferrer">BIFF</a><a href="https://map.naver.com/p/search/%EA%B5%AD%EC%A0%9C%EC%8B%9C%EC%9E%A5" target="_blank" rel="noreferrer">國際市場</a><a href="https://map.naver.com/p/search/%EB%B6%80%ED%8F%89%EA%B9%A1%ED%86%B5%EC%8B%9C%EC%9E%A5" target="_blank" rel="noreferrer">富平</a><a href="https://map.naver.com/p/search/%EC%9A%A9%EB%91%90%EC%82%B0%EA%B3%B5%EC%9B%90" target="_blank" rel="noreferrer">龍頭山</a><a href="https://map.naver.com/p/search/%EB%B6%80%EC%82%B0%ED%83%80%EC%9B%8C" target="_blank" rel="noreferrer">釜山塔</a></div></article>
-        <article class="mini-route"><strong>9/7 · 西面影島</strong><p>飯店→西面 25–40m<br>田浦→Momos 30–45m<br>白淺→西面 30–45m</p><div class="stop-links"><a href="https://map.naver.com/p/search/%EB%A1%AF%EB%8D%B0%EB%A9%B4%EC%84%B8%EC%A0%90%20%EB%B6%80%EC%82%B0%EC%A0%90" target="_blank" rel="noreferrer">樂天免稅店</a><a href="https://map.naver.com/p/search/%EC%84%9C%EB%A9%B4%EC%97%AD" target="_blank" rel="noreferrer">西面</a><a href="https://map.naver.com/p/search/%EC%A0%84%ED%8F%AC%EC%B9%B4%ED%8E%98%EA%B1%B0%EB%A6%AC" target="_blank" rel="noreferrer">田浦</a><a href="https://map.naver.com/p/search/%ED%9D%B0%EC%97%AC%EC%9A%B8%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">白淺村</a><a href="https://map.naver.com/p/search/%EC%A0%88%EC%98%81%ED%95%B4%EC%95%88%EC%82%B0%EC%B1%85%EB%A1%9C" target="_blank" rel="noreferrer">絕影海岸</a><a href="https://map.naver.com/p/search/%EB%A9%94%EC%9D%B4%ED%81%AC%EC%A0%9C%EB%A1%9C%20%EB%B6%80%EC%82%B0" target="_blank" rel="noreferrer">Make Zero</a></div></article>
+        <article class="mini-route"><strong>9/7 · 西面影島</strong><p>飯店→西面 25–40m<br>田浦→Momos 30–45m<br>白淺→西面 30–45m</p><div class="stop-links"><a href="https://map.naver.com/p/search/%EB%A1%AF%EB%8D%B0%EB%A9%B4%EC%84%B8%EC%A0%90%20%EB%B6%80%EC%82%B0%EC%A0%90" target="_blank" rel="noreferrer">樂天免稅店</a><a href="https://map.naver.com/p/search/%EC%84%9C%EB%A9%B4%EC%97%AD" target="_blank" rel="noreferrer">西面</a><a href="https://map.naver.com/p/search/%EC%A0%84%ED%8F%AC%EC%B9%B4%ED%8E%98%EA%B1%B0%EB%A6%AC" target="_blank" rel="noreferrer">田浦</a><a href="https://map.naver.com/p/search/%ED%9D%B0%EC%97%AC%EC%9A%B8%EB%AC%B8%ED%99%94%EB%A7%88%EC%9D%84" target="_blank" rel="noreferrer">白淺村</a><a href="https://map.naver.com/p/search/%EC%A0%88%EC%98%81%ED%95%B4%EC%95%88%EC%82%B0%EC%B1%85%EB%A1%9C%20%ED%84%B0%EB%84%90" target="_blank" rel="noreferrer">絕影海岸隧道</a><a href="https://map.naver.com/p/search/%EB%A9%94%EC%9D%B4%ED%81%AC%EC%A0%9C%EB%A1%9C%20%EB%B6%80%EC%82%B0" target="_blank" rel="noreferrer">Make Zero</a></div></article>
         <article class="mini-route"><strong>9/8 · 東岸</strong><p>飯店→龍宮寺 35–50m<br>龍宮寺→松亭 15–20m<br>飯店→機場 45–70m</p><div class="stop-links"><a href="https://map.naver.com/p/search/%ED%95%B4%EB%8F%99%EC%9A%A9%EA%B6%81%EC%82%AC" target="_blank" rel="noreferrer">龍宮寺</a><a href="https://map.naver.com/p/search/%EC%86%A1%EC%A0%95%ED%95%B4%EC%88%98%EC%9A%95%EC%9E%A5" target="_blank" rel="noreferrer">松亭</a><a href="https://map.naver.com/p/search/%EC%B2%AD%EC%82%AC%ED%8F%AC%EB%93%B1%EB%8C%80" target="_blank" rel="noreferrer">青沙浦燈塔</a><a href="https://map.naver.com/p/search/%EC%B2%AD%EC%82%AC%ED%8F%AC%20%EB%8B%A4%EB%A6%BF%EB%8F%8C%EC%A0%84%EB%A7%9D%EB%8C%80" target="_blank" rel="noreferrer">踏石觀景台</a><a href="https://map.naver.com/p/search/%ED%95%B4%EC%9A%B4%EB%8C%80%EB%B8%94%EB%A3%A8%EB%9D%BC%EC%9D%B8%ED%8C%8C%ED%81%AC%20%EC%B2%AD%EC%82%AC%ED%8F%AC%EC%A0%95%EA%B1%B0%EC%9E%A5" target="_blank" rel="noreferrer">天空膠囊</a><a href="https://map.naver.com/p/search/%EB%AF%B8%ED%8F%AC%EC%A0%95%EA%B1%B0%EC%9E%A5" target="_blank" rel="noreferrer">尾浦</a><a href="https://map.naver.com/p/search/%ED%95%B4%EB%A6%AC%EB%8B%A8%EA%B8%B8" target="_blank" rel="noreferrer">海理團路</a></div></article>
       </div>
     </section>
@@ -739,6 +756,8 @@
         <article class="audit-card warn"><h3>DAY 2 · 雲橋是唯一脆弱組合</h3><p><strong>條件式通過：</strong>雲橋往返加回程纜車與 Uber，舊版 14:30→15:20 幾乎無緩衝。已提前到 14:05；14:10 還沒到橋口就跳過。南浦改成札嘎其 → BIFF／國際市場單向北走，消除折返。</p></article>
         <article class="audit-card warn"><h3>DAY 3 · 有意識的跨區往返</h3><p><strong>可行但車程較碎：</strong>Park Hyatt → 西面 → 影島 → 西面 → Park Hyatt 是約 44 km 的基準道路圈。因 Make Zero 與晚餐都在田浦，回西面合理；若午後仍下大雨，跳過海岸隧道可回收 35–60 分鐘。</p></article>
         <article class="audit-card danger"><h3>DAY 4 · 航班是硬截止</h3><p><strong>不可延誤：</strong>Bada Sand 與 Duplit 都已放在 14:20，但只選一間；14:40 叫車、15:00 取行李、15:30 離開 Park Hyatt。任何早段延誤超過 20 分鐘，先刪海理團路，不可壓縮機場緩衝。</p></article>
+        <article class="audit-card warn"><h3>相似景點 · 村落</h3><p><strong>甘川與白淺有部分重複：</strong>兩者都是韓戰避難聚落轉型的觀光村。保留你指定的白淺＋隧道；甘川仍值得看階梯式彩色山城，但改走官方約 40 分鐘主路線即可，不必深入每條巷子。</p></article>
+        <article class="audit-card warn"><h3>相似景點 · 市場與海上步道</h3><p><strong>優先刪減：</strong>你已去海雲台傳統市場，因此 Day 2 國際市場只快閃、落後就取消；保留海鮮特色明確的札嘎其與夜間富平。松島龍宮雲橋與五六島／踏石觀景台重複度最高，也是第一個可直接取消的景點。</p></article>
       </div>
     </section>
 
@@ -799,7 +818,8 @@
     ];
     const savedDestinationKeys = [
       "Olive Young 海雲台站店", "Westin 海灘黃金時刻",
-      "Mammoth Coffee 西面", "海福鮑魚粥早餐", "Bada Sand 或 Duplit"
+      "Mammoth Coffee 西面", "海福鮑魚粥早餐", "Bada Sand 或 Duplit",
+      "白淺文化村", "絕影海岸隧道"
     ];
     const logisticsKeys = [
       "抵達金海機場", "Uber 前往五六島", "入住 Westin", "Westin → Park Hyatt",
@@ -1523,8 +1543,8 @@
         points: [
           ["Park Hyatt", 35.156825, 129.141430], ["樂天免稅店釜山店", 35.157900, 129.056800],
           ["Mammoth Coffee · Saved", 35.152582, 129.058406, "saved"], ["田浦咖啡街", 35.155000, 129.063000],
-          ["Momos Coffee 影島", 35.096863, 129.044241], ["白淺文化村", 35.077755, 129.045259],
-          ["絕影海岸隧道 · Optional", 35.075500, 129.044000, "optional"], ["西面／田浦晚餐", 35.155500, 129.060000],
+          ["Momos Coffee 影島", 35.096863, 129.044241], ["白淺文化村 · Saved", 35.077755, 129.045259, "saved"],
+          ["絕影海岸隧道 · Saved／天候條件", 35.075500, 129.044000, "saved optional"], ["西面／田浦晚餐", 35.155500, 129.060000],
           ["Make Zero", 35.157784, 129.061587], ["Park Hyatt", 35.156825, 129.141430]
         ],
         driveGroups: [[0, 1, 2, 4, 5, 7, 8, 9]],
